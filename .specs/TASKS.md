@@ -220,12 +220,12 @@ Objetivo: entregar estado claro.
 
 Tarefas:
 
-- [ ] Atualizar README.
-- [ ] Documentar comandos.
-- [ ] Documentar deploy.
-- [ ] Documentar fonte/atribuição das bandeiras.
-- [ ] Rodar validação final completa.
-- [ ] Registrar pendências futuras.
+- [x] Atualizar README.
+- [x] Documentar comandos.
+- [x] Documentar deploy.
+- [x] Documentar fonte/atribuição das bandeiras.
+- [x] Rodar validação final completa.
+- [x] Registrar pendências futuras.
 
 Commit sugerido:
 
