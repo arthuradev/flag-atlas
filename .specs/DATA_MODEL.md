@@ -1,0 +1,175 @@
+# Data Model — Flag Atlas MVP
+
+Este documento define modelos conceituais. A implementação pode ajustar nomes, mas deve preservar significado.
+
+## Country
+
+```ts
+type Locale = "pt-BR" | "en-US";
+
+type Country = {
+  id: string;
+  iso2: string;
+  names: Record<Locale, string>;
+  aliases?: Partial<Record<Locale, string[]>>;
+  continentId: ContinentId;
+  flagPath: string;
+  slug: string;
+};
+```
+
+## Continent
+
+```ts
+type Continent = {
+  id: "america" | "europe" | "africa" | "asia" | "oceania";
+  names: Record<Locale, string>;
+  emoji?: string;
+  order: number;
+  countryIds: string[];
+};
+```
+
+## MasteryLevel
+
+```ts
+type MasteryLevel =
+  | "new"
+  | "recognized"
+  | "learned"
+  | "dominated"
+  | "master";
+```
+
+Nomes públicos em pt-BR:
+
+```txt
+new → Novo
+recognized → Reconhecido
+learned → Aprendido
+dominated → Dominado
+master → Mestre
+```
+
+## CountryProgress
+
+```ts
+type CountryProgress = {
+  countryId: string;
+  seenCount: number;
+  correctCount: number;
+  wrongCount: number;
+  currentCorrectStreak: number;
+  bestCorrectStreak: number;
+  masteryPoints: number;
+  masteryLevel: MasteryLevel;
+  needsReview: boolean;
+  lastSeenAt?: string;
+  lastCorrectAt?: string;
+  lastWrongAt?: string;
+};
+```
+
+## UserProgress
+
+```ts
+type UserProgress = {
+  schemaVersion: number;
+  totalXp: number;
+  level: number;
+  countries: Record<string, CountryProgress>;
+  completedSessions: number;
+  lastPlayedAt?: string;
+};
+```
+
+## Settings
+
+```ts
+type AppSettings = {
+  locale: "pt-BR" | "en-US";
+  theme: "light" | "dark" | "system";
+  soundEnabled: boolean;
+  volume: number;
+  reduceMotion: boolean;
+  defaultSessionSize: 5 | 10 | 20 | 50;
+};
+```
+
+## Onboarding
+
+```ts
+type OnboardingState = {
+  hasCompletedOnboarding: boolean;
+};
+```
+
+## Session
+
+```ts
+type TrainingSession = {
+  id: string;
+  mode: "continue" | "continent";
+  continentId?: ContinentId;
+  questionIds: string[];
+  currentIndex: number;
+  answers: SessionAnswer[];
+  startedAt: string;
+};
+```
+
+## SessionAnswer
+
+```ts
+type SessionAnswer = {
+  countryId: string;
+  selectedCountryId: string;
+  isCorrect: boolean;
+  answeredAt: string;
+  xpGained: number;
+  masteryBefore: MasteryLevel;
+  masteryAfter: MasteryLevel;
+};
+```
+
+## XP sugerido
+
+Implementação inicial simples:
+
+```txt
++10 XP por acerto
++5 XP por evolução de domínio
++2 XP por resposta em streak >= 5
+0 XP por erro
+```
+
+A fórmula pode ser ajustada, mas deve ser simples, testada e não punitiva.
+
+## Domínio sugerido
+
+Usar pontos internos:
+
+```txt
+0 pontos  → Novo
+1–2       → Reconhecido
+3–5       → Aprendido
+6–8       → Dominado
+9–10      → Mestre
+```
+
+Atualização sugerida:
+
+- acerto: +1 ponto;
+- erro único: não remove ponto, marca revisão;
+- 2 erros recentes no mesmo país: -1 ponto;
+- pontos limitados entre 0 e 10.
+
+## Storage keys sugeridas
+
+```txt
+flag-atlas:settings
+flag-atlas:progress
+flag-atlas:onboarding
+```
+
+Todos os dados do storage devem ter schema versionado e validação.
