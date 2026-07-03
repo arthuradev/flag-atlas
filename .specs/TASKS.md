@@ -159,12 +159,12 @@ Objetivo: navegação de progresso.
 
 Tarefas:
 
-- [ ] Criar tela de continentes.
-- [ ] Criar tela de continente individual.
-- [ ] Criar coleção.
-- [ ] Adicionar busca.
-- [ ] Adicionar filtros por continente, domínio e status.
-- [ ] Adicionar ordenação simples.
+- [x] Criar tela de continentes.
+- [x] Criar tela de continente individual.
+- [x] Criar coleção.
+- [x] Adicionar busca.
+- [x] Adicionar filtros por continente, domínio e status.
+- [x] Adicionar ordenação simples.
 
 Commit sugerido:
 
