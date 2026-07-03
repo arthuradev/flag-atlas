@@ -98,11 +98,11 @@ Objetivo: entrada do usuário.
 
 Tarefas:
 
-- [ ] Criar onboarding curto.
-- [ ] Persistir conclusão do onboarding.
-- [ ] Criar Home com progresso geral.
-- [ ] Criar CTA “Continuar treino”.
-- [ ] Criar atalhos para Continentes, Coleção, Configurações.
+- [x] Criar onboarding curto.
+- [x] Persistir conclusão do onboarding.
+- [x] Criar Home com progresso geral.
+- [x] Criar CTA “Continuar treino”.
+- [x] Criar atalhos para Continentes, Coleção, Configurações.
 
 Commit sugerido:
 

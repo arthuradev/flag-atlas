@@ -1,4 +1,5 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
 import { CollectionPage } from "@/pages/CollectionPage/CollectionPage";
 import { ContinentPage } from "@/pages/ContinentPage/ContinentPage";
 import { ContinentsPage } from "@/pages/ContinentsPage/ContinentsPage";
@@ -8,11 +9,16 @@ import { SessionResultPage } from "@/pages/SessionResultPage/SessionResultPage";
 import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
 import { TrainingPage } from "@/pages/TrainingPage/TrainingPage";
 
+function RootRedirect() {
+  const hasCompletedOnboarding = useOnboardingStore((state) => state.hasCompletedOnboarding);
+  return <Navigate to={hasCompletedOnboarding ? "/home" : "/onboarding"} replace />;
+}
+
 export function AppRouter() {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={<RootRedirect />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/training" element={<TrainingPage />} />
