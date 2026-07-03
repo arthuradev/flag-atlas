@@ -116,15 +116,15 @@ Objetivo: ciclo jogável central.
 
 Tarefas:
 
-- [ ] Criar lógica de geração de sessão.
-- [ ] Criar lógica de alternativas.
-- [ ] Criar tela de pergunta.
-- [ ] Implementar feedback de acerto/erro.
-- [ ] Implementar avanço automático.
-- [ ] Implementar HUD discreto.
-- [ ] Implementar resumo final.
-- [ ] Implementar “Jogar mais uma”.
-- [ ] Criar testes de lógica.
+- [x] Criar lógica de geração de sessão.
+- [x] Criar lógica de alternativas.
+- [x] Criar tela de pergunta.
+- [x] Implementar feedback de acerto/erro.
+- [x] Implementar avanço automático.
+- [x] Implementar HUD discreto.
+- [x] Implementar resumo final.
+- [x] Implementar “Jogar mais uma”.
+- [x] Criar testes de lógica.
 
 Commit sugerido:
 
