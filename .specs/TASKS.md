@@ -50,21 +50,21 @@ Objetivo: importar base oficial.
 
 Tarefas:
 
-- [ ] Extrair `_inputs/flag-atlas-data-assets.zip`.
-- [ ] Copiar `public/flags`.
-- [ ] Copiar/adaptar dados de países e continentes.
-- [ ] Normalizar idioma para `pt-BR` e `en-US`.
-- [ ] Preservar extras separadamente.
-- [ ] Preservar atribuição em docs.
-- [ ] Criar testes de integridade de dados.
-- [ ] Criar teste simples de segurança dos SVGs.
+- [x] Extrair `_inputs/flag-atlas-data-assets.zip`.
+- [x] Copiar `public/flags`.
+- [x] Copiar/adaptar dados de países e continentes.
+- [x] Normalizar idioma para `pt-BR` e `en-US`.
+- [x] Preservar extras separadamente.
+- [x] Preservar atribuição em docs.
+- [x] Criar testes de integridade de dados.
+- [x] Criar teste simples de segurança dos SVGs.
 
 Validação:
 
-- [ ] 195 países.
-- [ ] 195 SVGs MVP.
-- [ ] 5 continentes.
-- [ ] Todos os nomes e flags válidos.
+- [x] 195 países.
+- [x] 195 SVGs MVP.
+- [x] 5 continentes.
+- [x] Todos os nomes e flags válidos.
 
 Commit sugerido:
 

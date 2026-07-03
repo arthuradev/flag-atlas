@@ -67,3 +67,9 @@ O MVP implementa:
 ## Documentação
 
 A fonte da verdade do projeto fica em `.specs/`.
+
+## Atribuição das bandeiras
+
+Imagens de bandeiras obtidas do Flagpedia.net. O Flagpedia informa que suas imagens de bandeiras estão em domínio público. Backlink apreciado: https://flagpedia.net
+
+Detalhes em `docs/attribution/`.
