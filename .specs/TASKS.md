@@ -178,14 +178,14 @@ Objetivo: polimento de experiência.
 
 Tarefas:
 
-- [ ] Configurar Howler.js.
-- [ ] Adicionar sons básicos opcionais.
-- [ ] Adicionar controle de volume.
-- [ ] Configurar Motion.
-- [ ] Adicionar microanimações.
-- [ ] Respeitar reduzir animações.
-- [ ] Melhorar focus states.
-- [ ] Revisar responsividade mobile.
+- [x] Configurar Howler.js.
+- [x] Adicionar sons básicos opcionais.
+- [x] Adicionar controle de volume.
+- [x] Configurar Motion.
+- [x] Adicionar microanimações.
+- [x] Respeitar reduzir animações.
+- [x] Melhorar focus states.
+- [x] Revisar responsividade mobile.
 
 Commit sugerido:
 

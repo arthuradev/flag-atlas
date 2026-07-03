@@ -1,7 +1,9 @@
+import { motion } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
+import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 
@@ -21,6 +23,7 @@ export function OnboardingPage() {
   const isLastStep = stepIndex === STEPS.length - 1;
 
   const handleNext = () => {
+    playSound("click");
     if (isLastStep) {
       completeOnboarding();
       navigate("/home", { replace: true });
@@ -32,11 +35,19 @@ export function OnboardingPage() {
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-4 py-8">
       <Card className="flex flex-col items-center gap-4 text-center">
-        <span className="text-6xl" aria-hidden="true">
-          {step.emoji}
-        </span>
-        <h1 className="text-2xl font-extrabold">{t(step.titleKey)}</h1>
-        <p className="text-lg text-text-muted">{t(step.bodyKey)}</p>
+        <motion.div
+          key={stepIndex}
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="flex flex-col items-center gap-4"
+        >
+          <span className="text-6xl" aria-hidden="true">
+            {step.emoji}
+          </span>
+          <h1 className="text-2xl font-extrabold">{t(step.titleKey)}</h1>
+          <p className="text-lg text-text-muted">{t(step.bodyKey)}</p>
+        </motion.div>
 
         <div
           className="flex gap-2 py-2"

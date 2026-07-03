@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+
 type OptionState = "idle" | "correct" | "wrong" | "dimmed";
 
 type OptionButtonProps = {
@@ -25,11 +27,13 @@ export function OptionButton({ label, state, disabled, onSelect }: OptionButtonP
   const icon = STATE_ICONS[state];
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={onSelect}
       disabled={disabled}
-      className={`flex min-h-14 w-full cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 px-5 text-left text-lg font-bold transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-default ${STATE_CLASSES[state]}`}
+      animate={state === "correct" ? { scale: [1, 1.04, 1] } : { scale: 1 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className={`flex min-h-14 w-full cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 px-5 text-left text-lg font-bold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-default ${STATE_CLASSES[state]}`}
     >
       <span>{label}</span>
       {icon && (
@@ -37,6 +41,6 @@ export function OptionButton({ label, state, disabled, onSelect }: OptionButtonP
           {icon}
         </span>
       )}
-    </button>
+    </motion.button>
   );
 }

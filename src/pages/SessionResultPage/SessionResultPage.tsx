@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
+import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
@@ -37,6 +39,12 @@ export function SessionResultPage() {
   // página não deve redirecionar para a Home durante a transição de rota.
   const [summary] = useState(storeSummary);
 
+  useEffect(() => {
+    if (summary) {
+      playSound("complete");
+    }
+  }, [summary]);
+
   if (!summary) {
     return <Navigate to="/home" replace />;
   }
@@ -44,6 +52,7 @@ export function SessionResultPage() {
   const leveledUp = summary.levelAfter > summary.levelBefore;
 
   const handlePlayAgain = () => {
+    playSound("click");
     // Navegar antes de iniciar: iniciar a sessão limpa o summary, o que
     // faria esta página redirecionar para a Home no re-render.
     navigate("/training", { replace: true });
@@ -51,16 +60,28 @@ export function SessionResultPage() {
   };
 
   const handleBackHome = () => {
+    playSound("click");
     clearSession();
     navigate("/home");
   };
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-5 px-4 py-8">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-5 px-4 py-8"
+    >
       <header className="text-center">
-        <p className="text-5xl" aria-hidden="true">
+        <motion.p
+          initial={{ scale: 0.4, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.1 }}
+          className="text-5xl"
+          aria-hidden="true"
+        >
           🎉
-        </p>
+        </motion.p>
         <h1 className="mt-2 text-3xl font-extrabold">{t("result.title")}</h1>
         {leveledUp && (
           <p className="mt-1 font-bold text-success">
@@ -113,6 +134,6 @@ export function SessionResultPage() {
           {t("common.backToHome")}
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }

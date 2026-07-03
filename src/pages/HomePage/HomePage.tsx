@@ -1,7 +1,9 @@
+import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { countLearnedCountries } from "@/entities/progress/progress.selectors";
 import { useProgressStore } from "@/features/progress/store/progressStore";
+import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { ProgressBar } from "@/shared/components/ProgressBar";
@@ -20,8 +22,18 @@ export function HomePage() {
   const learned = countLearnedCountries(progress);
   const total = COUNTRIES.length;
 
+  const handleContinueTraining = () => {
+    playSound("click");
+    navigate("/training");
+  };
+
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-4 py-8">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-4 py-8"
+    >
       <header className="text-center">
         <p className="text-5xl" aria-hidden="true">
           🌍
@@ -45,7 +57,7 @@ export function HomePage() {
         />
       </Card>
 
-      <Button size="lg" fullWidth onClick={() => navigate("/training")}>
+      <Button size="lg" fullWidth onClick={handleContinueTraining}>
         {t("home.continueTraining")}
       </Button>
 
@@ -63,6 +75,6 @@ export function HomePage() {
           </Link>
         ))}
       </nav>
-    </div>
+    </motion.div>
   );
 }
