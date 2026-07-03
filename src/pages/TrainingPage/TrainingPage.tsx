@@ -61,7 +61,7 @@ export function TrainingPage() {
 
   if (!session) {
     return (
-      <PageShell title={t("training.title")} backTo="/home">
+      <PageShell title={t("training.title")} backTo="/home" width="wide">
         <span className="sr-only">{t("training.title")}</span>
       </PageShell>
     );
@@ -71,7 +71,7 @@ export function TrainingPage() {
   const country = question ? getCountryById(question.countryId) : undefined;
   if (!question || !country) {
     return (
-      <PageShell title={t("training.title")} backTo="/home">
+      <PageShell title={t("training.title")} backTo="/home" width="wide">
         <p className="py-10 text-center text-text-muted">{t("training.emptyPool")}</p>
       </PageShell>
     );
@@ -82,9 +82,9 @@ export function TrainingPage() {
   const selectedCountry = feedback ? getCountryById(feedback.selectedCountryId) : undefined;
 
   return (
-    <PageShell backTo="/home" title={t("training.title")}>
-      <div className="flex flex-1 flex-col gap-4">
-        <div className="flex items-center justify-between text-sm font-bold text-text-muted">
+    <PageShell backTo="/home" title={t("training.title")} width="wide">
+      <div className="flex flex-1 flex-col gap-4 sm:gap-5">
+        <div className="flex items-center justify-between text-sm font-bold text-text-muted sm:text-base">
           <span>
             <span className="sr-only">{t("training.questionLabel", { current, total })}</span>
             <span aria-hidden="true">{t("training.questionShort", { current, total })}</span>
@@ -108,25 +108,27 @@ export function TrainingPage() {
           colorClassName="bg-primary"
         />
 
-        <h2 className="text-center text-xl font-extrabold">{t("training.whichCountry")}</h2>
+        <h2 className="text-center text-xl font-extrabold sm:text-2xl">
+          {t("training.whichCountry")}
+        </h2>
 
         <motion.div
           key={session.currentIndex}
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-4 sm:gap-6"
         >
-          <Card className="flex h-48 items-center justify-center bg-surface-raised p-4 sm:h-56">
+          <Card className="mx-auto flex h-52 w-full max-w-3xl items-center justify-center bg-surface-raised p-4 sm:h-72 sm:p-6 lg:h-[29rem]">
             <FlagImage
               key={question.countryId}
               flagPath={country.flagPath}
               alt={t("training.flagAlt")}
-              className="max-h-full max-w-full rounded-lg shadow-md"
+              className="max-h-full max-w-full rounded-lg object-contain shadow-md"
             />
           </Card>
 
-          <div className="flex flex-col gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
             {question.optionCountryIds.map((optionId) => {
               const option = getCountryById(optionId);
               if (!option) {
@@ -158,6 +160,7 @@ export function TrainingPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
+              className="mx-auto w-full max-w-3xl"
             >
               <Card
                 className={`flex flex-col gap-1 border-2 p-4 ${

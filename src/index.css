@@ -59,7 +59,7 @@
   --color-ring: var(--fa-ring);
   --color-progress: var(--fa-progress);
 
-  --font-sans: "Nunito Variable", ui-rounded, system-ui, "Segoe UI", sans-serif;
+  --font-sans: "Nunito Variable", "Nunito", ui-rounded, system-ui, "Segoe UI", sans-serif;
 }
 
 html,

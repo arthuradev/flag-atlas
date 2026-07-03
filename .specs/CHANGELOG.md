@@ -4,6 +4,7 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 
 ## Unreleased
 
+- Tela de treino redesenhada para desktop: container `max-w-5xl` (PageShell ganhou variante `wide`), bandeira maior (até ~720px de largura em telas grandes, `object-contain`), alternativas em grade 2×2 com botões de 80px/`text-xl` no desktop (64px/1 coluna no mobile); stack de fontes agora inclui `"Nunito"` como fallback nomeado (a fonte já era Nunito via `@fontsource-variable/nunito`, local e offline).
 - Project package created.
 - Fase 0: scaffold Vite + React + TypeScript strict com pnpm, Tailwind CSS 4, Biome, Vitest e Playwright configurados; estrutura modular de pastas criada; repositório privado `arthuradev/flag-atlas` criado.
 - Fase 9: README completo com status, comandos, scripts auxiliares, deploy e pendências futuras; deploy do Pages protegido pela variável de repositório `ENABLE_PAGES` até o Pages poder ser ativado; validação final completa (lint, typecheck, 74 testes unitários, build, 16 E2E).

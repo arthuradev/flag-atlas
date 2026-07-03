@@ -2,17 +2,25 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
+type PageShellWidth = "default" | "wide";
+
 type PageShellProps = {
   title?: string;
   backTo?: string;
+  width?: PageShellWidth;
   children: ReactNode;
 };
 
-export function PageShell({ title, backTo, children }: PageShellProps) {
+const WIDTH_CLASSES: Record<PageShellWidth, string> = {
+  default: "max-w-2xl",
+  wide: "max-w-5xl",
+};
+
+export function PageShell({ title, backTo, width = "default", children }: PageShellProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-4 pb-8">
+    <div className={`mx-auto flex min-h-dvh w-full ${WIDTH_CLASSES[width]} flex-col px-4 pb-8`}>
       {(title || backTo) && (
         <header className="flex min-h-16 items-center gap-2 py-3">
           {backTo && (

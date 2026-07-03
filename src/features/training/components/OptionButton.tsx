@@ -35,7 +35,7 @@ export function OptionButton({ label, state, disabled, onSelect }: OptionButtonP
       disabled={disabled}
       animate={state === "correct" ? { scale: [1, 1.04, 1] } : { scale: 1 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`flex min-h-14 w-full cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 px-5 text-left text-lg font-bold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-default ${STATE_CLASSES[state]}`}
+      className={`flex min-h-16 w-full cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 px-6 py-3 text-left text-lg font-bold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-default sm:min-h-20 sm:text-xl ${STATE_CLASSES[state]}`}
     >
       <span>{label}</span>
       {icon && (
