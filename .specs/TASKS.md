@@ -199,14 +199,14 @@ Objetivo: finalizar MVP publicável.
 
 Tarefas:
 
-- [ ] Configurar PWA.
-- [ ] Configurar manifest.
-- [ ] Configurar service worker/cache.
-- [ ] Criar teste E2E do fluxo principal.
-- [ ] Criar smoke test offline.
-- [ ] Configurar GitHub Actions.
-- [ ] Configurar GitHub Pages.
-- [ ] Validar build final.
+- [x] Configurar PWA.
+- [x] Configurar manifest.
+- [x] Configurar service worker/cache.
+- [x] Criar teste E2E do fluxo principal.
+- [x] Criar smoke test offline.
+- [x] Configurar GitHub Actions.
+- [x] Configurar GitHub Pages. (workflow pronto; ativação do Pages exige repo público ou plano GitHub Pro — ver DEPLOYMENT)
+- [x] Validar build final.
 
 Commit sugerido:
 
