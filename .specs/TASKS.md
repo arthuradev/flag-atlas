@@ -138,14 +138,14 @@ Objetivo: salvar e mostrar evolução real.
 
 Tarefas:
 
-- [ ] Criar storage versionado.
-- [ ] Implementar XP.
-- [ ] Implementar nível básico.
-- [ ] Implementar domínio por país.
-- [ ] Implementar revisão pendente.
-- [ ] Implementar progresso por continente.
-- [ ] Implementar reset com confirmação.
-- [ ] Criar testes de domínio/storage.
+- [x] Criar storage versionado.
+- [x] Implementar XP.
+- [x] Implementar nível básico.
+- [x] Implementar domínio por país.
+- [x] Implementar revisão pendente.
+- [x] Implementar progresso por continente.
+- [x] Implementar reset com confirmação.
+- [x] Criar testes de domínio/storage.
 
 Commit sugerido:
 

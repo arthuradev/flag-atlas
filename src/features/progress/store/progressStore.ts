@@ -5,42 +5,48 @@ import {
   type UserProgress,
 } from "@/entities/progress/progress.types";
 import { computeLevel } from "@/features/progress/logic/xp";
+import { clearProgress, loadProgress, saveProgress } from "@/shared/storage/progressRepository";
 
 type ProgressState = {
   progress: UserProgress;
   registerAnswer: (countryProgress: CountryProgress, xpGained: number, answeredAt: string) => void;
   registerCompletedSession: () => void;
+  resetProgress: () => void;
 };
 
-/**
- * Progresso do usuário em memória. A persistência local versionada
- * é conectada na Fase 5.
- */
-export const useProgressStore = create<ProgressState>((set) => ({
-  progress: createInitialUserProgress(),
-  registerAnswer: (countryProgress, xpGained, answeredAt) => {
+/** Progresso do usuário, carregado e persistido em localStorage versionado. */
+export const useProgressStore = create<ProgressState>((set) => {
+  const update = (recipe: (progress: UserProgress) => UserProgress) => {
     set((state) => {
-      const totalXp = state.progress.totalXp + xpGained;
-      return {
-        progress: {
-          ...state.progress,
+      const progress = recipe(state.progress);
+      saveProgress(progress);
+      return { progress };
+    });
+  };
+
+  return {
+    progress: loadProgress(),
+    registerAnswer: (countryProgress, xpGained, answeredAt) => {
+      update((progress) => {
+        const totalXp = progress.totalXp + xpGained;
+        return {
+          ...progress,
           totalXp,
           level: computeLevel(totalXp),
-          countries: {
-            ...state.progress.countries,
-            [countryProgress.countryId]: countryProgress,
-          },
+          countries: { ...progress.countries, [countryProgress.countryId]: countryProgress },
           lastPlayedAt: answeredAt,
-        },
-      };
-    });
-  },
-  registerCompletedSession: () => {
-    set((state) => ({
-      progress: {
-        ...state.progress,
-        completedSessions: state.progress.completedSessions + 1,
-      },
-    }));
-  },
-}));
+        };
+      });
+    },
+    registerCompletedSession: () => {
+      update((progress) => ({
+        ...progress,
+        completedSessions: progress.completedSessions + 1,
+      }));
+    },
+    resetProgress: () => {
+      clearProgress();
+      set({ progress: createInitialUserProgress() });
+    },
+  };
+});
