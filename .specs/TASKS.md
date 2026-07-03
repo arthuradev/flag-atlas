@@ -78,13 +78,13 @@ Objetivo: base navegável do app.
 
 Tarefas:
 
-- [ ] Configurar HashRouter.
-- [ ] Criar páginas vazias/placeholder.
-- [ ] Configurar i18next.
-- [ ] Criar traduções pt-BR/en-US.
-- [ ] Configurar tema claro/escuro/sistema se viável.
-- [ ] Criar layout base responsivo.
-- [ ] Criar componentes base: Button, Card, ProgressBar, PageShell.
+- [x] Configurar HashRouter.
+- [x] Criar páginas vazias/placeholder.
+- [x] Configurar i18next.
+- [x] Criar traduções pt-BR/en-US.
+- [x] Configurar tema claro/escuro/sistema se viável.
+- [x] Criar layout base responsivo.
+- [x] Criar componentes base: Button, Card, ProgressBar, PageShell.
 
 Commit sugerido:
 

@@ -1,7 +1,10 @@
+import { Providers } from "./providers";
+import { AppRouter } from "./router";
+
 export function App() {
   return (
-    <main className="flex min-h-dvh items-center justify-center">
-      <h1 className="text-2xl font-bold">Flag Atlas</h1>
-    </main>
+    <Providers>
+      <AppRouter />
+    </Providers>
   );
 }

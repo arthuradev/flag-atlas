@@ -1,0 +1,120 @@
+{
+  "app": {
+    "name": "Flag Atlas",
+    "tagline": "Learn the flags of the world in quick, fun training sessions."
+  },
+  "common": {
+    "back": "Back",
+    "backToHome": "Back to home",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "search": "Search",
+    "clear": "Clear",
+    "all": "All"
+  },
+  "onboarding": {
+    "welcomeTitle": "Welcome to Flag Atlas",
+    "welcomeBody": "Learn the flags of the world in quick, fun training sessions.",
+    "worldTitle": "Complete the world",
+    "worldBody": "Master countries, advance through continents and track your progress.",
+    "paceTitle": "Train at your own pace",
+    "paceBody": "No pressure. Miss, review and play one more whenever you want.",
+    "next": "Next",
+    "start": "Start",
+    "stepLabel": "Step {{current}} of {{total}}"
+  },
+  "home": {
+    "learnedCount": "{{learned}}/{{total}} countries learned",
+    "continueTraining": "Continue training",
+    "continents": "Continents",
+    "collection": "Collection",
+    "settings": "Settings",
+    "level": "Level {{level}}",
+    "totalXp": "{{xp}} XP",
+    "levelProgress": "Level progress"
+  },
+  "training": {
+    "title": "Training",
+    "questionLabel": "Question {{current}} of {{total}}",
+    "questionShort": "{{current}}/{{total}}",
+    "whichCountry": "Which country is this?",
+    "flagAlt": "Flag to guess",
+    "streak": "Streak: {{count}}",
+    "sessionXp": "Session XP: {{xp}}",
+    "correctTitle": "Nice!",
+    "wrongTitle": "Almost!",
+    "correctAnswerWas": "The right answer was {{country}}.",
+    "youChose": "You picked {{country}}.",
+    "xpGained": "+{{xp}} XP",
+    "masteryUp": "{{country}}: {{from}} → {{to}}",
+    "markedForReview": "We'll review this one soon.",
+    "sessionSize": "Session size",
+    "questionsCount": "{{count}} questions",
+    "emptyPool": "No countries available to train."
+  },
+  "result": {
+    "title": "Session complete!",
+    "correct": "{{count}} correct",
+    "correct_one": "{{count}} correct",
+    "wrong": "{{count}} misses",
+    "wrong_one": "{{count}} miss",
+    "bestStreak": "Best streak: {{count}}",
+    "xpEarned": "+{{xp}} XP",
+    "accuracy": "Accuracy: {{percent}}%",
+    "promoted": "Leveled up",
+    "toReview": "To review",
+    "playAgain": "Play one more",
+    "levelUp": "You reached level {{level}}!"
+  },
+  "continents": {
+    "title": "Continents",
+    "countriesCount": "{{learned}}/{{total}} countries",
+    "trainContinent": "Train this continent",
+    "viewCollection": "View countries"
+  },
+  "collection": {
+    "title": "Collection",
+    "searchPlaceholder": "Search country...",
+    "filterContinent": "Continent",
+    "filterMastery": "Mastery",
+    "filterStatus": "Status",
+    "statusSeen": "Seen",
+    "statusUnseen": "Not seen yet",
+    "statusReview": "To review",
+    "sort": "Sort",
+    "sortByName": "Name",
+    "sortByMastery": "Mastery",
+    "empty": "No countries found.",
+    "resultsCount": "{{count}} countries",
+    "resultsCount_one": "{{count}} country"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "sound": "Sounds",
+    "soundOn": "On",
+    "soundOff": "Off",
+    "volume": "Volume",
+    "reduceMotion": "Reduce animations",
+    "sessionSize": "Session size",
+    "resetProgress": "Reset progress",
+    "resetConfirmTitle": "Reset all progress?",
+    "resetConfirmBody": "Your XP, levels and country mastery will be erased. This cannot be undone.",
+    "resetConfirmAction": "Yes, reset",
+    "resetDone": "Progress reset.",
+    "about": "About",
+    "flagAttribution": "Flag images sourced from Flagpedia.net (public domain)."
+  },
+  "mastery": {
+    "new": "New",
+    "recognized": "Recognized",
+    "learned": "Learned",
+    "dominated": "Expert",
+    "master": "Master"
+  }
+}

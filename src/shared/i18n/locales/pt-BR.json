@@ -1,0 +1,120 @@
+{
+  "app": {
+    "name": "Flag Atlas",
+    "tagline": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos."
+  },
+  "common": {
+    "back": "Voltar",
+    "backToHome": "Voltar ao início",
+    "continue": "Continuar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "search": "Buscar",
+    "clear": "Limpar",
+    "all": "Todos"
+  },
+  "onboarding": {
+    "welcomeTitle": "Bem-vindo ao Flag Atlas",
+    "welcomeBody": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
+    "worldTitle": "Complete o mundo",
+    "worldBody": "Domine países, avance por continentes e acompanhe seu progresso.",
+    "paceTitle": "Treine no seu ritmo",
+    "paceBody": "Sem pressão. Erre, revise e jogue mais uma quando quiser.",
+    "next": "Avançar",
+    "start": "Começar",
+    "stepLabel": "Passo {{current}} de {{total}}"
+  },
+  "home": {
+    "learnedCount": "{{learned}}/{{total}} países aprendidos",
+    "continueTraining": "Continuar treino",
+    "continents": "Continentes",
+    "collection": "Coleção",
+    "settings": "Configurações",
+    "level": "Nível {{level}}",
+    "totalXp": "{{xp}} XP",
+    "levelProgress": "Progresso do nível"
+  },
+  "training": {
+    "title": "Treino",
+    "questionLabel": "Pergunta {{current}} de {{total}}",
+    "questionShort": "{{current}}/{{total}}",
+    "whichCountry": "Que país é este?",
+    "flagAlt": "Bandeira para adivinhar",
+    "streak": "Sequência: {{count}}",
+    "sessionXp": "XP da sessão: {{xp}}",
+    "correctTitle": "Boa!",
+    "wrongTitle": "Quase!",
+    "correctAnswerWas": "A resposta certa era {{country}}.",
+    "youChose": "Você escolheu {{country}}.",
+    "xpGained": "+{{xp}} XP",
+    "masteryUp": "{{country}}: {{from}} → {{to}}",
+    "markedForReview": "Vamos revisar essa em breve.",
+    "sessionSize": "Tamanho da sessão",
+    "questionsCount": "{{count}} perguntas",
+    "emptyPool": "Nenhum país disponível para treinar."
+  },
+  "result": {
+    "title": "Sessão concluída!",
+    "correct": "{{count}} acertos",
+    "correct_one": "{{count}} acerto",
+    "wrong": "{{count}} erros",
+    "wrong_one": "{{count}} erro",
+    "bestStreak": "Melhor sequência: {{count}}",
+    "xpEarned": "+{{xp}} XP",
+    "accuracy": "Precisão: {{percent}}%",
+    "promoted": "Evoluíram",
+    "toReview": "Para revisar",
+    "playAgain": "Jogar mais uma",
+    "levelUp": "Você alcançou o nível {{level}}!"
+  },
+  "continents": {
+    "title": "Continentes",
+    "countriesCount": "{{learned}}/{{total}} países",
+    "trainContinent": "Treinar este continente",
+    "viewCollection": "Ver países"
+  },
+  "collection": {
+    "title": "Coleção",
+    "searchPlaceholder": "Buscar país...",
+    "filterContinent": "Continente",
+    "filterMastery": "Domínio",
+    "filterStatus": "Status",
+    "statusSeen": "Já vistos",
+    "statusUnseen": "Ainda não vistos",
+    "statusReview": "Para revisar",
+    "sort": "Ordenar",
+    "sortByName": "Nome",
+    "sortByMastery": "Domínio",
+    "empty": "Nenhum país encontrado.",
+    "resultsCount": "{{count}} países",
+    "resultsCount_one": "{{count}} país"
+  },
+  "settings": {
+    "title": "Configurações",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "themeSystem": "Sistema",
+    "sound": "Sons",
+    "soundOn": "Ligados",
+    "soundOff": "Desligados",
+    "volume": "Volume",
+    "reduceMotion": "Reduzir animações",
+    "sessionSize": "Tamanho da sessão",
+    "resetProgress": "Resetar progresso",
+    "resetConfirmTitle": "Resetar todo o progresso?",
+    "resetConfirmBody": "Seu XP, níveis e domínio por país serão apagados. Essa ação não pode ser desfeita.",
+    "resetConfirmAction": "Sim, resetar",
+    "resetDone": "Progresso resetado.",
+    "about": "Sobre",
+    "flagAttribution": "Imagens de bandeiras obtidas do Flagpedia.net (domínio público)."
+  },
+  "mastery": {
+    "new": "Novo",
+    "recognized": "Reconhecido",
+    "learned": "Aprendido",
+    "dominated": "Dominado",
+    "master": "Mestre"
+  }
+}
