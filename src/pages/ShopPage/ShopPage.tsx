@@ -12,7 +12,6 @@ import { CosmeticItemCard } from "@/features/cosmetics/components/CosmeticItemCa
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { useCosmeticInventory } from "@/features/cosmetics/store/useCosmetics";
 import { useProgressStore } from "@/features/progress/store/progressStore";
-import { playSound } from "@/shared/audio/soundPlayer";
 import { Card } from "@/shared/components/Card";
 import { PageShell } from "@/shared/components/PageShell";
 
@@ -33,14 +32,12 @@ export function ShopPage() {
       return;
     }
     purchaseCosmetic(id);
-    playSound("click");
     setMessage(t("cosmetics.purchased"));
     setEffectKey((key) => key + 1);
   };
 
   const handleEquip = (id: string) => {
     equipCosmetic(id);
-    playSound("click");
     setMessage(t("cosmetics.itemEquipped"));
   };
 

@@ -66,7 +66,6 @@ export function SessionResultPage() {
   const isSurvival = summary.survival !== undefined;
 
   const handlePlayAgain = () => {
-    playSound("click");
     // Navegar antes de iniciar: iniciar a sessão limpa o summary, o que
     // faria esta página redirecionar para a Home no re-render.
     navigate("/training", { replace: true });
@@ -74,13 +73,11 @@ export function SessionResultPage() {
   };
 
   const handleReview = () => {
-    playSound("click");
     navigate("/training", { replace: true });
     startSession({ mode: "review", questionType: "choice", size: summary.config.size });
   };
 
   const handleBackHome = () => {
-    playSound("click");
     clearSession();
     navigate("/home");
   };

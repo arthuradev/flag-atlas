@@ -4,7 +4,6 @@ import type { SessionConfig } from "@/entities/session/session.types";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
-import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { PageShell } from "@/shared/components/PageShell";
@@ -79,7 +78,6 @@ export function ChallengesPage() {
   ];
 
   const handleStart = (config: SessionConfig) => {
-    playSound("click");
     navigate("/training");
     startSession(config);
   };

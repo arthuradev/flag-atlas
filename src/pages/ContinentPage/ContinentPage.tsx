@@ -7,7 +7,6 @@ import { CountryListItem } from "@/features/collection/components/CountryListIte
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
-import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { PageShell } from "@/shared/components/PageShell";
 import { ProgressBar } from "@/shared/components/ProgressBar";
@@ -37,7 +36,6 @@ export function ContinentPage() {
   const total = continent.countryIds.length;
 
   const handleTrain = () => {
-    playSound("click");
     navigate("/training");
     startSession({
       mode: "continent",

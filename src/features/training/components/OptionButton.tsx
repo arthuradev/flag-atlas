@@ -31,6 +31,7 @@ export function OptionButton({ label, state, disabled, onSelect }: OptionButtonP
   return (
     <motion.button
       type="button"
+      data-sound="off"
       data-testid="training-option"
       data-state={state}
       onClick={onSelect}

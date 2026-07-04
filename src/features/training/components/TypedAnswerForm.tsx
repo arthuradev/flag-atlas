@@ -46,7 +46,7 @@ export function TypedAnswerForm({ disabled, onSubmit }: TypedAnswerFormProps) {
         spellCheck={false}
         className="min-h-14 w-full flex-1 rounded-2xl border-2 border-border bg-surface px-5 text-lg font-bold text-text placeholder:font-semibold placeholder:text-text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 sm:min-h-16 sm:text-xl"
       />
-      <Button type="submit" size="lg" disabled={!canSubmit}>
+      <Button type="submit" size="lg" disabled={!canSubmit} data-sound="off">
         {t("typing.submit")}
       </Button>
     </form>

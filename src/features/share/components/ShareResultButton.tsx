@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { type ShareOutcome, shareOrCopyText } from "../logic/shareText";
 
@@ -19,7 +18,6 @@ export function ShareResultButton({ text }: ShareResultButtonProps) {
   const canNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const handleShare = async () => {
-    playSound("click");
     setOutcome(await shareOrCopyText(text));
   };
 

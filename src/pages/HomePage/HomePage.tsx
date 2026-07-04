@@ -12,7 +12,6 @@ import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine"
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
-import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Icon, type IconName } from "@/shared/components/Icon";
@@ -39,12 +38,10 @@ export function HomePage() {
   const reviewCount = listCountriesNeedingReview(progress).length;
 
   const handleContinueTraining = () => {
-    playSound("click");
     navigate("/training");
   };
 
   const handleReview = () => {
-    playSound("click");
     navigate("/training");
     startSession({ mode: "review", questionType: "choice", size: defaultSessionSize });
   };

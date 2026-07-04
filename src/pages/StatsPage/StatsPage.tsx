@@ -14,7 +14,6 @@ import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
 import { MAX_MASTERY_POINTS } from "@/features/progress/logic/mastery";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
-import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
@@ -71,7 +70,6 @@ export function StatsPage() {
           <Button
             size="lg"
             onClick={() => {
-              playSound("click");
               navigate("/training");
             }}
           >
