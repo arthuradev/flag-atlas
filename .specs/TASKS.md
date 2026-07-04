@@ -361,3 +361,40 @@ Objetivo: transformar o quiz em experiência de aprendizado, mantendo a simplici
 - [x] i18n pt-BR/en-US completo (blocos `shop` e `cosmetics`).
 - [x] 70 novos testes unitários (262 no total) e 8 novos fluxos E2E (54 no total, desktop + mobile).
 - [x] Documentação atualizada (README, DATA_MODEL, COSMETICS, V4_ACCEPTANCE_CRITERIA, CHANGELOG).
+
+# Versão 4.5 — Mastery 2.0 e insígnias
+
+## V4.5.1 — Domínio por país mais sério
+
+- [x] Substituir escala `0–10` por `0–100`.
+- [x] Criar decisão final de nível por `deriveMasteryLevel`.
+- [x] Exigir evidências extras para Mestre/Platina.
+- [x] Impedir Mestre em uma única sessão ou só por múltipla escolha repetida.
+
+## V4.5.2 — Evidência e revisão espaçada
+
+- [x] Adicionar `masterySystemVersion`, `correctDateKeys`, contadores por modo/tipo e `nextReviewAt`.
+- [x] Pontuar digitação/revisão/parecidas acima de múltipla escolha comum.
+- [x] Erros suspendem Mestre e agendam revisão hoje.
+- [x] Home/revisão consideram `needsReview` e `nextReviewAt <= hoje`.
+
+## V4.5.3 — Migração e compatibilidade
+
+- [x] Manter `PROGRESS_SCHEMA_VERSION = 1`.
+- [x] Migrar pontos legados de forma conservadora.
+- [x] Garantir que legacy `10` não vire Mestre automaticamente.
+- [x] Preservar XP, conquistas, missões, sobrevivência, moedas e cosméticos.
+
+## V4.5.4 — Insígnias, coleção, stats e conquistas
+
+- [x] Criar `MasteryBadge`.
+- [x] Mostrar insígnias na Coleção, feedback/resumo de sessão e Estatísticas.
+- [x] Adicionar contagens Bronze/Prata/Ouro/Platina e lista Quase Platina.
+- [x] Ajustar `worldMaster` para exigir Platina real.
+- [x] Adicionar conquistas Primeira Platina e Colecionador de Platina.
+
+## V4.5.5 — Qualidade e docs
+
+- [x] i18n pt-BR/en-US para insígnias e revisão.
+- [x] Testes unitários de escala, Mestre difícil, ganho/perda, revisão, migração, stats, coleção e conquistas.
+- [x] Documentação atualizada (README, DATA_MODEL, SESSION_ALGORITHM, TASKS, CHANGELOG, MASTERY_2, V4_5_ACCEPTANCE_CRITERIA).

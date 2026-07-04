@@ -6,6 +6,7 @@ import { getCountryById, getCountryName } from "@/entities/country/country.selec
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { flagFrameClass } from "@/features/cosmetics/logic/flagFrames";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
+import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { OptionButton } from "@/features/training/components/OptionButton";
 import { TypedAnswerForm } from "@/features/training/components/TypedAnswerForm";
@@ -281,13 +282,21 @@ export function TrainingPage() {
                   </>
                 )}
                 {feedback.promoted && (
-                  <p className="text-sm font-bold text-success">
-                    {t("training.masteryUp", {
-                      country: getCountryName(country, locale),
-                      from: t(`mastery.${feedback.masteryBefore}`),
-                      to: t(`mastery.${feedback.masteryAfter}`),
-                    })}
-                  </p>
+                  <div className="flex flex-wrap items-center gap-2 text-sm font-bold text-success">
+                    <span>
+                      {t(
+                        feedback.masteryAfter === "master"
+                          ? "training.platinumUnlocked"
+                          : "training.masteryUp",
+                        {
+                          country: getCountryName(country, locale),
+                          from: t(`mastery.${feedback.masteryBefore}`),
+                          to: t(`mastery.${feedback.masteryAfter}`),
+                        },
+                      )}
+                    </span>
+                    <MasteryBadge masteryLevel={feedback.masteryAfter} size="sm" showTier />
+                  </div>
                 )}
                 <Button variant="ghost" size="md" className="self-end" onClick={advance}>
                   {t("common.continue")}

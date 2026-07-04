@@ -70,7 +70,7 @@ test.describe("typing mode", () => {
 
     // O erro por digitação marca o país para revisão: CTA aparece na Home.
     await page.goto("./#/home");
-    await expect(page.getByRole("button", { name: /Revisar erros/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Revisar hoje/ })).toBeVisible();
   });
 });
 
@@ -81,7 +81,7 @@ test.describe("review sessions", () => {
     await seedProgressWithReview(page);
     await page.goto("./");
 
-    await page.getByRole("button", { name: /Revisar erros/ }).click();
+    await page.getByRole("button", { name: /Revisar hoje/ }).click();
 
     // Apenas 1 país em revisão + 1 fraco: a sessão encurta sem repetir.
     await expect(page.getByText("1/2")).toBeVisible();

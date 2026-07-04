@@ -13,10 +13,15 @@ export const FLAWLESS_MIN_QUESTIONS = 5;
 export const SURVIVOR_TARGET_SCORE = 15;
 
 /** Países com domínio alto (Dominado ou Mestre). */
-function countMastered(progress: UserProgress): number {
+function countGoldOrBetter(progress: UserProgress): number {
   return Object.values(progress.countries).filter((country) =>
     isMasteryAtLeast(country.masteryLevel, "dominated"),
   ).length;
+}
+
+function countPlatinum(progress: UserProgress): number {
+  return Object.values(progress.countries).filter((country) => country.masteryLevel === "master")
+    .length;
 }
 
 function cappedProgress(current: number, target: number): AchievementProgress {
@@ -69,21 +74,34 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
     id: "firstMastery",
     category: "mastery",
     emoji: "🏅",
-    isUnlocked: ({ progress }) => countMastered(progress) >= 1,
+    isUnlocked: ({ progress }) => countGoldOrBetter(progress) >= 1,
   },
   {
     id: "collector",
     category: "mastery",
     emoji: "🎒",
-    isUnlocked: ({ progress }) => countMastered(progress) >= 25,
-    getProgress: (progress) => cappedProgress(countMastered(progress), 25),
+    isUnlocked: ({ progress }) => countGoldOrBetter(progress) >= 25,
+    getProgress: (progress) => cappedProgress(countGoldOrBetter(progress), 25),
+  },
+  {
+    id: "firstPlatinum",
+    category: "mastery",
+    emoji: "💠",
+    isUnlocked: ({ progress }) => countPlatinum(progress) >= 1,
+  },
+  {
+    id: "platinumCollector",
+    category: "mastery",
+    emoji: "🔷",
+    isUnlocked: ({ progress }) => countPlatinum(progress) >= 10,
+    getProgress: (progress) => cappedProgress(countPlatinum(progress), 10),
   },
   {
     id: "worldMaster",
     category: "mastery",
     emoji: "👑",
-    isUnlocked: ({ progress }) => countMastered(progress) >= COUNTRIES.length,
-    getProgress: (progress) => cappedProgress(countMastered(progress), COUNTRIES.length),
+    isUnlocked: ({ progress }) => countPlatinum(progress) >= COUNTRIES.length,
+    getProgress: (progress) => cappedProgress(countPlatinum(progress), COUNTRIES.length),
   },
   ...CONTINENT_EXPLORERS,
   {

@@ -70,13 +70,14 @@ O MVP implementa:
 - **Versão 2**: completa — aprendizado real por cima do quiz.
 - **Versão 3**: completa — retenção e diversão, sem virar app punitivo.
 - **Versão 4**: completa — personalização cosmética, sem pay-to-win.
+- **Versão 4.5**: completa — Mastery 2.0, revisão espaçada simples e insígnias de domínio.
 
 ## Versão 2
 
 A Versão 2 adiciona:
 
 - **Modo digitação** (`Desafios → Modo digitação`): digite o nome do país da bandeira. Aceita nomes em pt-BR, en-US e aliases (EUA, USA, Santa Sé, UK...), com normalização de acentos, pontuação e espaços. Código ISO2 não é aceito de propósito.
-- **Revisão inteligente inicial** (`Revisar erros` na Home e no resumo da sessão): prioriza países marcados para revisão e completa com países fracos. Ainda não é revisão espaçada completa — é uma primeira versão.
+- **Revisão inteligente inicial** (agora `Revisar hoje` na Home e no resumo da sessão): prioriza países marcados para revisão e completa com países fracos.
 - **Bandeiras parecidas** (`Desafios → Bandeiras parecidas`): treino focado em grupos manuais de bandeiras confundíveis (Chade×Romênia, Eslováquia×Eslovênia, etc.), com alternativas erradas vindas do próprio grupo.
 - **Estatísticas** (`/stats`, atalho na Home): países vistos/aprendidos/dominados, precisão geral, mais difíceis, para revisar e confusões comuns (qual bandeira você trocou por qual). Tudo local, derivado do progresso local.
 
@@ -89,7 +90,7 @@ A Versão 3 adiciona retenção e diversão, mantendo a filosofia "erro ensina, 
 - **Conquistas** (`/achievements`, atalho 🏆 na Home): 18 conquistas locais derivadas do progresso — marcos de países vistos, domínio, continentes, sessões perfeitas, modos da V2 e sobrevivência. Bloqueadas mostram progresso parcial; desbloqueios aparecem no resumo da sessão, sem popups.
 - **Missões diárias** (bloco "Missões de hoje" na Home e no resumo): 3 missões por dia, geradas deterministicamente pela data local, persistidas durante o dia e renovadas na virada. Recompensa é um XP bônus pequeno, concedido uma única vez por missão.
 - **Streak diário saudável** (linha discreta na Home): conta dias com pelo menos uma sessão concluída, sem contar duas vezes o mesmo dia. Um dia pulado é coberto por 1 descanso (🧊), que recarrega a cada 7 dias ativos. Perder a sequência recomeça leve, com mensagem sem culpa — sem tela vermelha, sem vidas bloqueando aprendizado.
-- **Desafios** (`/challenges`): página reorganizada com 6 cards — Modo digitação, Bandeiras parecidas, Revisar erros, Sobrevivência, Desafio rápido (5 perguntas) e Desafio perfeito (10 perguntas) — cada um com tipo de pergunta e duração.
+- **Desafios** (`/challenges`): página reorganizada com 6 cards — Modo digitação, Bandeiras parecidas, Revisar hoje, Sobrevivência, Desafio rápido (5 perguntas) e Desafio perfeito (10 perguntas) — cada um com tipo de pergunta e duração.
 - **Modo sobrevivência** (`Desafios → Sobrevivência`): 3 vidas, cada erro tira uma, cada acerto pontua; termina quando as vidas acabam (teto de segurança de 100 perguntas, sem repetir país). Recorde local salvo e exibido no card do desafio.
 - **Compartilhar resultado** (botão no resumo da sessão): gera um texto bonito do resultado (normal ou sobrevivência) via Web Share API; sem ela, copia para a área de transferência; se nada funcionar, mostra o texto selecionável. Apenas texto local — sem backend e sem dados sensíveis.
 
@@ -107,6 +108,22 @@ A Versão 4 adiciona **personalização cosmética** — só aparência e som, s
 - **Como ganhar moedas:** jogue. Qualquer sessão comum, revisão, digitação, bandeiras parecidas ou sobrevivência concede moedas ao concluir; missões e conquistas também. Não é preciso ter moedas para aprender — cosmético nunca bloqueia conteúdo.
 
 Continua sem backend, login e ranking. O progresso V1/V2/V3 é preservado: o schema segue **v1** e o novo campo `cosmetics` (moedas, itens possuídos e equipados) é normalizado com defaults seguros; o `settings.theme` claro/escuro é mantido. Detalhes em `.specs/COSMETICS.md` e `.specs/V4_ACCEPTANCE_CRITERIA.md`.
+
+## Versão 4.5
+
+A Versão 4.5 transforma domínio por país em **Mastery 2.0**:
+
+- A escala interna saiu de `0–10` para `0–100`.
+- Os níveis públicos continuam `Novo`, `Reconhecido`, `Aprendido`, `Dominado` e `Mestre`, mas agora aparecem como insígnias: sem insígnia, Bronze, Prata, Ouro e Platina.
+- `Mestre`/Platina é raro: exige pelo menos 85 pontos, 20 acertos, 80% de precisão, acertos em 3 dias diferentes, 2 acertos por digitação, 2 revisões bem-sucedidas e nenhum erro/revisão pendente.
+- Acertos por digitação, revisão e bandeiras parecidas valem mais pontos que múltipla escolha comum.
+- Erros recentes suspendem Mestre e mandam o país para revisão.
+- `nextReviewAt` adiciona revisão espaçada simples; a Home e a revisão mostram países com erro pendente ou revisão vencida como **Revisar hoje**.
+- A Coleção mostra insígnias visuais, progresso `x/100`, revisão e pontos faltantes.
+- Estatísticas mostram contagens por Bronze/Prata/Ouro/Platina e uma lista "Quase Platina".
+- Progresso antigo é migrado de forma conservadora: países com `masteryPoints` legados `9–10` viram Ouro alto, mas não Platina automaticamente.
+
+A Versão 5 de cultura dos países continua fora do escopo e não foi implementada.
 
 ## Como rodar
 

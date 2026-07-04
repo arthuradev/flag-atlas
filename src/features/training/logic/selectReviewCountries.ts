@@ -1,4 +1,5 @@
 import type { Country } from "@/entities/country/country.types";
+import { isCountryDueForReview } from "@/entities/progress/progress.selectors";
 import type { UserProgress } from "@/entities/progress/progress.types";
 import { type Rng, shuffle } from "@/shared/utils/rng";
 
@@ -12,9 +13,10 @@ type SelectReviewParams = {
 /**
  * Seleciona países para uma sessão de revisão explícita:
  * 1. prioriza países marcados com needsReview;
- * 2. completa com países já vistos e fracos (menos pontos de domínio,
+ * 2. depois países com revisão espaçada vencida;
+ * 3. completa com países já vistos e fracos (menos pontos de domínio,
  *    mais erros — o que também cobre os próximos de evoluir);
- * 3. sem histórico, retorna vazio (a UI oferece treino normal).
+ * 4. sem histórico, retorna vazio (a UI oferece treino normal).
  *
  * Nunca repete país: com pouco material, a sessão fica mais curta.
  */
@@ -24,6 +26,7 @@ export function selectReviewCountries({ pool, progress, size, rng }: SelectRevie
   }
 
   const review: string[] = [];
+  const due: string[] = [];
   const seenFallback: Array<{ id: string; points: number; wrong: number }> = [];
 
   for (const country of pool) {
@@ -33,6 +36,8 @@ export function selectReviewCountries({ pool, progress, size, rng }: SelectRevie
     }
     if (countryProgress.needsReview) {
       review.push(country.id);
+    } else if (isCountryDueForReview(countryProgress)) {
+      due.push(country.id);
     } else {
       seenFallback.push({
         id: country.id,
@@ -43,6 +48,15 @@ export function selectReviewCountries({ pool, progress, size, rng }: SelectRevie
   }
 
   const selected = shuffle(review, rng).slice(0, size);
+
+  if (selected.length < size) {
+    for (const id of shuffle(due, rng)) {
+      if (selected.length >= size) {
+        break;
+      }
+      selected.push(id);
+    }
+  }
 
   if (selected.length < size) {
     // Ordenação estável sobre lista embaralhada: empates ficam aleatórios,

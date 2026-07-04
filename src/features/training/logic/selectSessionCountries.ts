@@ -1,4 +1,5 @@
 import type { Country } from "@/entities/country/country.types";
+import { isCountryDueForReview } from "@/entities/progress/progress.selectors";
 import { MASTERY_LEVELS, type UserProgress } from "@/entities/progress/progress.types";
 import { type Rng, shuffle } from "@/shared/utils/rng";
 
@@ -11,7 +12,7 @@ type SelectParams = {
 
 /** Distância em pontos até a próxima evolução de domínio (menor = mais perto). */
 function pointsToNextLevel(points: number): number {
-  const thresholds = [1, 3, 6, 9];
+  const thresholds = [1, 20, 50, 85];
   for (const threshold of thresholds) {
     if (points < threshold) {
       return threshold - points;
@@ -39,7 +40,7 @@ export function selectSessionCountries({ pool, progress, size, rng }: SelectPara
     const countryProgress = progress.countries[country.id];
     if (!countryProgress || countryProgress.seenCount === 0) {
       fresh.push(country.id);
-    } else if (countryProgress.needsReview) {
+    } else if (isCountryDueForReview(countryProgress)) {
       review.push(country.id);
     } else if (countryProgress.masteryLevel !== MASTERY_LEVELS[MASTERY_LEVELS.length - 1]) {
       inProgress.push(country.id);

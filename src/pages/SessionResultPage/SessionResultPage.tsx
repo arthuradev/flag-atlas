@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
@@ -7,6 +7,8 @@ import { countSeenCountries } from "@/entities/progress/progress.selectors";
 import { Mascot } from "@/features/cosmetics/components/Mascot";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
+import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
+import { MAX_MASTERY_POINTS } from "@/features/progress/logic/mastery";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { ShareResultButton } from "@/features/share/components/ShareResultButton";
@@ -18,7 +20,7 @@ import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
 import { COUNTRIES } from "@/shared/data/countries";
 
-function CountryRow({ countryId, detail }: { countryId: string; detail?: string }) {
+function CountryRow({ countryId, detail }: { countryId: string; detail?: ReactNode }) {
   const locale = useSettingsStore((state) => state.locale);
   const country = getCountryById(countryId);
   if (!country) {
@@ -176,7 +178,18 @@ export function SessionResultPage() {
               <CountryRow
                 key={`${promotion.countryId}-${promotion.to}`}
                 countryId={promotion.countryId}
-                detail={`${t(`mastery.${promotion.from}`)} → ${t(`mastery.${promotion.to}`)}`}
+                detail={
+                  <span className="flex flex-wrap items-center justify-end gap-1.5">
+                    <MasteryBadge masteryLevel={promotion.from} size="sm" showLabel={false} />
+                    <span aria-hidden="true">→</span>
+                    <MasteryBadge masteryLevel={promotion.to} size="sm" showTier />
+                    {promotion.pointsAfter !== undefined && (
+                      <span>
+                        {promotion.pointsAfter}/{MAX_MASTERY_POINTS}
+                      </span>
+                    )}
+                  </span>
+                }
               />
             ))}
           </ul>

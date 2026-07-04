@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   computeOverallStats,
+  listAlmostPlatinumCountries,
   listHardestCountries,
   listLowestMasteryCountries,
   listTopConfusions,
@@ -20,6 +21,7 @@ function progressWith(
     points?: number;
     level?: MasteryLevel;
     review?: boolean;
+    nextReviewAt?: string;
     confusions?: Record<string, number>;
   }>,
 ): UserProgress {
@@ -32,6 +34,7 @@ function progressWith(
     country.masteryPoints = entry.points ?? 0;
     country.masteryLevel = entry.level ?? "new";
     country.needsReview = entry.review ?? false;
+    country.nextReviewAt = entry.nextReviewAt;
     if (entry.confusions) {
       country.confusions = entry.confusions;
     }
@@ -52,18 +55,33 @@ describe("computeOverallStats", () => {
     const progress = progressWith([
       { id: "br", correct: 8, wrong: 2, level: "learned", points: 5 },
       { id: "jp", correct: 3, wrong: 3, level: "recognized", points: 2, review: true },
-      { id: "fr", correct: 9, wrong: 0, level: "master", points: 10 },
+      { id: "fr", correct: 22, wrong: 1, level: "master", points: 90 },
       { id: "de", correct: 7, wrong: 1, level: "dominated", points: 7 },
     ]);
     progress.completedSessions = 4;
     const stats = computeOverallStats(progress);
     expect(stats.seenCount).toBe(4);
     expect(stats.learnedCount).toBe(3);
+    expect(stats.bronzeCount).toBe(1);
+    expect(stats.silverCount).toBe(1);
+    expect(stats.goldCount).toBe(1);
+    expect(stats.platinumCount).toBe(1);
+    expect(stats.trueMasterCount).toBe(1);
     expect(stats.masteredCount).toBe(2);
     expect(stats.reviewCount).toBe(1);
-    expect(stats.totalAnswers).toBe(33);
-    expect(stats.accuracyPercent).toBe(Math.round((27 / 33) * 100));
+    expect(stats.dueReviewCount).toBe(1);
+    expect(stats.totalAnswers).toBe(47);
+    expect(stats.accuracyPercent).toBe(Math.round((40 / 47) * 100));
     expect(stats.completedSessions).toBe(4);
+  });
+
+  it("counts countries with due nextReviewAt as review due", () => {
+    const progress = progressWith([
+      { id: "br", correct: 2, level: "recognized", nextReviewAt: "2000-01-01" },
+    ]);
+    const stats = computeOverallStats(progress);
+    expect(stats.reviewCount).toBe(1);
+    expect(stats.dueReviewCount).toBe(1);
   });
 });
 
@@ -98,6 +116,28 @@ describe("listLowestMasteryCountries", () => {
     ]);
     const result = listLowestMasteryCountries(progress);
     expect(result.map((entry) => entry.countryId)).toEqual(["br", "jp"]);
+  });
+});
+
+describe("listAlmostPlatinumCountries", () => {
+  it("lists high-point countries missing real Platinum requirements", () => {
+    const progress = progressWith([
+      { id: "br", correct: 20, wrong: 0, points: 90, level: "dominated" },
+      { id: "jp", correct: 22, wrong: 0, points: 90, level: "master" },
+      { id: "fr", correct: 10, wrong: 0, points: 70, level: "dominated" },
+    ]);
+    const brazil = progress.countries.br;
+    if (!brazil) {
+      throw new Error("missing test country");
+    }
+    brazil.correctDateKeys = ["2026-07-01"];
+    brazil.typedCorrectCount = 0;
+    brazil.reviewCorrectCount = 0;
+
+    const result = listAlmostPlatinumCountries(progress);
+    expect(result.map((entry) => entry.countryId)).toEqual(["br"]);
+    expect(result[0]?.missing).toContain("correctDays");
+    expect(result[0]?.missing).toContain("typedCorrect");
   });
 });
 

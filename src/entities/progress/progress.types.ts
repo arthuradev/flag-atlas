@@ -2,6 +2,7 @@ import {
   type CosmeticInventory,
   createInitialCosmeticInventory,
 } from "@/entities/cosmetic/cosmetic.types";
+import type { QuestionType, SessionMode } from "@/entities/session/session.types";
 
 export const MASTERY_LEVELS = ["new", "recognized", "learned", "dominated", "master"] as const;
 
@@ -14,10 +15,25 @@ export type CountryProgress = {
   wrongCount: number;
   currentCorrectStreak: number;
   bestCorrectStreak: number;
-  /** Pontos internos de 0 a 10 que definem o nível de domínio. */
+  /** Pontos internos de 0 a 100. Mestre exige evidências extras além de pontos. */
   masteryPoints: number;
   masteryLevel: MasteryLevel;
   needsReview: boolean;
+  /** Versão do sistema de domínio por país; ausente significa escala legada 0–10. */
+  masterySystemVersion?: 2;
+  /** Dias locais YYYY-MM-DD em que este país foi acertado (limitado na normalização). */
+  correctDateKeys?: string[];
+  typedCorrectCount?: number;
+  choiceCorrectCount?: number;
+  reviewCorrectCount?: number;
+  similarCorrectCount?: number;
+  survivalCorrectCount?: number;
+  successfulReviews?: number;
+  lastPromotionAt?: string;
+  /** Dia local YYYY-MM-DD da próxima revisão espaçada. */
+  nextReviewAt?: string;
+  lastMasteryMode?: SessionMode;
+  lastMasteryQuestionType?: QuestionType;
   /** Quantas vezes este país foi confundido com cada outro país (múltipla escolha). */
   confusions?: Record<string, number>;
   lastSeenAt?: string;
@@ -95,5 +111,13 @@ export function createInitialCountryProgress(countryId: string): CountryProgress
     masteryPoints: 0,
     masteryLevel: "new",
     needsReview: false,
+    masterySystemVersion: 2,
+    correctDateKeys: [],
+    typedCorrectCount: 0,
+    choiceCorrectCount: 0,
+    reviewCorrectCount: 0,
+    similarCorrectCount: 0,
+    survivalCorrectCount: 0,
+    successfulReviews: 0,
   };
 }

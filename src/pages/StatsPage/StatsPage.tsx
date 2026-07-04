@@ -5,10 +5,13 @@ import { getCountryById, getCountryName } from "@/entities/country/country.selec
 import { listCountriesNeedingReview } from "@/entities/progress/progress.selectors";
 import {
   computeOverallStats,
+  listAlmostPlatinumCountries,
   listHardestCountries,
   listLowestMasteryCountries,
   listTopConfusions,
 } from "@/entities/progress/progress.stats";
+import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
+import { MAX_MASTERY_POINTS } from "@/features/progress/logic/mastery";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { playSound } from "@/shared/audio/soundPlayer";
@@ -53,6 +56,7 @@ export function StatsPage() {
   const stats = computeOverallStats(progress);
   const hardest = listHardestCountries(progress);
   const lowMastery = listLowestMasteryCountries(progress);
+  const almostPlatinum = listAlmostPlatinumCountries(progress);
   const confusions = listTopConfusions(progress);
   const toReview = listCountriesNeedingReview(progress).slice(0, 8);
 
@@ -81,8 +85,9 @@ export function StatsPage() {
   const summaryCards = [
     { labelKey: "stats.seen", value: String(stats.seenCount) },
     { labelKey: "stats.learned", value: String(stats.learnedCount) },
-    { labelKey: "stats.mastered", value: String(stats.masteredCount) },
-    { labelKey: "stats.toReview", value: String(stats.reviewCount) },
+    { labelKey: "stats.gold", value: String(stats.goldCount) },
+    { labelKey: "stats.platinum", value: String(stats.platinumCount) },
+    { labelKey: "stats.toReview", value: String(stats.dueReviewCount) },
     { labelKey: "stats.accuracy", value: `${stats.accuracyPercent}%` },
     { labelKey: "stats.sessions", value: String(stats.completedSessions) },
   ];
@@ -98,6 +103,25 @@ export function StatsPage() {
             </Card>
           ))}
         </div>
+
+        <StatsSection title={t("stats.badges")}>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {[
+              { level: "recognized" as const, value: stats.bronzeCount },
+              { level: "learned" as const, value: stats.silverCount },
+              { level: "dominated" as const, value: stats.goldCount },
+              { level: "master" as const, value: stats.platinumCount },
+            ].map((entry) => (
+              <div
+                key={entry.level}
+                className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface-raised px-3 py-2"
+              >
+                <MasteryBadge masteryLevel={entry.level} size="sm" showTier />
+                <span className="font-extrabold text-primary">{entry.value}</span>
+              </div>
+            ))}
+          </div>
+        </StatsSection>
 
         {hardest.length > 0 && (
           <StatsSection title={t("stats.hardest")}>
@@ -120,6 +144,23 @@ export function StatsPage() {
               {toReview.map((countryId) => (
                 <li key={countryId}>
                   <CountryLabel countryId={countryId} locale={locale} />
+                </li>
+              ))}
+            </ul>
+          </StatsSection>
+        )}
+
+        {almostPlatinum.length > 0 && (
+          <StatsSection title={t("stats.almostPlatinum")}>
+            <ul className="flex flex-col gap-2">
+              {almostPlatinum.map((entry) => (
+                <li key={entry.countryId} className="flex items-center justify-between gap-3">
+                  <CountryLabel countryId={entry.countryId} locale={locale} />
+                  <span className="text-right text-sm font-bold text-text-muted">
+                    {t(`stats.masteryRequirementReasons.${entry.missing[0] ?? "points"}`)}
+                    {" · "}
+                    {entry.masteryPoints}/{MAX_MASTERY_POINTS}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -153,9 +194,7 @@ export function StatsPage() {
               {lowMastery.map((entry) => (
                 <li key={entry.countryId} className="flex items-center justify-between gap-3">
                   <CountryLabel countryId={entry.countryId} locale={locale} />
-                  <span className="text-sm font-bold text-text-muted">
-                    {t(`mastery.${entry.masteryLevel}`)}
-                  </span>
+                  <MasteryBadge masteryLevel={entry.masteryLevel} size="sm" showTier />
                 </li>
               ))}
             </ul>

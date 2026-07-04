@@ -1,5 +1,6 @@
 import type { ContinentId } from "@/entities/continent/continent.types";
 import type { Country } from "@/entities/country/country.types";
+import { isCountryDueForReview } from "@/entities/progress/progress.selectors";
 import {
   MASTERY_LEVELS,
   type MasteryLevel,
@@ -61,7 +62,7 @@ export function filterCollection(
     if (filters.status === "unseen" && seen) {
       return false;
     }
-    if (filters.status === "review" && countryProgress?.needsReview !== true) {
+    if (filters.status === "review" && !isCountryDueForReview(countryProgress)) {
       return false;
     }
     if (search.length > 0 && !normalizeSearchText(country.names[locale]).includes(search)) {
@@ -77,6 +78,12 @@ export function filterCollection(
         masteryRank(progress.countries[a.id]?.masteryLevel ?? "new");
       if (rankDiff !== 0) {
         return rankDiff;
+      }
+      const pointDiff =
+        (progress.countries[b.id]?.masteryPoints ?? 0) -
+        (progress.countries[a.id]?.masteryPoints ?? 0);
+      if (pointDiff !== 0) {
+        return pointDiff;
       }
     }
     return a.names[locale].localeCompare(b.names[locale], locale);

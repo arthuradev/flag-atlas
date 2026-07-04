@@ -167,3 +167,67 @@ Não confundir com a streak de acertos dentro da sessão (são independentes).
 ### Conquistas no fim da sessão
 
 Ao concluir qualquer sessão, o evento (modo, tipo de pergunta, precisão, melhor streak, nº de perguntas) alimenta a avaliação de conquistas; as recém-desbloqueadas entram no resumo, sem popups nem bloqueio do fluxo.
+
+## 13. Versão 4.5 — Mastery 2.0 e revisão espaçada simples
+
+### Evidência de domínio
+
+Cada resposta correta concede pontos conforme a qualidade da evidência:
+
+```txt
+múltipla escolha comum: +2
+digitação: +4
+revisão: +5
+bandeiras parecidas: +4
+sobrevivência: +2
+revisão vencida respondida corretamente: bônus +3
+```
+
+Cada acerto também registra o dia local (`correctDateKeys`) e contadores por
+modo/tipo (`typedCorrectCount`, `reviewCorrectCount`, `similarCorrectCount`,
+`survivalCorrectCount`). Esses dados alimentam os requisitos de Platina.
+
+### Erros
+
+Erro sempre marca `needsReview = true` e agenda `nextReviewAt = hoje`.
+A perda de pontos depende do nível atual:
+
+```txt
+Novo: 0
+Reconhecido: -1
+Aprendido: -2
+Dominado: -4
+Mestre: -8
+```
+
+Dois erros recentes continuam pesando mais um ponto. Erro em Mestre suspende
+Platina e o país volta para Ouro/Dominado até revisão bem-sucedida.
+
+### Revisão
+
+`listCountriesNeedingReview` agora inclui:
+
+```txt
+needsReview = true
+ou nextReviewAt <= hoje
+```
+
+O CTA público passa a ser **Revisar hoje**. A seleção de revisão prioriza:
+
+1. países com `needsReview`;
+2. países com `nextReviewAt` vencido;
+3. países vistos de baixo domínio;
+4. países com mais erros;
+5. países próximos de evoluir.
+
+Próxima revisão após acerto:
+
+```txt
+Reconhecido: +1 dia
+Aprendido: +3 dias
+Dominado: +7 dias
+Mestre: +14 dias
+```
+
+Sessões normais também consideram países vencidos para revisão no balde de
+revisão/fracos, preservando descoberta de países novos.

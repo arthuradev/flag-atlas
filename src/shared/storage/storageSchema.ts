@@ -17,7 +17,12 @@ import {
   type ThemePreference,
 } from "@/entities/settings/settings.types";
 import { MAX_REST_DAYS } from "@/features/progress/logic/dailyStreak";
-import { MAX_MASTERY_POINTS, masteryLevelForPoints } from "@/features/progress/logic/mastery";
+import {
+  CORRECT_DATE_KEY_LIMIT,
+  deriveMasteryLevel,
+  MASTERY_SYSTEM_VERSION,
+  MAX_MASTERY_POINTS,
+} from "@/features/progress/logic/mastery";
 import { computeLevel } from "@/features/progress/logic/xp";
 import { isLocale } from "@/shared/i18n/locale";
 import { isDateKey } from "@/shared/utils/dateKey";
@@ -146,7 +151,7 @@ function normalizeCountryProgress(countryId: string, value: unknown): CountryPro
   if (!isRecord(value) || typeof countryId !== "string" || countryId.length === 0) {
     return null;
   }
-  const masteryPoints = Math.min(MAX_MASTERY_POINTS, toSafeCount(value.masteryPoints));
+  const masteryPoints = normalizeMasteryPoints(value);
   const normalized: CountryProgress = {
     countryId,
     seenCount: toSafeCount(value.seenCount),
@@ -155,9 +160,17 @@ function normalizeCountryProgress(countryId: string, value: unknown): CountryPro
     currentCorrectStreak: toSafeCount(value.currentCorrectStreak),
     bestCorrectStreak: toSafeCount(value.bestCorrectStreak),
     masteryPoints,
-    // Recalculado a partir dos pontos: o nível público nunca vem do storage.
-    masteryLevel: masteryLevelForPoints(masteryPoints),
+    // Recalculado: o nível público nunca vem diretamente do storage.
+    masteryLevel: "new",
     needsReview: value.needsReview === true,
+    masterySystemVersion: MASTERY_SYSTEM_VERSION,
+    correctDateKeys: normalizeCorrectDateKeys(value.correctDateKeys),
+    typedCorrectCount: toSafeCount(value.typedCorrectCount),
+    choiceCorrectCount: toSafeCount(value.choiceCorrectCount),
+    reviewCorrectCount: toSafeCount(value.reviewCorrectCount),
+    similarCorrectCount: toSafeCount(value.similarCorrectCount),
+    survivalCorrectCount: toSafeCount(value.survivalCorrectCount),
+    successfulReviews: toSafeCount(value.successfulReviews),
   };
   if (typeof value.lastSeenAt === "string") {
     normalized.lastSeenAt = value.lastSeenAt;
@@ -167,6 +180,18 @@ function normalizeCountryProgress(countryId: string, value: unknown): CountryPro
   }
   if (typeof value.lastWrongAt === "string") {
     normalized.lastWrongAt = value.lastWrongAt;
+  }
+  if (typeof value.lastPromotionAt === "string") {
+    normalized.lastPromotionAt = value.lastPromotionAt;
+  }
+  if (isDateKey(value.nextReviewAt)) {
+    normalized.nextReviewAt = value.nextReviewAt;
+  }
+  if (isSessionMode(value.lastMasteryMode)) {
+    normalized.lastMasteryMode = value.lastMasteryMode;
+  }
+  if (isQuestionType(value.lastMasteryQuestionType)) {
+    normalized.lastMasteryQuestionType = value.lastMasteryQuestionType;
   }
   // Campo opcional adicionado na Versão 2: dados antigos sem ele seguem válidos.
   if (isRecord(value.confusions)) {
@@ -181,7 +206,62 @@ function normalizeCountryProgress(countryId: string, value: unknown): CountryPro
       normalized.confusions = confusions;
     }
   }
+  normalized.masteryLevel = deriveMasteryLevel(normalized);
   return normalized;
+}
+
+function normalizeMasteryPoints(value: Record<string, unknown>): number {
+  const raw = toSafeCount(value.masteryPoints);
+  if (value.masterySystemVersion === MASTERY_SYSTEM_VERSION) {
+    return Math.min(MAX_MASTERY_POINTS, raw);
+  }
+  return legacyMasteryPointsToV2(Math.min(10, raw));
+}
+
+function legacyMasteryPointsToV2(points: number): number {
+  const legacy = Math.min(10, Math.max(0, Math.floor(points)));
+  if (legacy === 0) {
+    return 0;
+  }
+  if (legacy <= 2) {
+    return legacy === 1 ? 8 : 15;
+  }
+  if (legacy <= 5) {
+    return legacy === 3 ? 25 : legacy === 4 ? 32 : 40;
+  }
+  if (legacy <= 8) {
+    return legacy === 6 ? 55 : legacy === 7 ? 60 : 65;
+  }
+  return legacy === 9 ? 75 : 80;
+}
+
+function normalizeCorrectDateKeys(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  const unique = new Set<string>();
+  for (const key of value) {
+    if (isDateKey(key)) {
+      unique.add(key);
+    }
+  }
+  return [...unique].sort().slice(-CORRECT_DATE_KEY_LIMIT);
+}
+
+function isSessionMode(value: unknown): value is NonNullable<CountryProgress["lastMasteryMode"]> {
+  return (
+    value === "continue" ||
+    value === "continent" ||
+    value === "review" ||
+    value === "similar" ||
+    value === "survival"
+  );
+}
+
+function isQuestionType(
+  value: unknown,
+): value is NonNullable<CountryProgress["lastMasteryQuestionType"]> {
+  return value === "choice" || value === "typing";
 }
 
 function toSafeCount(value: unknown): number {

@@ -4,6 +4,19 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 
 ## Unreleased
 
+### Versão 4.5 — Mastery 2.0 e insígnias
+
+- Domínio por país migrado de escala `0–10` para `0–100`; `masteryLevelForPoints` não concede Mestre por pontos sozinho, e `deriveMasteryLevel` exige pontos altos + evidência real.
+- Mestre/Platina agora exige `masteryPoints >= 85`, `correctCount >= 20`, precisão >= 80%, acertos em 3 dias diferentes, 2 acertos por digitação, 2 revisões bem-sucedidas, sem `needsReview` e sem erro recente.
+- `CountryProgress` ganhou `masterySystemVersion`, `correctDateKeys`, contadores por tipo/modo, `successfulReviews`, `nextReviewAt`, `lastPromotionAt`, `lastMasteryMode` e `lastMasteryQuestionType`, todos normalizados com defaults seguros.
+- Migração conservadora de progresso legado: `10/10` vira `80/100` e `Dominado`, não `Mestre`; `8/10` vira `65`, `5/10` vira `40`, `2/10` vira `15`. `PROGRESS_SCHEMA_VERSION` permanece 1.
+- Pontuação de domínio agora diferencia evidência: múltipla escolha +2, digitação +4, revisão +5, parecidas +4, sobrevivência +2 e revisão vencida correta +3.
+- Revisão espaçada simples via `nextReviewAt`: erro agenda hoje; acerto agenda 1/3/7/14 dias conforme nível. Home, coleção, stats e seleção de revisão consideram `needsReview` ou revisão vencida. CTA público atualizado para “Revisar hoje”.
+- Novo componente `MasteryBadge` para insígnias sem insígnia/Bronze/Prata/Ouro/Platina; usado na Coleção, feedback de treino, resumo da sessão e Estatísticas.
+- Estatísticas mostram Bronze, Prata, Ouro, Platina, revisões do dia e lista “Quase Platina” com motivo simples.
+- Conquistas ajustadas: `worldMaster` exige todos os países em Mestre/Platina real; `firstMastery` e `collector` continuam em Ouro/Dominado; adicionadas `firstPlatinum` e `platinumCollector`.
+- i18n pt-BR/en-US e documentação atualizados. Versão 5 de cultura dos países permanece não implementada.
+
 ### Versão 4 — Personalização cosmética
 
 - Modelo de cosméticos (`src/entities/cosmetic/`): tipos `theme`, `soundPack`, `flagFrame`, `mascot`, `visualEffect`; catálogo de 28 itens com id/preço/raridade/preview; funções puras `getCosmeticById`, `getOwnedCosmetics`, `canPurchaseCosmetic`, `purchaseCosmetic`, `equipCosmetic`, `getEquippedCosmetics`, `normalizeCosmeticInventory` (itens gratuitos sempre possuídos, equipar não custa moedas, compra bloqueada sem saldo/duplicada, equipado inválido volta ao padrão).

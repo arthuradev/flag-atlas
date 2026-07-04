@@ -93,9 +93,17 @@
         "title": "Collector",
         "description": "Reach high mastery on 25 countries."
       },
+      "firstPlatinum": {
+        "title": "First Platinum",
+        "description": "Unlock your first Platinum badge."
+      },
+      "platinumCollector": {
+        "title": "Platinum Collector",
+        "description": "Unlock Platinum badges in 10 countries."
+      },
       "worldMaster": {
         "title": "World Master",
-        "description": "Reach high mastery on every country."
+        "description": "Unlock Platinum on every country."
       },
       "explorerAmerica": {
         "title": "America Explorer",
@@ -184,6 +192,8 @@
     "youChose": "You picked {{country}}.",
     "xpGained": "+{{xp}} XP",
     "masteryUp": "{{country}}: {{from}} → {{to}}",
+    "badgeUnlocked": "Badge unlocked",
+    "platinumUnlocked": "Platinum badge unlocked! You truly know this flag.",
     "markedForReview": "We'll review this one soon.",
     "sessionSize": "Session size",
     "questionsCount": "{{count}} questions",
@@ -199,8 +209,9 @@
     "xpEarned": "+{{xp}} XP",
     "coinsEarned": "+{{count}} Atlas Coins",
     "accuracy": "Accuracy: {{percent}}%",
-    "promoted": "Leveled up",
+    "promoted": "Badges unlocked",
     "toReview": "To review",
+    "reviewCompleted": "Review complete",
     "playAgain": "Play one more",
     "levelUp": "You reached level {{level}}!"
   },
@@ -214,17 +225,25 @@
     "title": "Collection",
     "searchPlaceholder": "Search country...",
     "filterContinent": "Continent",
-    "filterMastery": "Mastery",
+    "filterMastery": "Badge",
     "filterStatus": "Status",
     "statusSeen": "Seen",
     "statusUnseen": "Not seen yet",
-    "statusReview": "To review",
+    "statusReview": "Review today",
     "sort": "Sort",
     "sortByName": "Name",
-    "sortByMastery": "Mastery",
+    "sortByMastery": "Badge",
     "empty": "No countries found.",
     "resultsCount": "{{count}} countries",
-    "resultsCount_one": "{{count}} country"
+    "resultsCount_one": "{{count}} country",
+    "badgeProgress": "Badge progress",
+    "nextReview": "Next review",
+    "nextReviewInDays": "Next review in {{count}} days",
+    "nextReviewInDays_one": "Next review tomorrow",
+    "nextReviewInDays_zero": "Review today",
+    "pointsMissing": "{{count}} points left",
+    "pointsMissing_one": "{{count}} point left",
+    "masterRequirements": "Master requirements"
   },
   "settings": {
     "title": "Settings",
@@ -256,8 +275,8 @@
     "typingDescription": "No options: type the name of the country for the flag.",
     "similarTitle": "Similar flags",
     "similarDescription": "Train the flag pairs everyone mixes up.",
-    "reviewTitle": "Review misses",
-    "reviewDescription": "Revisit the countries that got away last time.",
+    "reviewTitle": "Review today",
+    "reviewDescription": "Revisit misses and due spaced reviews.",
     "survivalTitle": "Survival",
     "survivalDescription": "Keep playing until you lose all 3 lives.",
     "quickTitle": "Quick challenge",
@@ -278,22 +297,36 @@
     "youTyped": "You typed: {{answer}}"
   },
   "review": {
-    "cta": "Review misses",
+    "cta": "Review today",
     "nothingToReview": "Nothing to review right now. How about discovering new countries?"
   },
   "stats": {
     "title": "Statistics",
     "seen": "Countries seen",
     "learned": "Learned",
-    "mastered": "Expert or Master",
-    "toReview": "To review",
-    "toReviewList": "To review",
+    "mastered": "Gold or Platinum",
+    "gold": "Gold",
+    "platinum": "Platinum",
+    "toReview": "Review today",
+    "toReviewList": "Review today",
     "accuracy": "Overall accuracy",
     "sessions": "Sessions completed",
+    "badges": "Badges",
+    "almostPlatinum": "Almost Platinum",
     "hardest": "Hardest ones",
     "lowMastery": "Low mastery",
     "confusions": "Common mix-ups",
     "confusedWith": "confused with",
+    "masteryRequirementReasons": {
+      "points": "needs more points",
+      "correctCount": "needs more correct answers",
+      "accuracy": "needs better accuracy",
+      "correctDays": "needs correct answers on more days",
+      "typedCorrect": "needs typing answers",
+      "reviewCorrect": "needs review wins",
+      "needsReview": "review it today",
+      "recentWrong": "recent miss: review to recover"
+    },
     "wrongCount": "{{count}} misses",
     "wrongCount_one": "{{count}} miss",
     "empty": "Play a few sessions to see your statistics.",
@@ -304,7 +337,19 @@
     "recognized": "Recognized",
     "learned": "Learned",
     "dominated": "Expert",
-    "master": "Master"
+    "master": "Master",
+    "badge": "Badge",
+    "badgesTitle": "Badges",
+    "rareMastery": "Master is now a rare badge",
+    "trueMastery": "You truly know this flag",
+    "badges": {
+      "none": "No badge",
+      "bronze": "Bronze",
+      "silver": "Silver",
+      "gold": "Gold",
+      "platinum": "Platinum",
+      "diamond": "Diamond"
+    }
   },
   "shop": {
     "title": "Shop",

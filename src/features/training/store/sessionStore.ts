@@ -29,6 +29,7 @@ import {
   getSimilarPeerIds,
   listSimilarCountryIds,
 } from "@/shared/data/similarFlags";
+import { getLocalDateKey } from "@/shared/utils/dateKey";
 import { createRng, type Rng } from "@/shared/utils/rng";
 
 export type AnswerFeedback = {
@@ -39,6 +40,8 @@ export type AnswerFeedback = {
   xpGained: number;
   masteryBefore: MasteryLevel;
   masteryAfter: MasteryLevel;
+  masteryPointsBefore: number;
+  masteryPointsAfter: number;
   promoted: boolean;
 };
 
@@ -128,6 +131,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     }
 
     const answeredAt = new Date().toISOString();
+    const localDateKey = getLocalDateKey(new Date(answeredAt));
     const progressStore = useProgressStore.getState();
     const previous =
       progressStore.progress.countries[question.countryId] ??
@@ -135,6 +139,9 @@ export const useSessionStore = create<SessionState>((set, get) => {
     const next = applyAnswerToCountryProgress(previous, {
       isCorrect: input.isCorrect,
       answeredAt,
+      localDateKey,
+      mode: session.config.mode,
+      questionType: session.config.questionType,
       ...(input.confusedWithCountryId !== undefined && {
         confusedWithCountryId: input.confusedWithCountryId,
       }),
@@ -161,6 +168,9 @@ export const useSessionStore = create<SessionState>((set, get) => {
       xpGained,
       masteryBefore: previous.masteryLevel,
       masteryAfter: next.masteryLevel,
+      masteryPointsBefore: previous.masteryPoints,
+      masteryPointsAfter: next.masteryPoints,
+      ...(next.nextReviewAt !== undefined && { nextReviewAt: next.nextReviewAt }),
       ...(input.selectedCountryId !== undefined && {
         selectedCountryId: input.selectedCountryId,
       }),
@@ -181,6 +191,8 @@ export const useSessionStore = create<SessionState>((set, get) => {
         xpGained,
         masteryBefore: previous.masteryLevel,
         masteryAfter: next.masteryLevel,
+        masteryPointsBefore: previous.masteryPoints,
+        masteryPointsAfter: next.masteryPoints,
         promoted,
         ...(input.selectedCountryId !== undefined && {
           selectedCountryId: input.selectedCountryId,
@@ -322,6 +334,12 @@ export const useSessionStore = create<SessionState>((set, get) => {
           countryId: answer.countryId,
           from: answer.masteryBefore,
           to: answer.masteryAfter,
+          ...(answer.masteryPointsBefore !== undefined && {
+            pointsBefore: answer.masteryPointsBefore,
+          }),
+          ...(answer.masteryPointsAfter !== undefined && {
+            pointsAfter: answer.masteryPointsAfter,
+          }),
         }));
       const toReviewCountryIds = [
         ...new Set(

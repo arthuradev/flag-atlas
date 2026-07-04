@@ -28,7 +28,14 @@ function progressWithCountries(
       seenCount: 1,
       correctCount: 1,
       masteryLevel,
-      masteryPoints: masteryLevel === "dominated" ? 7 : masteryLevel === "learned" ? 3 : 1,
+      masteryPoints:
+        masteryLevel === "master"
+          ? 90
+          : masteryLevel === "dominated"
+            ? 70
+            : masteryLevel === "learned"
+              ? 25
+              : 8,
     };
   }
   return progress;
@@ -73,7 +80,7 @@ describe("evaluateNewAchievements", () => {
     ).toContain("livingAtlas");
   });
 
-  it("unlocks mastery milestones from dominated countries", () => {
+  it("unlocks gold mastery milestones from dominated countries", () => {
     expect(evaluateNewAchievements({ progress: progressWithCountries(1, "dominated") })).toContain(
       "firstMastery",
     );
@@ -83,6 +90,20 @@ describe("evaluateNewAchievements", () => {
     expect(
       evaluateNewAchievements({
         progress: progressWithCountries(COUNTRIES.length, "dominated"),
+      }),
+    ).not.toContain("worldMaster");
+  });
+
+  it("unlocks Platinum achievements only from real master countries", () => {
+    expect(evaluateNewAchievements({ progress: progressWithCountries(1, "master") })).toContain(
+      "firstPlatinum",
+    );
+    expect(evaluateNewAchievements({ progress: progressWithCountries(10, "master") })).toContain(
+      "platinumCollector",
+    );
+    expect(
+      evaluateNewAchievements({
+        progress: progressWithCountries(COUNTRIES.length, "master"),
       }),
     ).toContain("worldMaster");
   });

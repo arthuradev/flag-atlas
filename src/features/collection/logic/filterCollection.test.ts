@@ -11,13 +11,23 @@ import {
   normalizeSearchText,
 } from "./filterCollection";
 
-function progressWith(entries: Array<{ id: string; level: MasteryLevel; review?: boolean }>) {
+function progressWith(
+  entries: Array<{
+    id: string;
+    level: MasteryLevel;
+    review?: boolean;
+    points?: number;
+    nextReviewAt?: string;
+  }>,
+) {
   const progress = createInitialUserProgress();
   for (const entry of entries) {
     const country = createInitialCountryProgress(entry.id);
     country.masteryLevel = entry.level;
     country.seenCount = 1;
     country.needsReview = entry.review ?? false;
+    country.masteryPoints = entry.points ?? 0;
+    country.nextReviewAt = entry.nextReviewAt;
     progress.countries[entry.id] = country;
   }
   return progress;
@@ -76,6 +86,7 @@ describe("filterCollection", () => {
     const progress = progressWith([
       { id: "br", level: "recognized" },
       { id: "jp", level: "recognized", review: true },
+      { id: "fr", level: "learned", nextReviewAt: "2000-01-01" },
     ]);
     const seen = filterCollection(
       COUNTRIES,
@@ -83,7 +94,7 @@ describe("filterCollection", () => {
       { ...DEFAULT_COLLECTION_FILTERS, status: "seen" },
       "pt-BR",
     );
-    expect(seen.map((country) => country.id).sort()).toEqual(["br", "jp"]);
+    expect(seen.map((country) => country.id).sort()).toEqual(["br", "fr", "jp"]);
 
     const unseen = filterCollection(
       COUNTRIES,
@@ -91,7 +102,7 @@ describe("filterCollection", () => {
       { ...DEFAULT_COLLECTION_FILTERS, status: "unseen" },
       "pt-BR",
     );
-    expect(unseen).toHaveLength(193);
+    expect(unseen).toHaveLength(192);
 
     const review = filterCollection(
       COUNTRIES,
@@ -99,13 +110,14 @@ describe("filterCollection", () => {
       { ...DEFAULT_COLLECTION_FILTERS, status: "review" },
       "pt-BR",
     );
-    expect(review.map((country) => country.id)).toEqual(["jp"]);
+    expect(review.map((country) => country.id).sort()).toEqual(["fr", "jp"]);
   });
 
   it("sorts by mastery with name as tiebreaker", () => {
     const progress = progressWith([
-      { id: "jp", level: "master" },
-      { id: "br", level: "learned" },
+      { id: "jp", level: "master", points: 90 },
+      { id: "br", level: "learned", points: 45 },
+      { id: "fr", level: "learned", points: 20 },
     ]);
     const result = filterCollection(
       COUNTRIES,
@@ -115,6 +127,7 @@ describe("filterCollection", () => {
     );
     expect(result[0]?.id).toBe("jp");
     expect(result[1]?.id).toBe("br");
+    expect(result[2]?.id).toBe("fr");
   });
 
   it("sorts by localized name by default", () => {

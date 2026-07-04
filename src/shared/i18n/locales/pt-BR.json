@@ -93,9 +93,17 @@
         "title": "Colecionador",
         "description": "Alcance domínio alto em 25 países."
       },
+      "firstPlatinum": {
+        "title": "Primeira Platina",
+        "description": "Desbloqueie sua primeira insígnia Platina."
+      },
+      "platinumCollector": {
+        "title": "Colecionador de Platina",
+        "description": "Desbloqueie insígnias Platina em 10 países."
+      },
       "worldMaster": {
         "title": "Mestre do Mundo",
-        "description": "Alcance domínio alto em todos os países."
+        "description": "Desbloqueie Platina em todos os países."
       },
       "explorerAmerica": {
         "title": "Explorador da América",
@@ -184,6 +192,8 @@
     "youChose": "Você escolheu {{country}}.",
     "xpGained": "+{{xp}} XP",
     "masteryUp": "{{country}}: {{from}} → {{to}}",
+    "badgeUnlocked": "Insígnia desbloqueada",
+    "platinumUnlocked": "Insígnia Platina desbloqueada! Você realmente domina essa bandeira.",
     "markedForReview": "Vamos revisar essa em breve.",
     "sessionSize": "Tamanho da sessão",
     "questionsCount": "{{count}} perguntas",
@@ -199,8 +209,9 @@
     "xpEarned": "+{{xp}} XP",
     "coinsEarned": "+{{count}} Moedas Atlas",
     "accuracy": "Precisão: {{percent}}%",
-    "promoted": "Evoluíram",
+    "promoted": "Insígnias desbloqueadas",
     "toReview": "Para revisar",
+    "reviewCompleted": "Revisão concluída",
     "playAgain": "Jogar mais uma",
     "levelUp": "Você alcançou o nível {{level}}!"
   },
@@ -214,17 +225,25 @@
     "title": "Coleção",
     "searchPlaceholder": "Buscar país...",
     "filterContinent": "Continente",
-    "filterMastery": "Domínio",
+    "filterMastery": "Insígnia",
     "filterStatus": "Status",
     "statusSeen": "Já vistos",
     "statusUnseen": "Ainda não vistos",
-    "statusReview": "Para revisar",
+    "statusReview": "Revisar hoje",
     "sort": "Ordenar",
     "sortByName": "Nome",
-    "sortByMastery": "Domínio",
+    "sortByMastery": "Insígnia",
     "empty": "Nenhum país encontrado.",
     "resultsCount": "{{count}} países",
-    "resultsCount_one": "{{count}} país"
+    "resultsCount_one": "{{count}} país",
+    "badgeProgress": "Progresso da insígnia",
+    "nextReview": "Próxima revisão",
+    "nextReviewInDays": "Próxima revisão em {{count}} dias",
+    "nextReviewInDays_one": "Próxima revisão amanhã",
+    "nextReviewInDays_zero": "Revisar hoje",
+    "pointsMissing": "Faltam {{count}} pontos",
+    "pointsMissing_one": "Falta {{count}} ponto",
+    "masterRequirements": "Requisitos para Mestre"
   },
   "settings": {
     "title": "Configurações",
@@ -256,8 +275,8 @@
     "typingDescription": "Sem alternativas: digite o nome do país da bandeira.",
     "similarTitle": "Bandeiras parecidas",
     "similarDescription": "Treine os pares de bandeiras que todo mundo confunde.",
-    "reviewTitle": "Revisar erros",
-    "reviewDescription": "Volte nos países que escaparam da última vez.",
+    "reviewTitle": "Revisar hoje",
+    "reviewDescription": "Volte nos erros e nas revisões espaçadas vencidas.",
     "survivalTitle": "Sobrevivência",
     "survivalDescription": "Continue jogando até perder as 3 vidas.",
     "quickTitle": "Desafio rápido",
@@ -278,22 +297,36 @@
     "youTyped": "Você digitou: {{answer}}"
   },
   "review": {
-    "cta": "Revisar erros",
+    "cta": "Revisar hoje",
     "nothingToReview": "Nada para revisar por enquanto. Que tal descobrir países novos?"
   },
   "stats": {
     "title": "Estatísticas",
     "seen": "Países vistos",
     "learned": "Aprendidos",
-    "mastered": "Dominados ou Mestre",
-    "toReview": "Para revisar",
-    "toReviewList": "Para revisar",
+    "mastered": "Ouro ou Platina",
+    "gold": "Ouro",
+    "platinum": "Platina",
+    "toReview": "Revisar hoje",
+    "toReviewList": "Revisar hoje",
     "accuracy": "Precisão geral",
     "sessions": "Sessões concluídas",
+    "badges": "Insígnias",
+    "almostPlatinum": "Quase Platina",
     "hardest": "Mais difíceis",
     "lowMastery": "Baixo domínio",
     "confusions": "Confusões comuns",
     "confusedWith": "confundido com",
+    "masteryRequirementReasons": {
+      "points": "faltam pontos",
+      "correctCount": "faltam acertos",
+      "accuracy": "precisa melhorar a precisão",
+      "correctDays": "faltam acertos em mais dias",
+      "typedCorrect": "falta acertar por digitação",
+      "reviewCorrect": "falta revisar esta bandeira",
+      "needsReview": "precisa revisar hoje",
+      "recentWrong": "erro recente: revise para recuperar"
+    },
     "wrongCount": "{{count}} erros",
     "wrongCount_one": "{{count}} erro",
     "empty": "Jogue algumas sessões para ver suas estatísticas.",
@@ -304,7 +337,19 @@
     "recognized": "Reconhecido",
     "learned": "Aprendido",
     "dominated": "Dominado",
-    "master": "Mestre"
+    "master": "Mestre",
+    "badge": "Insígnia",
+    "badgesTitle": "Insígnias",
+    "rareMastery": "Mestre agora é uma insígnia rara",
+    "trueMastery": "Você realmente domina essa bandeira",
+    "badges": {
+      "none": "Sem insígnia",
+      "bronze": "Bronze",
+      "silver": "Prata",
+      "gold": "Ouro",
+      "platinum": "Platina",
+      "diamond": "Diamante"
+    }
   },
   "shop": {
     "title": "Loja",

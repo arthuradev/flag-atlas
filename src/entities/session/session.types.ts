@@ -28,6 +28,9 @@ export type SessionAnswer = {
   xpGained: number;
   masteryBefore: MasteryLevel;
   masteryAfter: MasteryLevel;
+  masteryPointsBefore?: number;
+  masteryPointsAfter?: number;
+  nextReviewAt?: string;
   /** Alternativa escolhida (apenas múltipla escolha). */
   selectedCountryId?: string;
   /** Texto digitado pelo usuário (apenas modo digitação). */
@@ -50,6 +53,8 @@ export type MasteryPromotion = {
   countryId: string;
   from: MasteryLevel;
   to: MasteryLevel;
+  pointsBefore?: number;
+  pointsAfter?: number;
 };
 
 export type SummaryDailyStreak = {

@@ -69,14 +69,80 @@ describe("normalizeUserProgress", () => {
     expect(result.countries.xx).toBeUndefined();
   });
 
-  it("recomputes mastery level from points and clamps them", () => {
+  it("migrates legacy mastery points without granting master automatically", () => {
     const result = normalizeUserProgress({
       countries: {
-        jp: { masteryPoints: 42, masteryLevel: "new" },
+        jp: { masteryPoints: 10, masteryLevel: "master" },
       },
     });
-    expect(result.countries.jp?.masteryPoints).toBe(10);
-    expect(result.countries.jp?.masteryLevel).toBe("master");
+    expect(result.countries.jp?.masterySystemVersion).toBe(2);
+    expect(result.countries.jp?.masteryPoints).toBe(80);
+    expect(result.countries.jp?.masteryLevel).toBe("dominated");
+  });
+
+  it("converts legacy mastery points to the new 0-100 scale conservatively", () => {
+    const result = normalizeUserProgress({
+      countries: {
+        zero: { masteryPoints: 0 },
+        bronze: { masteryPoints: 2 },
+        silver: { masteryPoints: 5 },
+        gold: { masteryPoints: 8 },
+      },
+    });
+    expect(result.countries.zero?.masteryPoints).toBe(0);
+    expect(result.countries.bronze?.masteryPoints).toBe(15);
+    expect(result.countries.silver?.masteryPoints).toBe(40);
+    expect(result.countries.gold?.masteryPoints).toBe(65);
+    expect(result.countries.gold?.masteryLevel).toBe("dominated");
+  });
+
+  it("does not reconvert modern mastery v2 progress", () => {
+    const result = normalizeUserProgress({
+      countries: {
+        jp: { masterySystemVersion: 2, masteryPoints: 42, masteryLevel: "new" },
+      },
+    });
+    expect(result.countries.jp?.masteryPoints).toBe(42);
+    expect(result.countries.jp?.masteryLevel).toBe("learned");
+  });
+
+  it("adds safe Mastery 2 defaults to old countries", () => {
+    const result = normalizeUserProgress({
+      countries: {
+        br: { seenCount: 2, correctCount: 2, masteryPoints: 2 },
+      },
+    });
+    expect(result.countries.br?.correctDateKeys).toEqual([]);
+    expect(result.countries.br?.typedCorrectCount).toBe(0);
+    expect(result.countries.br?.reviewCorrectCount).toBe(0);
+    expect(result.countries.br?.successfulReviews).toBe(0);
+  });
+
+  it("normalizes invalid Mastery 2 fields safely", () => {
+    const result = normalizeUserProgress({
+      countries: {
+        br: {
+          masterySystemVersion: 2,
+          masteryPoints: 120,
+          correctDateKeys: ["2026-07-04", "bad", "2026-07-04"],
+          typedCorrectCount: -2,
+          reviewCorrectCount: "many",
+          successfulReviews: 1.8,
+          nextReviewAt: "tomorrow",
+          lastMasteryMode: "practice",
+          lastMasteryQuestionType: "voice",
+        },
+      },
+    });
+    expect(result.countries.br?.masteryPoints).toBe(100);
+    expect(result.countries.br?.masteryLevel).toBe("dominated");
+    expect(result.countries.br?.correctDateKeys).toEqual(["2026-07-04"]);
+    expect(result.countries.br?.typedCorrectCount).toBe(0);
+    expect(result.countries.br?.reviewCorrectCount).toBe(0);
+    expect(result.countries.br?.successfulReviews).toBe(1);
+    expect(result.countries.br?.nextReviewAt).toBeUndefined();
+    expect(result.countries.br?.lastMasteryMode).toBeUndefined();
+    expect(result.countries.br?.lastMasteryQuestionType).toBeUndefined();
   });
 });
 

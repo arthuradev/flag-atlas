@@ -2,6 +2,9 @@
 
 O MVP é aceito quando todos os critérios abaixo estiverem verdadeiros.
 
+Critérios de versões posteriores vivem em arquivos próprios. Para a Versão 4.5,
+ver `.specs/V4_5_ACCEPTANCE_CRITERIA.md`.
+
 ## Produto
 
 - O app abre em desktop e mobile.

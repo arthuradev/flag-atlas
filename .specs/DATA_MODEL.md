@@ -319,3 +319,75 @@ Progresso V1/V2/V3 sem `cosmetics` carrega com defaults seguros
 (`coins = 0`, `ownedItemIds = []`, equipados no padrão de cada tipo). Moedas
 inválidas viram 0, itens desconhecidos são descartados e itens equipados
 inválidos/não possuídos voltam ao padrão. `PROGRESS_SCHEMA_VERSION` permanece 1.
+
+## Versão 4.5 — Mastery 2.0 e insígnias
+
+O domínio por país usa escala interna `0–100` (`MAX_MASTERY_POINTS = 100`).
+Os níveis públicos permanecem:
+
+```txt
+new → Novo / sem insígnia
+recognized → Reconhecido / Bronze
+learned → Aprendido / Prata
+dominated → Dominado / Ouro
+master → Mestre / Platina
+```
+
+Faixas por pontos:
+
+```txt
+0      → Novo
+1–19   → Reconhecido / Bronze
+20–49  → Aprendido / Prata
+50–100 → Dominado / Ouro, ou candidato a Mestre
+```
+
+`Mestre` não é derivado apenas de pontos. A função final de domínio considera
+evidência real:
+
+```txt
+masteryPoints >= 85
+correctCount >= 20
+precisão do país >= 80%
+acertos em pelo menos 3 dias locais diferentes
+typedCorrectCount >= 2
+reviewCorrectCount >= 2 ou successfulReviews >= 2
+needsReview = false
+sem erro recente pendente
+```
+
+`CountryProgress` ganha campos opcionais normalizados:
+
+```ts
+type CountryProgress += {
+  masterySystemVersion?: 2;
+  correctDateKeys?: string[]; // YYYY-MM-DD local, únicos, limitados aos 30 mais recentes
+  typedCorrectCount?: number;
+  choiceCorrectCount?: number;
+  reviewCorrectCount?: number;
+  similarCorrectCount?: number;
+  survivalCorrectCount?: number;
+  successfulReviews?: number;
+  lastPromotionAt?: string;
+  nextReviewAt?: string; // YYYY-MM-DD local
+  lastMasteryMode?: SessionMode;
+  lastMasteryQuestionType?: QuestionType;
+};
+```
+
+Revisão espaçada simples:
+
+- erro: `needsReview = true` e `nextReviewAt = hoje`;
+- acerto Reconhecido: próxima revisão em 1 dia;
+- acerto Aprendido: próxima revisão em 3 dias;
+- acerto Dominado: próxima revisão em 7 dias;
+- acerto Mestre: próxima revisão em 14 dias.
+
+Compatibilidade:
+
+- `PROGRESS_SCHEMA_VERSION` permanece 1;
+- país sem `masterySystemVersion` é tratado como legado `0–10`;
+- legacy `10` vira `80` pontos, nível `Dominado`, nunca `Mestre`;
+- legacy `8` vira `65`, legacy `5` vira `40`, legacy `2` vira `15`;
+- campos novos ausentes recebem defaults seguros;
+- progresso moderno `masterySystemVersion: 2` não é reconvertido.

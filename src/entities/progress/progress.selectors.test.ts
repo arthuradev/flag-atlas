@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { CONTINENTS } from "@/shared/data/continents";
 import {
+  countCountriesDueForReview,
   countLearnedCountries,
   countLearnedCountriesIn,
   countSeenCountries,
+  isCountryDueForReview,
   listCountriesNeedingReview,
 } from "./progress.selectors";
 import {
@@ -12,13 +14,16 @@ import {
   type MasteryLevel,
 } from "./progress.types";
 
-function progressWith(entries: Array<{ id: string; level: MasteryLevel; review?: boolean }>) {
+function progressWith(
+  entries: Array<{ id: string; level: MasteryLevel; review?: boolean; nextReviewAt?: string }>,
+) {
   const progress = createInitialUserProgress();
   for (const entry of entries) {
     const country = createInitialCountryProgress(entry.id);
     country.masteryLevel = entry.level;
     country.seenCount = entry.level === "new" ? 0 : 1;
     country.needsReview = entry.review ?? false;
+    country.nextReviewAt = entry.nextReviewAt;
     progress.countries[entry.id] = country;
   }
   return progress;
@@ -57,5 +62,17 @@ describe("progress selectors", () => {
     ]);
     expect(countSeenCountries(progress)).toBe(2);
     expect(listCountriesNeedingReview(progress)).toEqual(["br"]);
+  });
+
+  it("includes countries with due spaced review", () => {
+    const progress = progressWith([
+      { id: "br", level: "recognized", nextReviewAt: "2026-07-03" },
+      { id: "jp", level: "learned", nextReviewAt: "2026-07-05" },
+      { id: "fr", level: "learned", review: true },
+    ]);
+    expect(isCountryDueForReview(progress.countries.br, "2026-07-04")).toBe(true);
+    expect(isCountryDueForReview(progress.countries.jp, "2026-07-04")).toBe(false);
+    expect(listCountriesNeedingReview(progress, "2026-07-04").sort()).toEqual(["br", "fr"]);
+    expect(countCountriesDueForReview(progress, "2026-07-04")).toBe(2);
   });
 });

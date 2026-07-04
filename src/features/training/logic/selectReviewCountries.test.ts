@@ -4,12 +4,20 @@ import {
   createInitialUserProgress,
   type UserProgress,
 } from "@/entities/progress/progress.types";
+import { applyAnswerToCountryProgress } from "@/features/progress/logic/mastery";
 import { COUNTRIES } from "@/shared/data/countries";
 import { createRng } from "@/shared/utils/rng";
 import { selectReviewCountries } from "./selectReviewCountries";
 
 function progressWith(
-  entries: Array<{ id: string; seen?: number; points?: number; wrong?: number; review?: boolean }>,
+  entries: Array<{
+    id: string;
+    seen?: number;
+    points?: number;
+    wrong?: number;
+    review?: boolean;
+    nextReviewAt?: string;
+  }>,
 ): UserProgress {
   const progress = createInitialUserProgress();
   for (const entry of entries) {
@@ -18,6 +26,7 @@ function progressWith(
     country.masteryPoints = entry.points ?? 1;
     country.wrongCount = entry.wrong ?? 0;
     country.needsReview = entry.review ?? false;
+    country.nextReviewAt = entry.nextReviewAt;
     progress.countries[entry.id] = country;
   }
   return progress;
@@ -59,6 +68,39 @@ describe("selectReviewCountries", () => {
     expect(result).toContain("jp");
     // jp (1 ponto, 3 erros) entra antes de br (9 pontos).
     expect(result).not.toContain("br");
+  });
+
+  it("includes countries whose spaced review is due", () => {
+    const progress = progressWith([
+      { id: "td", nextReviewAt: "2000-01-01" },
+      { id: "ro", nextReviewAt: "2999-01-01", points: 1 },
+    ]);
+    const result = selectReviewCountries({ pool: COUNTRIES, progress, size: 1, rng: createRng(6) });
+    expect(result).toEqual(["td"]);
+  });
+
+  it("does not treat future nextReviewAt as priority", () => {
+    const progress = progressWith([
+      { id: "td", nextReviewAt: "2999-01-01", points: 90 },
+      { id: "ro", points: 1 },
+    ]);
+    const result = selectReviewCountries({ pool: COUNTRIES, progress, size: 1, rng: createRng(7) });
+    expect(result).not.toEqual(["td"]);
+  });
+
+  it("schedules a future review and increments successful reviews after a correct review", () => {
+    const after = applyAnswerToCountryProgress(
+      { ...createInitialCountryProgress("td"), needsReview: true, nextReviewAt: "2026-07-03" },
+      {
+        isCorrect: true,
+        answeredAt: "2026-07-03T10:00:00.000Z",
+        localDateKey: "2026-07-03",
+        mode: "review",
+      },
+    );
+    expect(after.needsReview).toBe(false);
+    expect(after.nextReviewAt).toBe("2026-07-04");
+    expect(after.successfulReviews).toBe(1);
   });
 
   it("does not repeat countries and shortens the session when material is scarce", () => {

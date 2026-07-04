@@ -79,7 +79,7 @@ test.describe("daily missions, streak and achievements flow", () => {
     // Página de conquistas reflete o desbloqueio.
     await page.getByRole("link", { name: "Conquistas" }).click();
     await expect(page.getByRole("heading", { name: "Conquistas" })).toBeVisible();
-    await expect(page.getByTestId("achievement-card")).toHaveCount(18);
+    await expect(page.getByTestId("achievement-card")).toHaveCount(20);
     const firstSteps = page.getByTestId("achievement-card").filter({ hasText: "Primeiros Passos" });
     await expect(firstSteps).toHaveAttribute("data-unlocked", "true");
   });
@@ -93,7 +93,7 @@ test.describe("challenges page v3", () => {
     for (const title of [
       "Modo digitação",
       "Bandeiras parecidas",
-      "Revisar erros",
+      "Revisar hoje",
       "Sobrevivência",
       "Desafio rápido",
       "Desafio perfeito",
