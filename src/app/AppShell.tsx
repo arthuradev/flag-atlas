@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink, Outlet } from "react-router-dom";
@@ -32,6 +33,9 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
   { to: "/challenges", icon: "target", labelKey: "home.challenges", ariaLabel: "abrir modos" },
 ];
 
+const SIDEBAR_COLLAPSED_WIDTH = 80;
+const SIDEBAR_EXPANDED_WIDTH = 288;
+
 function navItemClass(isActive: boolean, isCollapsed: boolean): string {
   return `flex min-h-11 items-center rounded-btn font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink ${
     isCollapsed ? "justify-center px-0" : "gap-3 px-3"
@@ -48,10 +52,33 @@ function mobileNavItemClass(isActive: boolean): string {
   }`;
 }
 
+type SidebarLabelProps = {
+  children: string;
+  isCollapsed: boolean;
+};
+
+function SidebarLabel({ children, isCollapsed }: SidebarLabelProps) {
+  return (
+    <AnimatePresence initial={false}>
+      {!isCollapsed && (
+        <motion.span
+          key="label"
+          initial={{ opacity: 0, x: -8, width: 0 }}
+          animate={{ opacity: 1, x: 0, width: "auto" }}
+          exit={{ opacity: 0, x: -8, width: 0 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
+          className="overflow-hidden whitespace-nowrap"
+        >
+          <span className="block truncate">{children}</span>
+        </motion.span>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export function AppShell() {
   const { t } = useTranslation();
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const desktopLabelClass = isSidebarCollapsed ? "sr-only" : "truncate";
   const sidebarToggleLabel = isSidebarCollapsed
     ? "Expandir barra lateral"
     : "Recolher barra lateral";
@@ -65,10 +92,14 @@ export function AppShell() {
         {t("common.continue")}
       </a>
 
-      <aside
-        className={`hidden shrink-0 bg-ink text-background shadow-card transition-[width,padding] duration-200 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col ${
-          isSidebarCollapsed ? "w-20 p-3" : "w-64 p-5"
-        }`}
+      <motion.aside
+        initial={false}
+        animate={{
+          width: isSidebarCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH,
+          padding: isSidebarCollapsed ? 12 : 20,
+        }}
+        transition={{ type: "spring", stiffness: 360, damping: 36, mass: 0.7 }}
+        className="hidden shrink-0 overflow-hidden bg-ink text-background shadow-card lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col"
       >
         <div
           className={`mb-7 flex items-center ${isSidebarCollapsed ? "flex-col gap-3" : "gap-3"}`}
@@ -77,20 +108,29 @@ export function AppShell() {
             to="/home"
             aria-label={t("app.name")}
             className={`flex min-w-0 items-center rounded-btn text-background transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              isSidebarCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-2"
+              isSidebarCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1"
             }`}
           >
             <span className="flex size-12 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
               <Icon name="compass" size={25} strokeWidth={2.2} />
             </span>
-            <span className={isSidebarCollapsed ? "sr-only" : "min-w-0"}>
-              <span className="block truncate text-lg font-black leading-tight">
-                {t("app.name")}
-              </span>
-              <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-background/50">
-                Terrain
-              </span>
-            </span>
+            <AnimatePresence initial={false}>
+              {!isSidebarCollapsed && (
+                <motion.span
+                  key="brand-copy"
+                  initial={{ opacity: 0, x: -10, width: 0 }}
+                  animate={{ opacity: 1, x: 0, width: "auto" }}
+                  exit={{ opacity: 0, x: -10, width: 0 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="min-w-0 overflow-hidden whitespace-nowrap"
+                >
+                  <span className="block text-lg font-black leading-tight">{t("app.name")}</span>
+                  <span className="block text-xs font-extrabold uppercase tracking-[0.16em] text-background/50">
+                    Terrain
+                  </span>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </Link>
 
           <button
@@ -101,7 +141,13 @@ export function AppShell() {
             onClick={() => setSidebarCollapsed((value) => !value)}
             className="inline-flex size-10 shrink-0 items-center justify-center rounded-btn border border-white/10 text-background/70 transition hover:bg-white/10 hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
           >
-            <Icon name={isSidebarCollapsed ? "chevron-right" : "chevron-left"} size={20} />
+            <motion.span
+              animate={{ rotate: isSidebarCollapsed ? 180 : 0 }}
+              transition={{ type: "spring", stiffness: 420, damping: 28 }}
+              className="inline-flex"
+            >
+              <Icon name="chevron-left" size={20} />
+            </motion.span>
           </button>
         </div>
 
@@ -113,7 +159,9 @@ export function AppShell() {
             className={({ isActive }) => navItemClass(isActive, isSidebarCollapsed)}
           >
             <Icon name="play" size={20} />
-            <span className={desktopLabelClass}>{t("home.continueTraining")}</span>
+            <SidebarLabel isCollapsed={isSidebarCollapsed}>
+              {t("home.continueTraining")}
+            </SidebarLabel>
           </NavLink>
           <div className="my-3 h-px bg-white/10" />
           {PRIMARY_NAV_ITEMS.map((item) => (
@@ -125,7 +173,7 @@ export function AppShell() {
               className={({ isActive }) => navItemClass(isActive, isSidebarCollapsed)}
             >
               <Icon name={item.icon} size={20} />
-              <span className={desktopLabelClass}>{t(item.labelKey)}</span>
+              <SidebarLabel isCollapsed={isSidebarCollapsed}>{t(item.labelKey)}</SidebarLabel>
             </NavLink>
           ))}
         </nav>
@@ -137,9 +185,9 @@ export function AppShell() {
           className={({ isActive }) => navItemClass(isActive, isSidebarCollapsed)}
         >
           <Icon name="settings" size={20} />
-          <span className={desktopLabelClass}>{t("home.settings")}</span>
+          <SidebarLabel isCollapsed={isSidebarCollapsed}>{t("home.settings")}</SidebarLabel>
         </NavLink>
-      </aside>
+      </motion.aside>
 
       <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 border-b border-line bg-background/88 px-4 py-3 backdrop-blur lg:hidden">
