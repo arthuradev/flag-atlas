@@ -79,6 +79,8 @@ export type SessionSummary = {
   levelAfter: number;
   /** Conquistas desbloqueadas ao longo desta sessão (Versão 3). */
   unlockedAchievementIds: string[];
+  /** Moedas Atlas ganhas nesta sessão: sessão + conquistas (Versão 4). */
+  coinsEarned: number;
   dailyStreak: SummaryDailyStreak;
   /** Presente apenas em sessões de sobrevivência. */
   survival?: SummarySurvival;

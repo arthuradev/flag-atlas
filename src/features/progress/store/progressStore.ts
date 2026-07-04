@@ -2,10 +2,18 @@ import { create } from "zustand";
 import { evaluateNewAchievements } from "@/entities/achievement/achievement.selectors";
 import type { AchievementSessionEvent } from "@/entities/achievement/achievement.types";
 import {
+  equipCosmetic as equipCosmeticInInventory,
+  purchaseCosmetic as purchaseCosmeticInInventory,
+} from "@/entities/cosmetic/cosmetic.selectors";
+import {
   type CountryProgress,
   createInitialUserProgress,
   type UserProgress,
 } from "@/entities/progress/progress.types";
+import {
+  computeAchievementCoins,
+  computeSessionCoins,
+} from "@/features/cosmetics/logic/coinRewards";
 import { type DailyStreakUpdate, registerActiveDay } from "@/features/progress/logic/dailyStreak";
 import { computeLevel } from "@/features/progress/logic/xp";
 import { clearProgress, loadProgress, saveProgress } from "@/shared/storage/progressRepository";
@@ -21,6 +29,8 @@ export type SessionCompletionResult = {
   unlockedAchievementIds: string[];
   dailyStreak: DailyStreakUpdate;
   survival?: SurvivalCompletionResult;
+  /** Moedas Atlas concedidas ao fechar a sessão (sessão + conquistas do fim). */
+  coinsEarned: number;
 };
 
 type ProgressState = {
@@ -35,8 +45,25 @@ type ProgressState = {
   registerCompletedSession: (event: AchievementSessionEvent) => SessionCompletionResult;
   /** XP de missão diária, concedido fora do fluxo de resposta. */
   addBonusXp: (xp: number) => void;
+  /** Credita Moedas Atlas cosméticas (missões, etc.). Nunca deixa o saldo negativo. */
+  addCoins: (coins: number) => void;
+  /** Compra um cosmético com Moedas Atlas, se possível. */
+  purchaseCosmetic: (id: string) => void;
+  /** Equipa um cosmético possuído (nunca custa moedas). */
+  equipCosmetic: (id: string) => void;
   resetProgress: () => void;
 };
+
+/** Credita moedas ao inventário cosmético de forma imutável e segura. */
+function grantCoins(progress: UserProgress, coins: number): UserProgress {
+  if (coins <= 0) {
+    return progress;
+  }
+  return {
+    ...progress,
+    cosmetics: { ...progress.cosmetics, coins: progress.cosmetics.coins + coins },
+  };
+}
 
 function withUnlockedAchievements(
   progress: UserProgress,
@@ -79,6 +106,8 @@ export const useProgressStore = create<ProgressState>((set) => {
         };
         unlockedIds = evaluateNewAchievements({ progress });
         progress = withUnlockedAchievements(progress, unlockedIds, answeredAt);
+        // Moedas por conquistas desbloqueadas no meio da sessão, uma vez cada.
+        progress = grantCoins(progress, computeAchievementCoins(unlockedIds.length));
         return progress;
       });
       return unlockedIds;
@@ -114,9 +143,15 @@ export const useProgressStore = create<ProgressState>((set) => {
         const unlockedIds = evaluateNewAchievements({ progress, sessionEvent: event });
         progress = withUnlockedAchievements(progress, unlockedIds, completedAt);
 
+        // Moedas cosméticas: base da sessão + conquistas fechadas agora.
+        const coinsEarned =
+          computeSessionCoins(event) + computeAchievementCoins(unlockedIds.length);
+        progress = grantCoins(progress, coinsEarned);
+
         result = {
           unlockedAchievementIds: unlockedIds,
           dailyStreak: streakUpdate,
+          coinsEarned,
           ...(survival !== undefined && { survival }),
         };
         return progress;
@@ -136,6 +171,27 @@ export const useProgressStore = create<ProgressState>((set) => {
         const totalXp = previous.totalXp + xp;
         return { ...previous, totalXp, level: computeLevel(totalXp) };
       });
+    },
+
+    addCoins: (coins) => {
+      if (coins <= 0) {
+        return;
+      }
+      update((previous) => grantCoins(previous, coins));
+    },
+
+    purchaseCosmetic: (id) => {
+      update((previous) => ({
+        ...previous,
+        cosmetics: purchaseCosmeticInInventory(previous.cosmetics, id),
+      }));
+    },
+
+    equipCosmetic: (id) => {
+      update((previous) => ({
+        ...previous,
+        cosmetics: equipCosmeticInInventory(previous.cosmetics, id),
+      }));
     },
 
     resetProgress: () => {

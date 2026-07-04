@@ -261,3 +261,61 @@ são avaliadas ao concluir sessão e dependem do registro persistido.
 Progresso V1/V2 carrega com defaults: `achievementsUnlocked = {}`,
 `dailyStreak = { 0, 0, restDaysAvailable: 1 }`, `survival = { 0, 0, 0 }`.
 Nenhum dado antigo é descartado; `PROGRESS_SCHEMA_VERSION` permanece 1.
+
+## Versão 4 — Extensões (cosméticos)
+
+```ts
+type CosmeticType = "theme" | "soundPack" | "flagFrame" | "mascot" | "visualEffect";
+
+type CosmeticItem = {
+  id: string;
+  type: CosmeticType;
+  nameKey: string;
+  descriptionKey: string;
+  price: number; // em Moedas Atlas; 0 = gratuito (sempre possuído)
+  rarity?: "common" | "rare" | "epic" | "legendary";
+  preview?: string; // emoji para preview simples
+  isDefault?: boolean; // item padrão equipado do tipo; nunca vendável
+};
+
+type CosmeticInventory = {
+  coins: number; // Moedas Atlas, nunca negativo
+  ownedItemIds: string[]; // itens comprados (gratuitos não precisam constar)
+  equipped: {
+    themeId: string;
+    soundPackId: string;
+    flagFrameId: string;
+    mascotId: string;
+    visualEffectId: string;
+  };
+};
+
+// UserProgress += {
+//   cosmetics: CosmeticInventory;
+// }
+```
+
+O **catálogo** (`cosmetic.catalog.ts`) é código, não storage: só o `cosmetics`
+(moedas, itens possuídos e equipados) é persistido no progresso.
+
+### Moedas Atlas
+
+Locais, cosméticas e sem valor real. Concedidas ao concluir sessões (+10, +5 de
+bônus por sessão perfeita), missões (+15), conquistas (+25) e sobrevivência
+(pelo score, com teto). Cada recompensa é concedida na transição de
+conclusão/desbloqueio, garantindo pagamento único. Não alteram dificuldade, XP
+real, domínio nem vantagem.
+
+### Tema × settings.theme
+
+`settings.theme` (light/dark/system) continua controlando o **modo claro/escuro**.
+O tema cosmético `Padrão` (`theme-default`) segue essa preferência; temas
+especiais definem paleta própria (ignoram claro/escuro). Não há duplicação de
+estado nem migração destrutiva — o `settings.theme` antigo é preservado.
+
+### Compatibilidade
+
+Progresso V1/V2/V3 sem `cosmetics` carrega com defaults seguros
+(`coins = 0`, `ownedItemIds = []`, equipados no padrão de cada tipo). Moedas
+inválidas viram 0, itens desconhecidos são descartados e itens equipados
+inválidos/não possuídos voltam ao padrão. `PROGRESS_SCHEMA_VERSION` permanece 1.

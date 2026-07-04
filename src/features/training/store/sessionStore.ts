@@ -13,6 +13,7 @@ import type {
   SessionSummary,
   TrainingSession,
 } from "@/entities/session/session.types";
+import { computeAchievementCoins } from "@/features/cosmetics/logic/coinRewards";
 import { useMissionsStore } from "@/features/missions/store/missionsStore";
 import { applyAnswerToCountryProgress } from "@/features/progress/logic/mastery";
 import { computeAnswerXp, computeLevel } from "@/features/progress/logic/xp";
@@ -59,6 +60,8 @@ type SessionState = {
   summary: SessionSummary | null;
   /** Conquistas desbloqueadas por respostas desta sessão (vai para o resumo). */
   unlockedDuringSession: string[];
+  /** Moedas ganhas por respostas desta sessão (conquistas no meio da sessão). */
+  coinsDuringSession: number;
   startSession: (config: SessionConfig) => void;
   answerCurrentQuestion: (selectedCountryId: string) => void;
   answerCurrentQuestionTyped: (typedAnswer: string) => void;
@@ -188,6 +191,8 @@ export const useSessionStore = create<SessionState>((set, get) => {
       currentStreak: streakAfter,
       bestStreak: Math.max(bestStreak, streakAfter),
       unlockedDuringSession: [...get().unlockedDuringSession, ...unlockedByAnswer],
+      coinsDuringSession:
+        get().coinsDuringSession + computeAchievementCoins(unlockedByAnswer.length),
     });
   };
 
@@ -199,6 +204,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     bestStreak: 0,
     summary: null,
     unlockedDuringSession: [],
+    coinsDuringSession: 0,
 
     startSession: (config) => {
       const rng = createRng();
@@ -224,6 +230,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         bestStreak: 0,
         summary: null,
         unlockedDuringSession: [],
+        coinsDuringSession: 0,
       });
     },
 
@@ -266,7 +273,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     },
 
     advance: () => {
-      const { session, sessionXp, bestStreak, unlockedDuringSession } = get();
+      const { session, sessionXp, bestStreak, unlockedDuringSession, coinsDuringSession } = get();
       if (!session) {
         return;
       }
@@ -329,6 +336,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         session: null,
         feedback: null,
         unlockedDuringSession: [],
+        coinsDuringSession: 0,
         summary: {
           config: session.config,
           correctCount,
@@ -343,6 +351,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
           unlockedAchievementIds: [
             ...new Set([...unlockedDuringSession, ...completion.unlockedAchievementIds]),
           ],
+          coinsEarned: coinsDuringSession + completion.coinsEarned,
           dailyStreak: {
             current: completion.dailyStreak.streak.currentStreak,
             countedToday: completion.dailyStreak.countedToday,
@@ -363,6 +372,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         bestStreak: 0,
         summary: null,
         unlockedDuringSession: [],
+        coinsDuringSession: 0,
       });
     },
   };

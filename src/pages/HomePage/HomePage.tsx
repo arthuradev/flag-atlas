@@ -5,6 +5,8 @@ import {
   countLearnedCountries,
   listCountriesNeedingReview,
 } from "@/entities/progress/progress.selectors";
+import { CoinBalance } from "@/features/cosmetics/components/CoinBalance";
+import { Mascot } from "@/features/cosmetics/components/Mascot";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
 import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine";
 import { useProgressStore } from "@/features/progress/store/progressStore";
@@ -59,6 +61,7 @@ export function HomePage() {
         </p>
         <h1 className="mt-2 text-3xl font-extrabold">{t("app.name")}</h1>
         <p className="mt-1 text-text-muted">{t("app.tagline")}</p>
+        <Mascot size="md" className="mt-2" />
       </header>
 
       <Card className="flex flex-col gap-3">
@@ -75,6 +78,17 @@ export function HomePage() {
           label={t("home.learnedCount", { learned, total })}
         />
       </Card>
+
+      <Link
+        to="/shop"
+        className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 shadow-sm transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <span className="inline-flex items-center gap-2 font-bold">
+          <span aria-hidden="true">🛍️</span>
+          {t("home.shop")}
+        </span>
+        <CoinBalance />
+      </Link>
 
       <DailyStreakLine streak={progress.dailyStreak} />
 

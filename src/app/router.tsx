@@ -9,6 +9,7 @@ import { HomePage } from "@/pages/HomePage/HomePage";
 import { OnboardingPage } from "@/pages/OnboardingPage/OnboardingPage";
 import { SessionResultPage } from "@/pages/SessionResultPage/SessionResultPage";
 import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
+import { ShopPage } from "@/pages/ShopPage/ShopPage";
 import { StatsPage } from "@/pages/StatsPage/StatsPage";
 import { TrainingPage } from "@/pages/TrainingPage/TrainingPage";
 
@@ -30,6 +31,7 @@ export function AppRouter() {
         <Route path="/continents/:continentId" element={<ContinentPage />} />
         <Route path="/collection" element={<CollectionPage />} />
         <Route path="/challenges" element={<ChallengesPage />} />
+        <Route path="/shop" element={<ShopPage />} />
         <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/settings" element={<SettingsPage />} />

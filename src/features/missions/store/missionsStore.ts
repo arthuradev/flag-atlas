@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { DailyMissionsState } from "@/entities/mission/mission.types";
+import { computeMissionCoins } from "@/features/cosmetics/logic/coinRewards";
 import {
   applyAnswerToMissions,
   applySessionToMissions,
@@ -43,6 +44,11 @@ export const useMissionsStore = create<MissionsState>((set, get) => {
     if (rewardXp > 0) {
       // Concedido apenas na transição para completa: nunca duas vezes.
       useProgressStore.getState().addBonusXp(rewardXp);
+    }
+    // Moedas Atlas cosméticas por missão concluída, também só na transição.
+    const rewardCoins = computeMissionCoins(completedNow.length);
+    if (rewardCoins > 0) {
+      useProgressStore.getState().addCoins(rewardCoins);
     }
     const next: DailyMissionsState = { date: current.date, missions };
     saveDailyMissions(next);

@@ -1,3 +1,4 @@
+import { normalizeCosmeticInventory } from "@/entities/cosmetic/cosmetic.selectors";
 import {
   type CountryProgress,
   createInitialDailyStreak,
@@ -90,6 +91,8 @@ export function normalizeUserProgress(value: unknown): UserProgress {
     achievementsUnlocked: normalizeAchievementsUnlocked(value.achievementsUnlocked),
     dailyStreak: normalizeDailyStreak(value.dailyStreak),
     survival: normalizeSurvivalStats(value.survival),
+    // Campo da Versão 4: progresso V1/V2/V3 sem ele carrega com defaults seguros.
+    cosmetics: normalizeCosmeticInventory(value.cosmetics),
   };
   if (typeof value.lastPlayedAt === "string") {
     progress.lastPlayedAt = value.lastPlayedAt;

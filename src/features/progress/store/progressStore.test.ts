@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import type { AchievementSessionEvent } from "@/entities/achievement/achievement.types";
+import { createInitialCosmeticInventory } from "@/entities/cosmetic/cosmetic.types";
 import { createInitialCountryProgress } from "@/entities/progress/progress.types";
+import {
+  ACHIEVEMENT_COIN_REWARD,
+  PERFECT_SESSION_BONUS,
+  SESSION_COIN_REWARD,
+} from "@/features/cosmetics/logic/coinRewards";
 import { applyAnswerToCountryProgress } from "@/features/progress/logic/mastery";
 import { useProgressStore } from "./progressStore";
 
@@ -129,5 +135,83 @@ describe("progressStore", () => {
     expect(progress.level).toBe(1);
     expect(progress.countries).toEqual({});
     expect(progress.completedSessions).toBe(0);
+    expect(progress.cosmetics).toEqual(createInitialCosmeticInventory());
+  });
+});
+
+describe("progressStore — Atlas Coins (V4)", () => {
+  beforeEach(() => {
+    useProgressStore.getState().resetProgress();
+  });
+
+  it("awards session coins plus achievement coins on the first session", () => {
+    // A primeira sessão concluída também desbloqueia firstSteps (+moedas).
+    const result = useProgressStore.getState().registerCompletedSession(completionEvent());
+    expect(result.coinsEarned).toBe(SESSION_COIN_REWARD + ACHIEVEMENT_COIN_REWARD);
+    expect(useProgressStore.getState().progress.cosmetics.coins).toBe(
+      SESSION_COIN_REWARD + ACHIEVEMENT_COIN_REWARD,
+    );
+  });
+
+  it("does not award the same achievement coins twice", () => {
+    useProgressStore.getState().registerCompletedSession(completionEvent());
+    const second = useProgressStore.getState().registerCompletedSession(completionEvent());
+    // Só a base da sessão: firstSteps já foi concedida.
+    expect(second.coinsEarned).toBe(SESSION_COIN_REWARD);
+  });
+
+  it("adds the perfect-session bonus", () => {
+    useProgressStore.getState().registerCompletedSession(completionEvent()); // firstSteps sai aqui
+    // Sessão curta (< mínimo da conquista flawless) isola o bônus de perfeição.
+    const perfect = useProgressStore
+      .getState()
+      .registerCompletedSession(
+        completionEvent({ accuracy: 100, correctCount: 4, questionCount: 4 }),
+      );
+    expect(perfect.coinsEarned).toBe(SESSION_COIN_REWARD + PERFECT_SESSION_BONUS);
+  });
+
+  it("rewards survival by score, capped", () => {
+    useProgressStore.getState().registerCompletedSession(completionEvent()); // firstSteps
+    const survival = useProgressStore
+      .getState()
+      .registerCompletedSession(completionEvent({ mode: "survival", correctCount: 12 }));
+    expect(survival.coinsEarned).toBe(12);
+  });
+
+  it("credits coins via addCoins and never goes negative", () => {
+    useProgressStore.getState().addCoins(50);
+    useProgressStore.getState().addCoins(-999);
+    expect(useProgressStore.getState().progress.cosmetics.coins).toBe(50);
+  });
+
+  it("purchases a cosmetic when there are enough coins", () => {
+    useProgressStore.getState().addCoins(200);
+    useProgressStore.getState().purchaseCosmetic("theme-oceano");
+    const cosmetics = useProgressStore.getState().progress.cosmetics;
+    expect(cosmetics.coins).toBe(80);
+    expect(cosmetics.ownedItemIds).toContain("theme-oceano");
+  });
+
+  it("does not purchase a cosmetic without enough coins", () => {
+    useProgressStore.getState().addCoins(10);
+    useProgressStore.getState().purchaseCosmetic("theme-oceano");
+    const cosmetics = useProgressStore.getState().progress.cosmetics;
+    expect(cosmetics.coins).toBe(10);
+    expect(cosmetics.ownedItemIds).not.toContain("theme-oceano");
+  });
+
+  it("equips an owned cosmetic without spending coins", () => {
+    useProgressStore.getState().addCoins(200);
+    useProgressStore.getState().purchaseCosmetic("theme-oceano");
+    useProgressStore.getState().equipCosmetic("theme-oceano");
+    const cosmetics = useProgressStore.getState().progress.cosmetics;
+    expect(cosmetics.equipped.themeId).toBe("theme-oceano");
+    expect(cosmetics.coins).toBe(80);
+  });
+
+  it("does not equip an unowned cosmetic", () => {
+    useProgressStore.getState().equipCosmetic("theme-oceano");
+    expect(useProgressStore.getState().progress.cosmetics.equipped.themeId).toBe("theme-default");
   });
 });

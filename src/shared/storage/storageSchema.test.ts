@@ -182,3 +182,62 @@ describe("V3 fields normalization", () => {
     expect(result.dailyStreak.bestStreak).toBe(5);
   });
 });
+
+describe("V4 cosmetics normalization", () => {
+  it("gives V4 cosmetics defaults to progress saved before V4", () => {
+    const result = normalizeUserProgress({
+      totalXp: 120,
+      completedSessions: 4,
+      countries: { br: { seenCount: 3, correctCount: 3, masteryPoints: 3 } },
+    });
+    // Progresso antigo é preservado...
+    expect(result.countries.br?.masteryLevel).toBe("learned");
+    expect(result.completedSessions).toBe(4);
+    // ...e o inventário cosmético entra com defaults seguros.
+    expect(result.cosmetics.coins).toBe(0);
+    expect(result.cosmetics.ownedItemIds).toEqual([]);
+    expect(result.cosmetics.equipped.themeId).toBe("theme-default");
+    expect(result.cosmetics.equipped.soundPackId).toBe("sound-default");
+    expect(result.cosmetics.equipped.flagFrameId).toBe("frame-default");
+    expect(result.cosmetics.equipped.mascotId).toBe("mascot-none");
+    expect(result.cosmetics.equipped.visualEffectId).toBe("effect-none");
+  });
+
+  it("preserves the old light/dark theme setting alongside cosmetic defaults", () => {
+    // O tema claro/escuro continua em settings; cosmetics.themeId nasce padrão.
+    const settings = normalizeSettings({ theme: "dark" });
+    expect(settings.theme).toBe("dark");
+    const progress = normalizeUserProgress({ countries: {} });
+    expect(progress.cosmetics.equipped.themeId).toBe("theme-default");
+  });
+
+  it("keeps a valid cosmetic inventory", () => {
+    const result = normalizeUserProgress({
+      countries: {},
+      cosmetics: {
+        coins: 130,
+        ownedItemIds: ["theme-oceano"],
+        equipped: { themeId: "theme-oceano" },
+      },
+    });
+    expect(result.cosmetics.coins).toBe(130);
+    expect(result.cosmetics.ownedItemIds).toEqual(["theme-oceano"]);
+    expect(result.cosmetics.equipped.themeId).toBe("theme-oceano");
+  });
+
+  it("sanitizes invalid cosmetic data", () => {
+    const result = normalizeUserProgress({
+      countries: {},
+      cosmetics: {
+        coins: -40,
+        ownedItemIds: ["ghost", "theme-oceano", 5],
+        equipped: { themeId: "theme-neon", mascotId: "mascot-owl" },
+      },
+    });
+    expect(result.cosmetics.coins).toBe(0);
+    expect(result.cosmetics.ownedItemIds).toEqual(["theme-oceano"]);
+    // theme-neon e mascot-owl não são possuídos → voltam ao padrão.
+    expect(result.cosmetics.equipped.themeId).toBe("theme-default");
+    expect(result.cosmetics.equipped.mascotId).toBe("mascot-none");
+  });
+});
