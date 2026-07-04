@@ -4,20 +4,41 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* Tema claro — alegre e limpo */
-  --fa-background: #f2f7f8;
+  /* Terrain: modern cartographic learning game. */
+  --fa-background: #eef1ea;
   --fa-surface: #ffffff;
-  --fa-surface-raised: #ffffff;
-  --fa-text: #1c2f38;
-  --fa-text-muted: #5b7280;
-  --fa-primary: #0d9488;
+  --fa-surface-raised: #f6f8f3;
+  --fa-surface-2: #f6f8f3;
+  --fa-text: #16231d;
+  --fa-text-2: #3d4d44;
+  --fa-text-muted: #5c6b62;
+  --fa-text-faint: #8a917f;
+  --fa-primary: #1f7a4d;
+  --fa-primary-hover: #1a6a42;
   --fa-primary-foreground: #ffffff;
-  --fa-success: #16a34a;
-  --fa-warning: #d97706;
-  --fa-danger: #dc2626;
-  --fa-border: #d9e4e8;
-  --fa-ring: #0d9488;
-  --fa-progress: #f59e0b;
+  --fa-primary-soft: #e4f3ea;
+  --fa-accent: #cf9a3a;
+  --fa-accent-foreground: #a1761d;
+  --fa-accent-soft: #faf1dc;
+  --fa-success: #2f9e63;
+  --fa-success-soft: #e4f3ea;
+  --fa-warning: #c9911f;
+  --fa-danger: #c04a2e;
+  --fa-danger-soft: #f8e6e0;
+  --fa-border: #dfe6dd;
+  --fa-border-strong: #cfdccb;
+  --fa-ring: #1f7a4d;
+  --fa-progress: #cf9a3a;
+  --fa-bronze: #c88a52;
+  --fa-silver: #98a3aa;
+  --fa-gold: #c1901f;
+  --fa-platinum: #34c07d;
+  --fa-contour-color: rgba(31, 122, 77, 0.055);
+  --fa-contour-accent: rgba(207, 154, 58, 0.06);
+  --fa-shadow-card: 0 2px 4px rgba(22, 35, 29, 0.04),
+    0 24px 44px -30px rgba(22, 35, 29, 0.45);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-flag: 0 16px 34px -18px rgba(22, 35, 29, 0.55);
 
   color-scheme: light;
   font-synthesis: none;
@@ -26,158 +47,294 @@
 }
 
 [data-theme="dark"] {
-  /* Tema escuro — confortável, sem preto absoluto */
-  --fa-background: #0f1c21;
-  --fa-surface: #16262d;
-  --fa-surface-raised: #1d3038;
-  --fa-text: #e6eef1;
-  --fa-text-muted: #92a8b1;
-  --fa-primary: #14b8a6;
-  --fa-primary-foreground: #04201d;
-  --fa-success: #4ade80;
-  --fa-warning: #fbbf24;
-  --fa-danger: #f87171;
-  --fa-border: #2a4049;
-  --fa-ring: #2dd4bf;
-  --fa-progress: #fbbf24;
+  --fa-background: #0f1713;
+  --fa-surface: #16211b;
+  --fa-surface-raised: #1b2822;
+  --fa-surface-2: #1b2822;
+  --fa-text: #e9f1ea;
+  --fa-text-2: #c9d3cb;
+  --fa-text-muted: #9db0a3;
+  --fa-text-faint: #6f7c72;
+  --fa-primary: #34c07d;
+  --fa-primary-hover: #2ca96c;
+  --fa-primary-foreground: #0f1713;
+  --fa-primary-soft: #12352a;
+  --fa-accent: #e0ad4c;
+  --fa-accent-foreground: #e0ad4c;
+  --fa-accent-soft: #2a2416;
+  --fa-success: #34c07d;
+  --fa-success-soft: #12352a;
+  --fa-warning: #e0ad4c;
+  --fa-danger: #f07a5f;
+  --fa-danger-soft: #3a1f18;
+  --fa-border: #26332b;
+  --fa-border-strong: #2c3a32;
+  --fa-ring: #34c07d;
+  --fa-progress: #e0ad4c;
+  --fa-contour-color: rgba(52, 192, 125, 0.075);
+  --fa-contour-accent: rgba(224, 173, 76, 0.08);
+  --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.18),
+    0 24px 44px -30px rgba(0, 0, 0, 0.85);
+  --fa-shadow-btn: 0 7px 0 #1b7c50;
+  --fa-shadow-flag: 0 18px 38px -18px rgba(0, 0, 0, 0.85);
 
   color-scheme: dark;
 }
 
-/* ── Temas cosméticos da Versão 4 ──────────────────────────────────────────
-   Puramente estéticos: só trocam a paleta de CSS Variables, nunca o layout
-   nem a legibilidade. Locais, sem imagens externas, funcionam offline. */
-
 [data-theme="mapa-antigo"] {
-  /* Mapa Antigo — pergaminho sépia, claro e aconchegante */
   --fa-background: #efe6d2;
-  --fa-surface: #f7f0e0;
+  --fa-surface: #fbf6ea;
   --fa-surface-raised: #fbf6ea;
+  --fa-surface-2: #f7f0e0;
   --fa-text: #4a3826;
+  --fa-text-2: #5f4b34;
   --fa-text-muted: #8a745a;
+  --fa-text-faint: #a99f89;
   --fa-primary: #9a6b3f;
+  --fa-primary-hover: #805732;
   --fa-primary-foreground: #fff8ec;
+  --fa-primary-soft: #efe0c6;
+  --fa-accent: #b8863b;
+  --fa-accent-foreground: #7c5620;
+  --fa-accent-soft: #f6ecd6;
   --fa-success: #4d7c2f;
+  --fa-success-soft: #e5efd8;
   --fa-warning: #b45309;
   --fa-danger: #b23a2e;
+  --fa-danger-soft: #f3ddd5;
   --fa-border: #d8c6a5;
+  --fa-border-strong: #cdb88f;
   --fa-ring: #9a6b3f;
   --fa-progress: #b8863b;
+  --fa-contour-color: rgba(154, 107, 63, 0.075);
+  --fa-contour-accent: rgba(184, 134, 59, 0.09);
+  --fa-shadow-card: 0 2px 4px rgba(74, 56, 38, 0.05),
+    0 24px 44px -30px rgba(74, 56, 38, 0.48);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
 
   color-scheme: light;
 }
 
 [data-theme="neon"] {
-  /* Neon Atlas — escuro com acentos vivos */
   --fa-background: #0a0a16;
   --fa-surface: #14142a;
   --fa-surface-raised: #1d1d3d;
+  --fa-surface-2: #1d1d3d;
   --fa-text: #eef0ff;
+  --fa-text-2: #c9cdfa;
   --fa-text-muted: #9aa0d0;
+  --fa-text-faint: #757ab0;
   --fa-primary: #ff3fbf;
+  --fa-primary-hover: #d92b9e;
   --fa-primary-foreground: #10001a;
+  --fa-primary-soft: #3a1233;
+  --fa-accent: #22d3ee;
+  --fa-accent-foreground: #67e8f9;
+  --fa-accent-soft: #102f3b;
   --fa-success: #39ff88;
+  --fa-success-soft: #123824;
   --fa-warning: #ffd23f;
   --fa-danger: #ff5470;
+  --fa-danger-soft: #3b1620;
   --fa-border: #33336a;
+  --fa-border-strong: #47478a;
   --fa-ring: #ff5ccd;
   --fa-progress: #22d3ee;
+  --fa-contour-color: rgba(255, 63, 191, 0.07);
+  --fa-contour-accent: rgba(34, 211, 238, 0.08);
+  --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.22),
+    0 24px 44px -30px rgba(0, 0, 0, 0.9);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
 
   color-scheme: dark;
 }
 
 [data-theme="oceano"] {
-  /* Oceano — azul profundo e calmo */
   --fa-background: #06283d;
   --fa-surface: #0b3a56;
   --fa-surface-raised: #114b6e;
+  --fa-surface-2: #114b6e;
   --fa-text: #e6f4fb;
+  --fa-text-2: #c7e5f3;
   --fa-text-muted: #9cc4da;
+  --fa-text-faint: #6e9eb8;
   --fa-primary: #2ec7c7;
+  --fa-primary-hover: #25a7aa;
   --fa-primary-foreground: #04222f;
+  --fa-primary-soft: #0f4e5c;
+  --fa-accent: #38bdf8;
+  --fa-accent-foreground: #7dd3fc;
+  --fa-accent-soft: #0f405f;
   --fa-success: #4ade80;
+  --fa-success-soft: #123b2f;
   --fa-warning: #fbbf24;
   --fa-danger: #f87171;
+  --fa-danger-soft: #451e25;
   --fa-border: #1c5a7e;
+  --fa-border-strong: #28719b;
   --fa-ring: #38d6d6;
   --fa-progress: #38bdf8;
+  --fa-contour-color: rgba(46, 199, 199, 0.07);
+  --fa-contour-accent: rgba(56, 189, 248, 0.08);
+  --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.22),
+    0 24px 44px -30px rgba(0, 0, 0, 0.9);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
 
   color-scheme: dark;
 }
 
 [data-theme="espaco"] {
-  /* Espaço — noite estrelada, índigo profundo */
   --fa-background: #070713;
   --fa-surface: #12122a;
   --fa-surface-raised: #1b1b3a;
+  --fa-surface-2: #1b1b3a;
   --fa-text: #e9e9ff;
+  --fa-text-2: #ccccfb;
   --fa-text-muted: #9a9ac8;
+  --fa-text-faint: #7777a8;
   --fa-primary: #8b7bff;
+  --fa-primary-hover: #715fe6;
   --fa-primary-foreground: #0a0620;
+  --fa-primary-soft: #282249;
+  --fa-accent: #a78bfa;
+  --fa-accent-foreground: #c4b5fd;
+  --fa-accent-soft: #282145;
   --fa-success: #5eead4;
+  --fa-success-soft: #143634;
   --fa-warning: #fcd34d;
   --fa-danger: #fb7185;
+  --fa-danger-soft: #3d1a25;
   --fa-border: #2b2b52;
+  --fa-border-strong: #3c3c70;
   --fa-ring: #a99bff;
   --fa-progress: #a78bfa;
+  --fa-contour-color: rgba(139, 123, 255, 0.07);
+  --fa-contour-accent: rgba(252, 211, 77, 0.07);
+  --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.24),
+    0 24px 44px -30px rgba(0, 0, 0, 0.9);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
 
   color-scheme: dark;
 }
 
 [data-theme="biblioteca"] {
-  /* Biblioteca — madeira e creme, claro e sóbrio */
   --fa-background: #ece3d4;
   --fa-surface: #f5efe3;
   --fa-surface-raised: #fbf7ee;
+  --fa-surface-2: #fbf7ee;
   --fa-text: #3a2f25;
+  --fa-text-2: #574636;
   --fa-text-muted: #7b6b57;
+  --fa-text-faint: #9d917f;
   --fa-primary: #7a5230;
+  --fa-primary-hover: #624026;
   --fa-primary-foreground: #fdf6ea;
+  --fa-primary-soft: #eadcca;
+  --fa-accent: #a97b45;
+  --fa-accent-foreground: #7a5230;
+  --fa-accent-soft: #f2e5d4;
   --fa-success: #4d7c2f;
+  --fa-success-soft: #e0ead4;
   --fa-warning: #a86523;
   --fa-danger: #a83a2e;
+  --fa-danger-soft: #f1dad4;
   --fa-border: #d5c6ab;
+  --fa-border-strong: #c4b08d;
   --fa-ring: #7a5230;
   --fa-progress: #a97b45;
+  --fa-contour-color: rgba(122, 82, 48, 0.07);
+  --fa-contour-accent: rgba(169, 123, 69, 0.08);
+  --fa-shadow-card: 0 2px 4px rgba(58, 47, 37, 0.05),
+    0 24px 44px -30px rgba(58, 47, 37, 0.45);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
 
   color-scheme: light;
 }
 
 [data-theme="minimalista"] {
-  /* Minimalista — tons neutros, muito contraste, sem distração */
   --fa-background: #f6f6f7;
   --fa-surface: #ffffff;
   --fa-surface-raised: #ffffff;
+  --fa-surface-2: #f0f0f1;
   --fa-text: #1a1a1a;
+  --fa-text-2: #333333;
   --fa-text-muted: #6b6b6b;
+  --fa-text-faint: #8a8a8a;
   --fa-primary: #2b2b2b;
+  --fa-primary-hover: #111111;
   --fa-primary-foreground: #ffffff;
+  --fa-primary-soft: #e8e8e8;
+  --fa-accent: #4b4b4b;
+  --fa-accent-foreground: #2b2b2b;
+  --fa-accent-soft: #eeeeee;
   --fa-success: #2e7d32;
+  --fa-success-soft: #e3f0e4;
   --fa-warning: #b26a00;
   --fa-danger: #c62828;
+  --fa-danger-soft: #f4dddd;
   --fa-border: #e2e2e4;
+  --fa-border-strong: #cfcfd2;
   --fa-ring: #2b2b2b;
   --fa-progress: #4b4b4b;
+  --fa-contour-color: rgba(43, 43, 43, 0.04);
+  --fa-contour-accent: rgba(75, 75, 75, 0.04);
+  --fa-shadow-card: 0 2px 4px rgba(26, 26, 26, 0.035),
+    0 24px 44px -30px rgba(26, 26, 26, 0.35);
+  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
 
   color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--fa-background);
+  --color-bg: var(--fa-background);
   --color-surface: var(--fa-surface);
   --color-surface-raised: var(--fa-surface-raised);
+  --color-surface-2: var(--fa-surface-2);
   --color-text: var(--fa-text);
+  --color-ink: var(--fa-text);
+  --color-ink-2: var(--fa-text-2);
   --color-text-muted: var(--fa-text-muted);
+  --color-muted: var(--fa-text-muted);
+  --color-faint: var(--fa-text-faint);
   --color-primary: var(--fa-primary);
+  --color-pine: var(--fa-primary);
+  --color-pine-hover: var(--fa-primary-hover);
+  --color-pine-soft: var(--fa-primary-soft);
   --color-primary-foreground: var(--fa-primary-foreground);
+  --color-accent: var(--fa-accent);
+  --color-ocre: var(--fa-accent);
+  --color-ocre-ink: var(--fa-accent-foreground);
+  --color-ocre-soft: var(--fa-accent-soft);
   --color-success: var(--fa-success);
+  --color-success-soft: var(--fa-success-soft);
+  --color-ok: var(--fa-success);
+  --color-ok-soft: var(--fa-success-soft);
   --color-warning: var(--fa-warning);
   --color-danger: var(--fa-danger);
+  --color-danger-soft: var(--fa-danger-soft);
+  --color-bad: var(--fa-danger);
+  --color-bad-soft: var(--fa-danger-soft);
   --color-border: var(--fa-border);
+  --color-line: var(--fa-border);
+  --color-line-strong: var(--fa-border-strong);
   --color-ring: var(--fa-ring);
   --color-progress: var(--fa-progress);
+  --color-bronze: var(--fa-bronze);
+  --color-silver: var(--fa-silver);
+  --color-gold: var(--fa-gold);
+  --color-platinum: var(--fa-platinum);
 
   --font-sans: "Nunito Variable", "Nunito", ui-rounded, system-ui, "Segoe UI", sans-serif;
+
+  --radius-chip: 10px;
+  --radius-btn: 14px;
+  --radius-card: 20px;
+  --radius-xl2: 28px;
+
+  --shadow-card: var(--fa-shadow-card);
+  --shadow-btn: var(--fa-shadow-btn);
+  --shadow-flag: var(--fa-shadow-flag);
 }
 
 html,
@@ -187,4 +344,41 @@ body {
 
 body {
   @apply bg-background font-sans text-text;
+  background-image:
+    radial-gradient(circle at 12% 16%, var(--fa-contour-accent) 0 42px, transparent 43px 84px),
+    repeating-radial-gradient(
+      circle at 82% 18%,
+      transparent 0 46px,
+      var(--fa-contour-color) 46px 47px
+    ),
+    repeating-radial-gradient(
+      circle at 18% 86%,
+      transparent 0 62px,
+      var(--fa-contour-color) 62px 63px
+    );
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--fa-primary-soft);
+  color: var(--fa-text);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

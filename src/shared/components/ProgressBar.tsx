@@ -23,10 +23,10 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={safeMax}
       aria-valuenow={Math.min(value, safeMax)}
-      className={`w-full overflow-hidden rounded-full bg-border/60 ${size === "thin" ? "h-1.5" : "h-3"}`}
+      className={`w-full overflow-hidden rounded-full bg-line/70 ring-1 ring-line/70 ${size === "thin" ? "h-1.5" : "h-3"}`}
     >
       <div
-        className={`h-full rounded-full transition-[width] duration-300 ease-out ${colorClassName}`}
+        className={`h-full rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.2)_inset] transition-[width] duration-300 ease-out ${colorClassName}`}
         style={{ width: `${percent}%` }}
       />
     </div>

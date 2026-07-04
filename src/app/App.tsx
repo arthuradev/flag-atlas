@@ -6,8 +6,7 @@ export function App() {
   return (
     <Providers>
       <AppRouter />
-      {/* ⚠️ Ferramenta de teste temporária — remover junto com src/features/debug/. */}
-      <DebugConsole />
+      {import.meta.env.DEV && <DebugConsole />}
     </Providers>
   );
 }

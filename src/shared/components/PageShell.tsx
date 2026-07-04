@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Icon } from "./Icon";
 
 type PageShellWidth = "default" | "wide";
 
@@ -12,38 +13,27 @@ type PageShellProps = {
 };
 
 const WIDTH_CLASSES: Record<PageShellWidth, string> = {
-  default: "max-w-2xl",
-  wide: "max-w-5xl",
+  default: "max-w-3xl",
+  wide: "max-w-6xl",
 };
 
 export function PageShell({ title, backTo, width = "default", children }: PageShellProps) {
   const { t } = useTranslation();
 
   return (
-    <div className={`mx-auto flex min-h-dvh w-full ${WIDTH_CLASSES[width]} flex-col px-4 pb-8`}>
+    <div className={`mx-auto flex min-h-full w-full ${WIDTH_CLASSES[width]} flex-col`}>
       {(title || backTo) && (
-        <header className="flex min-h-16 items-center gap-2 py-3">
+        <header className="mb-5 flex min-h-14 items-center gap-3">
           {backTo && (
             <Link
               to={backTo}
               aria-label={t("common.back")}
-              className="inline-flex size-11 items-center justify-center rounded-2xl text-text-muted transition hover:bg-surface-raised hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex size-11 items-center justify-center rounded-btn border border-line bg-surface text-muted shadow-sm transition hover:bg-surface-2 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-6"
-                aria-hidden="true"
-              >
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
+              <Icon name="chevron-left" size={23} strokeWidth={2.4} />
             </Link>
           )}
-          {title && <h1 className="text-xl font-extrabold">{title}</h1>}
+          {title && <h1 className="text-2xl font-black text-text sm:text-3xl">{title}</h1>}
         </header>
       )}
       <main className="flex flex-1 flex-col">{children}</main>

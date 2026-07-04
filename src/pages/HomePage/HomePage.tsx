@@ -15,17 +15,18 @@ import { useSessionStore } from "@/features/training/store/sessionStore";
 import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
+import { Icon, type IconName } from "@/shared/components/Icon";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import { COUNTRIES } from "@/shared/data/countries";
 
 const SHORTCUTS = [
-  { to: "/challenges", emoji: "🎯", labelKey: "home.challenges" },
-  { to: "/continents", emoji: "🧭", labelKey: "home.continents" },
-  { to: "/collection", emoji: "🎒", labelKey: "home.collection" },
-  { to: "/achievements", emoji: "🏆", labelKey: "home.achievements" },
-  { to: "/stats", emoji: "📊", labelKey: "home.stats" },
-  { to: "/settings", emoji: "⚙️", labelKey: "home.settings" },
-] as const;
+  { to: "/challenges", icon: "target", labelKey: "home.challenges" },
+  { to: "/continents", icon: "compass", labelKey: "home.continents" },
+  { to: "/collection", icon: "collection", labelKey: "home.collection" },
+  { to: "/achievements", icon: "trophy", labelKey: "home.achievements" },
+  { to: "/stats", icon: "chart", labelKey: "home.stats" },
+  { to: "/settings", icon: "settings", labelKey: "home.settings" },
+] satisfies readonly { icon: IconName; labelKey: string; to: string }[];
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -53,22 +54,22 @@ export function HomePage() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-4 py-8"
+      className="mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-6 py-4 lg:justify-start"
     >
-      <header className="text-center">
-        <p className="text-5xl" aria-hidden="true">
-          🌍
-        </p>
-        <h1 className="mt-2 text-3xl font-extrabold">{t("app.name")}</h1>
-        <p className="mt-1 text-text-muted">{t("app.tagline")}</p>
+      <header className="text-center lg:text-left">
+        <div className="mx-auto flex size-16 items-center justify-center rounded-xl2 bg-ink text-platinum shadow-card lg:mx-0">
+          <Icon name="globe" size={34} strokeWidth={2.1} />
+        </div>
+        <h1 className="mt-3 text-3xl font-black">{t("app.name")}</h1>
+        <p className="mt-1 font-semibold text-text-muted">{t("app.tagline")}</p>
         <Mascot size="md" className="mt-2" />
       </header>
 
       <Card className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between">
-          <span className="font-bold">{t("home.learnedCount", { learned, total })}</span>
-          <span className="text-sm text-text-muted">
-            {t("home.level", { level: progress.level })} ·{" "}
+          <span className="font-extrabold">{t("home.learnedCount", { learned, total })}</span>
+          <span className="text-sm font-bold text-text-muted">
+            {t("home.level", { level: progress.level })} /{" "}
             {t("home.totalXp", { xp: progress.totalXp })}
           </span>
         </div>
@@ -81,10 +82,10 @@ export function HomePage() {
 
       <Link
         to="/shop"
-        className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 shadow-sm transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex items-center justify-between rounded-card border border-line bg-surface px-4 py-3 shadow-card transition hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        <span className="inline-flex items-center gap-2 font-bold">
-          <span aria-hidden="true">🛍️</span>
+        <span className="inline-flex items-center gap-2 font-extrabold">
+          <Icon name="shop" size={19} className="text-primary" />
           {t("home.shop")}
         </span>
         <CoinBalance />
@@ -94,28 +95,36 @@ export function HomePage() {
 
       <DailyMissionsCard />
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <Button size="lg" fullWidth onClick={handleContinueTraining}>
+          <Icon name="play" size={20} fill="currentColor" strokeWidth={1.8} />
           {t("home.continueTraining")}
         </Button>
         {reviewCount > 0 && (
           <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
-            🔁 {t("review.cta")}
+            <Icon name="refresh" size={20} />
+            {t("review.cta")}
           </Button>
         )}
       </div>
 
-      <nav aria-label={t("app.name")} className="grid grid-cols-3 gap-3">
+      <nav
+        aria-label={t("app.name")}
+        className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6"
+      >
         {SHORTCUTS.map((shortcut) => (
           <Link
             key={shortcut.to}
             to={shortcut.to}
-            className="flex min-h-24 flex-col items-center justify-center gap-1.5 rounded-3xl border border-border bg-surface p-3 text-center shadow-sm transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-card border border-line bg-surface p-3 text-center shadow-card transition hover:-translate-y-0.5 hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            <span className="text-2xl" aria-hidden="true">
-              {shortcut.emoji}
+            <span
+              className="flex size-10 items-center justify-center rounded-btn bg-pine-soft text-primary"
+              aria-hidden="true"
+            >
+              <Icon name={shortcut.icon} size={21} />
             </span>
-            <span className="text-sm font-bold">{t(shortcut.labelKey)}</span>
+            <span className="text-sm font-extrabold">{t(shortcut.labelKey)}</span>
           </Link>
         ))}
       </nav>

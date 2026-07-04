@@ -2,17 +2,13 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useMissionsStore } from "@/features/missions/store/missionsStore";
 import { Card } from "@/shared/components/Card";
+import { Icon } from "@/shared/components/Icon";
 
-/**
- * Bloco compacto "Missões de hoje" (Home e resumo de sessão).
- * Missões concluídas ficam marcadas; as demais mostram o progresso.
- */
 export function DailyMissionsCard() {
   const { t } = useTranslation();
   const missions = useMissionsStore((state) => state.missions.missions);
   const refreshForToday = useMissionsStore((state) => state.refreshForToday);
 
-  // Renova na virada do dia sem exigir reload.
   useEffect(() => {
     refreshForToday();
   }, [refreshForToday]);
@@ -31,8 +27,8 @@ export function DailyMissionsCard() {
               {t(`missions.types.${mission.type}`, { target: mission.target })}
             </span>
             {mission.completed ? (
-              <span className="font-bold text-success">
-                <span aria-hidden="true">✓ </span>
+              <span className="inline-flex items-center gap-1 font-bold text-success">
+                <Icon name="check" size={15} strokeWidth={2.6} />
                 {t("missions.completed")}
               </span>
             ) : (
