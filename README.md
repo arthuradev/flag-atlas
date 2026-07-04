@@ -69,6 +69,7 @@ O MVP implementa:
 - **MVP**: completo (Fases 0–9 de `.specs/TASKS.md`).
 - **Versão 2**: completa — aprendizado real por cima do quiz.
 - **Versão 3**: completa — retenção e diversão, sem virar app punitivo.
+- **Versão 4**: completa — personalização cosmética, sem pay-to-win.
 
 ## Versão 2
 
@@ -93,6 +94,19 @@ A Versão 3 adiciona retenção e diversão, mantendo a filosofia "erro ensina, 
 - **Compartilhar resultado** (botão no resumo da sessão): gera um texto bonito do resultado (normal ou sobrevivência) via Web Share API; sem ela, copia para a área de transferência; se nada funcionar, mostra o texto selecionável. Apenas texto local — sem backend e sem dados sensíveis.
 
 Continua sem backend, login, ranking, loja ou moedas. O progresso V1/V2 é preservado: o schema segue v1 e os campos novos (`achievementsUnlocked`, `dailyStreak`, `survival`) são normalizados com defaults; as missões diárias vivem em chave própria (`flag-atlas:daily-missions`).
+
+## Versão 4
+
+A Versão 4 adiciona **personalização cosmética** — só aparência e som, sem alterar dificuldade, aprendizado, XP real ou vantagem. É tudo local e offline: **sem dinheiro real, sem microtransação, sem backend, sem login, sem pay-to-win**.
+
+- **Moedas Atlas** (`cosmetics.coins`): moeda local e cosmética, ganha jogando. +10 por sessão concluída, +5 de bônus por sessão perfeita, +15 por missão diária, +25 por conquista e, na sobrevivência, moedas pelo score (com teto). São concedidas uma única vez por evento e o saldo nunca fica negativo. Saldo mostrado discretamente na Home (linha 🛍️ Loja) e no resumo da sessão.
+- **Loja** (`/shop`, atalho 🛍️ na Home, no resumo e nas Configurações): compra e equipa cosméticos com Moedas Atlas. Categorias: **Temas, Sons, Molduras, Mascotes e Efeitos**. Cada item mostra preço e estado (Comprar / Equipar / Equipado); itens gratuitos nunca são vendidos. "Continuar treino" segue como CTA principal.
+- **Temas** (CSS Variables): `Padrão` segue o claro/escuro/sistema das Configurações; 6 temas especiais (Mapa Antigo, Neon Atlas, Oceano, Espaço, Biblioteca, Minimalista) trazem paleta própria. Sem imagens externas, funciona offline.
+- **Sound packs** (Howler, WAV locais): Padrão e Silencioso são grátis; Suave, Arcade e Digital são cosméticos. Respeitam mute e volume das Configurações.
+- **Molduras** decoram só o card da bandeira no treino (todos os modos), sem distorcer a bandeira. **Mascote** discreto (Globo, Bússola, Corujinha Atlas, Foguetinho ou nenhum) na Home e no resumo. **Efeitos visuais** sutis (brilho, confete, pulso neon, estrelas) em momentos de feedback — sempre desativados com "Reduzir animações" ligado.
+- **Como ganhar moedas:** jogue. Qualquer sessão comum, revisão, digitação, bandeiras parecidas ou sobrevivência concede moedas ao concluir; missões e conquistas também. Não é preciso ter moedas para aprender — cosmético nunca bloqueia conteúdo.
+
+Continua sem backend, login e ranking. O progresso V1/V2/V3 é preservado: o schema segue **v1** e o novo campo `cosmetics` (moedas, itens possuídos e equipados) é normalizado com defaults seguros; o `settings.theme` claro/escuro é mantido. Detalhes em `.specs/COSMETICS.md` e `.specs/V4_ACCEPTANCE_CRITERIA.md`.
 
 ## Como rodar
 
@@ -140,8 +154,8 @@ O deploy é feito pelo GitHub Actions (`.github/workflows/deploy.yml`): a cada p
 ## Pendências futuras
 
 - Ativar o GitHub Pages (ver seção Deploy).
-- Possível code splitting do bundle (~530 kB minificado; Motion e Howler poderiam ser carregados sob demanda).
-- Features fora de escopo listadas em `.specs/PRODUCT_DECISIONS.md` (login, ranking, loja, moedas, mascote, multiplayer, etc.) permanecem não implementadas por decisão de escopo.
+- Possível code splitting do bundle (~578 kB minificado; Motion e Howler poderiam ser carregados sob demanda).
+- Features fora de escopo listadas em `.specs/PRODUCT_DECISIONS.md` (login, ranking global, backend, multiplayer, cultura dos países, estados/regiões, etc.) permanecem não implementadas por decisão de escopo.
 
 ## Documentação
 

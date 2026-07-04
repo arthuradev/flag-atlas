@@ -324,3 +324,40 @@ Objetivo: transformar o quiz em experiência de aprendizado, mantendo a simplici
 - [x] i18n pt-BR/en-US completo.
 - [x] 60+ novos testes unitários e 6 novos fluxos E2E (desktop + mobile).
 - [x] Documentação atualizada (README, DATA_MODEL, SESSION_ALGORITHM, V3_ACCEPTANCE_CRITERIA, CHANGELOG).
+
+# Versão 4 — Personalização cosmética
+
+## V4.1 — Domínio de cosméticos
+
+- [x] `src/entities/cosmetic/`: tipos, catálogo (28 itens) e seletores puros.
+- [x] `getCosmeticById`, `getOwnedCosmetics`, `canPurchaseCosmetic`, `purchaseCosmetic`, `equipCosmetic`, `getEquippedCosmetics`, `normalizeCosmeticInventory`.
+- [x] Regras: gratuito sempre possuído, equipar não custa, sem compra sem saldo/duplicada, equipado inválido → padrão.
+
+## V4.2 — Moedas Atlas
+
+- [x] `coinRewards.ts`: +10 sessão, +5 sessão perfeita, +15 missão, +25 conquista, sobrevivência pelo score com teto.
+- [x] Concessão única por evento (conclusão/desbloqueio); saldo nunca negativo.
+- [x] Saldo discreto na Home e moedas ganhas no resumo da sessão.
+
+## V4.3 — Loja e equipamento
+
+- [x] Rota `/shop` (`ShopPage`) com categorias, saldo, preço, estados e feedback `aria-live`.
+- [x] Comprar desconta moedas; equipar aplica imediatamente sem custo.
+- [x] Entradas discretas na Home, no resumo e nas Configurações; CTA principal preservado.
+
+## V4.4 — Temas, sons, molduras, mascote e efeitos
+
+- [x] 6 temas cosméticos via CSS Variables + `theme-default` que segue as Configurações.
+- [x] Sound packs (Howler, WAV locais) respeitando mute/volume; pacote silencioso e fallback.
+- [x] Molduras no card da bandeira sem distorcer; mascote discreto; efeitos sutis com reduced motion.
+
+## V4.5 — Storage e migração
+
+- [x] `UserProgress` += `cosmetics` (schema v1, defaults seguros); progresso V1/V2/V3 preservado.
+- [x] `settings.theme` claro/escuro mantido; sem duplicação de estado.
+
+## V4.6 — Qualidade e docs
+
+- [x] i18n pt-BR/en-US completo (blocos `shop` e `cosmetics`).
+- [x] 70 novos testes unitários (262 no total) e 8 novos fluxos E2E (54 no total, desktop + mobile).
+- [x] Documentação atualizada (README, DATA_MODEL, COSMETICS, V4_ACCEPTANCE_CRITERIA, CHANGELOG).

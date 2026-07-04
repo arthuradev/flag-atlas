@@ -4,6 +4,17 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 
 ## Unreleased
 
+### Versão 4 — Personalização cosmética
+
+- Modelo de cosméticos (`src/entities/cosmetic/`): tipos `theme`, `soundPack`, `flagFrame`, `mascot`, `visualEffect`; catálogo de 28 itens com id/preço/raridade/preview; funções puras `getCosmeticById`, `getOwnedCosmetics`, `canPurchaseCosmetic`, `purchaseCosmetic`, `equipCosmetic`, `getEquippedCosmetics`, `normalizeCosmeticInventory` (itens gratuitos sempre possuídos, equipar não custa moedas, compra bloqueada sem saldo/duplicada, equipado inválido volta ao padrão).
+- Moedas Atlas (locais, cosméticas, sem valor real): +10 por sessão, +5 de bônus por sessão perfeita, +15 por missão diária, +25 por conquista, sobrevivência pelo score com teto de 30; concedidas nas transições de conclusão/desbloqueio (nunca duas vezes); saldo nunca fica negativo. Saldo discreto na Home e no resumo da sessão.
+- Loja `/shop`: categorias Temas, Sons, Molduras, Mascotes e Efeitos; saldo, preço, estados comprar/equipar/equipado, preview e feedback com `aria-live`; linguagem calma ("Personalize sua jornada", "Sem dinheiro real", "Apenas cosmético"). Entrada discreta na Home, no resumo e nas Configurações; "Continuar treino" segue como CTA principal.
+- Temas cosméticos via CSS Variables: `default` segue claro/escuro/sistema das Configurações; 6 temas especiais (Mapa Antigo, Neon Atlas, Oceano, Espaço, Biblioteca, Minimalista) com paleta própria, offline e sem imagens externas.
+- Sound packs (Howler, assets WAV locais sintetizados por `scripts/generate-sounds.mjs`): Padrão, Silencioso (grátis), Suave, Arcade, Digital; respeitam mute/volume; pacote inválido volta ao padrão; pacote silencioso não toca nada.
+- Molduras aplicadas ao card da bandeira no treino (todos os modos) sem distorcer a bandeira; mascote discreto (Globo, Bússola, Corujinha, Foguetinho ou nenhum) na Home/resumo; efeitos visuais sutis (brilho, confete, pulso neon, estrelas) em momentos de feedback, sempre desativados sob reduced motion.
+- Storage: `PROGRESS_SCHEMA_VERSION` permanece 1; novo campo `cosmetics` normalizado com defaults seguros (progresso V1/V2/V3 preservado; moedas inválidas → 0; itens desconhecidos descartados; equipado inválido → padrão; `settings.theme` claro/escuro preservado). i18n pt-BR/en-US completo.
+- 70 novos testes unitários (262 no total) e 8 novos fluxos E2E (54 no total, desktop + mobile).
+
 ### Versão 3 — Retenção e diversão
 
 - Conquistas locais: catálogo com 18 conquistas (marcos de progresso, domínio, 5 continentes, sessão perfeita, sequência quente, modos da V2 e sobrevivência); desbloqueio persistido com data no progresso (`achievementsUnlocked`), progresso parcial exibido; página `/achievements` e seção no resumo da sessão, sem popups.
