@@ -4,6 +4,16 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 
 ## Unreleased
 
+### Versão 3 — Retenção e diversão
+
+- Conquistas locais: catálogo com 18 conquistas (marcos de progresso, domínio, 5 continentes, sessão perfeita, sequência quente, modos da V2 e sobrevivência); desbloqueio persistido com data no progresso (`achievementsUnlocked`), progresso parcial exibido; página `/achievements` e seção no resumo da sessão, sem popups.
+- Missões diárias locais: 3 por dia, determinísticas pela data local (base "complete 1 sessão" + 2 rotativas), persistidas em `flag-atlas:daily-missions` e renovadas na virada do dia; XP bônus pequeno concedido uma única vez por missão; bloco "Missões de hoje" na Home e no resumo.
+- Streak diário saudável: conta 1 vez por dia ao concluir sessão; 1 descanso (🧊) cobre um dia pulado e recarrega a cada 7 dias ativos; perda recomeça leve com mensagem sem culpa; exibido discretamente na Home e no resumo. Independente da streak de acertos na sessão.
+- Modo sobrevivência: 3 vidas, erro tira vida, acerto pontua; fila de até 100 perguntas sem repetição; corações + score na tela de treino; resumo com "Fim da sobrevivência!", recorde anterior e novo recorde; recordes em `progress.survival`.
+- Página Desafios reorganizada com 6 cards (digitação, parecidas, revisar erros, sobrevivência, rápido, perfeito) com tipo de pergunta e duração; recorde de sobrevivência no card.
+- Compartilhar resultado: texto i18n do resumo (normal e sobrevivência) via Web Share API → Clipboard → fallback selecionável; apenas texto local, sem backend nem dados sensíveis.
+- Storage: schema de progresso permanece v1 com campos novos normalizados por defaults (progresso V1/V2 preservado); 72 novos testes unitários (192 no total) e 6 novos fluxos E2E (38 no total, desktop + mobile); i18n pt-BR/en-US completo.
+
 ### Versão 2 — Aprendizado real
 
 - Modo digitação: bandeira + input com foco automático, Enter envia, resposta vazia bloqueada; aceita nomes pt-BR/en-US e aliases com normalização robusta (acentos, pontuação, espaços); erros marcam revisão; XP/streak/domínio preservados.

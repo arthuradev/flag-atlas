@@ -284,3 +284,43 @@ Objetivo: transformar o quiz em experiência de aprendizado, mantendo a simplici
 - [x] i18n pt-BR/en-US completo.
 - [x] E2E dos novos fluxos.
 - [x] Documentação atualizada (README, SESSION_ALGORITHM, DATA_MODEL, V2_ACCEPTANCE_CRITERIA).
+
+# Versão 3 — Retenção e diversão
+
+## V3.1 — Fundação
+
+- [x] `dateKey.ts` (dia local YYYY-MM-DD + diferença em dias).
+- [x] Streak diário saudável (`dailyStreak.ts`): 1 descanso, recarga a cada 7 dias, recomeço leve.
+- [x] `UserProgress` += `achievementsUnlocked`, `dailyStreak`, `survival` (schema v1, defaults seguros).
+- [x] Testes de compatibilidade com progresso V1/V2.
+
+## V3.2 — Conquistas
+
+- [x] Catálogo com 18 conquistas (`achievement.catalog.ts`), incluindo 5 de continente.
+- [x] Avaliação pura por progresso e por evento de sessão.
+- [x] Desbloqueio persistido com data; página `/achievements` com progresso parcial.
+- [x] Desbloqueios exibidos no resumo da sessão, sem popups.
+
+## V3.3 — Missões diárias
+
+- [x] Geração determinística por data local (3 por dia, base + 2 rotativas).
+- [x] Persistência em `flag-atlas:daily-missions` com renovação na virada do dia.
+- [x] XP bônus concedido uma única vez por missão.
+- [x] Bloco "Missões de hoje" na Home e no resumo.
+
+## V3.4 — Sobrevivência
+
+- [x] `mode: "survival"`: 3 vidas, score, fim por vidas, teto de 100 perguntas sem repetição.
+- [x] Corações e score na TrainingPage; resumo com recorde.
+- [x] Recordes em `progress.survival`.
+
+## V3.5 — Desafios e compartilhamento
+
+- [x] Página Desafios com 6 cards (tipo de pergunta + duração).
+- [x] Compartilhar/copiar resultado (Web Share → Clipboard → texto selecionável), i18n, sem backend.
+
+## V3.6 — Qualidade e docs
+
+- [x] i18n pt-BR/en-US completo.
+- [x] 60+ novos testes unitários e 6 novos fluxos E2E (desktop + mobile).
+- [x] Documentação atualizada (README, DATA_MODEL, SESSION_ALGORITHM, V3_ACCEPTANCE_CRITERIA, CHANGELOG).

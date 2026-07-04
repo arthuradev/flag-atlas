@@ -136,3 +136,34 @@ Seleção em `selectReviewCountries.ts`:
 ### Confusões
 
 Ao errar uma alternativa de múltipla escolha, o país correto registra com qual país foi confundido (`CountryProgress.confusions`). O modo digitação não infere confusão.
+
+## 12. Versão 3 — Sobrevivência, streak diário e missões
+
+### Modo sobrevivência (`mode: "survival"`)
+
+- O jogador começa com 3 vidas (`SURVIVAL_STARTING_LIVES`); cada erro remove 1; acertos pontuam (+1 no score).
+- A fila de perguntas é gerada com `selectSessionCountries` cobrindo o pool inteiro, até o teto de segurança de 100 perguntas (`SURVIVAL_MAX_QUESTIONS`) — sem repetir país enquanto houver disponível.
+- A sessão termina quando as vidas acabam ou a fila esgota; o `config.size` é ignorado.
+- O resumo traz score, recorde anterior e se houve novo recorde; `progress.survival` guarda `bestScore`, `bestStreak` e `sessionsCompleted`.
+
+### Streak diário (`dailyStreak`)
+
+Atualizado apenas ao concluir uma sessão (`registerActiveDay`):
+
+1. mesmo dia nunca conta duas vezes;
+2. dia seguinte incrementa;
+3. exatamente 1 dia pulado com descanso disponível: consome o descanso e incrementa;
+4. pausas maiores recomeçam do 1, devolvendo o descanso — sem culpa;
+5. a cada 7 dias ativos o descanso recarrega (máximo 1).
+
+Não confundir com a streak de acertos dentro da sessão (são independentes).
+
+### Missões diárias
+
+- 3 missões por dia (`generateDailyMissions`), determinísticas pela data local (seed da data): recarregar não troca as missões; a virada do dia renova.
+- A primeira é sempre "complete 1 sessão"; as outras 2 rotacionam entre acertos, revisão, evolução de domínio, digitação, bandeiras parecidas, sequência e precisão ≥ 80%.
+- Progresso atualizado por resposta (`applyAnswerToMissions`) e por sessão concluída (`applySessionToMissions`); XP bônus é concedido uma única vez, na transição para concluída.
+
+### Conquistas no fim da sessão
+
+Ao concluir qualquer sessão, o evento (modo, tipo de pergunta, precisão, melhor streak, nº de perguntas) alimenta a avaliação de conquistas; as recém-desbloqueadas entram no resumo, sem popups nem bloqueio do fluxo.

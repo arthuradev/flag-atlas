@@ -68,6 +68,7 @@ O MVP implementa:
 
 - **MVP**: completo (Fases 0–9 de `.specs/TASKS.md`).
 - **Versão 2**: completa — aprendizado real por cima do quiz.
+- **Versão 3**: completa — retenção e diversão, sem virar app punitivo.
 
 ## Versão 2
 
@@ -79,6 +80,19 @@ A Versão 2 adiciona:
 - **Estatísticas** (`/stats`, atalho na Home): países vistos/aprendidos/dominados, precisão geral, mais difíceis, para revisar e confusões comuns (qual bandeira você trocou por qual). Tudo local, derivado do progresso local.
 
 Continua sem backend, login e ranking. O progresso antigo é preservado (schema v1 mantido, campos novos opcionais).
+
+## Versão 3
+
+A Versão 3 adiciona retenção e diversão, mantendo a filosofia "erro ensina, não pune":
+
+- **Conquistas** (`/achievements`, atalho 🏆 na Home): 18 conquistas locais derivadas do progresso — marcos de países vistos, domínio, continentes, sessões perfeitas, modos da V2 e sobrevivência. Bloqueadas mostram progresso parcial; desbloqueios aparecem no resumo da sessão, sem popups.
+- **Missões diárias** (bloco "Missões de hoje" na Home e no resumo): 3 missões por dia, geradas deterministicamente pela data local, persistidas durante o dia e renovadas na virada. Recompensa é um XP bônus pequeno, concedido uma única vez por missão.
+- **Streak diário saudável** (linha discreta na Home): conta dias com pelo menos uma sessão concluída, sem contar duas vezes o mesmo dia. Um dia pulado é coberto por 1 descanso (🧊), que recarrega a cada 7 dias ativos. Perder a sequência recomeça leve, com mensagem sem culpa — sem tela vermelha, sem vidas bloqueando aprendizado.
+- **Desafios** (`/challenges`): página reorganizada com 6 cards — Modo digitação, Bandeiras parecidas, Revisar erros, Sobrevivência, Desafio rápido (5 perguntas) e Desafio perfeito (10 perguntas) — cada um com tipo de pergunta e duração.
+- **Modo sobrevivência** (`Desafios → Sobrevivência`): 3 vidas, cada erro tira uma, cada acerto pontua; termina quando as vidas acabam (teto de segurança de 100 perguntas, sem repetir país). Recorde local salvo e exibido no card do desafio.
+- **Compartilhar resultado** (botão no resumo da sessão): gera um texto bonito do resultado (normal ou sobrevivência) via Web Share API; sem ela, copia para a área de transferência; se nada funcionar, mostra o texto selecionável. Apenas texto local — sem backend e sem dados sensíveis.
+
+Continua sem backend, login, ranking, loja ou moedas. O progresso V1/V2 é preservado: o schema segue v1 e os campos novos (`achievementsUnlocked`, `dailyStreak`, `survival`) são normalizados com defaults; as missões diárias vivem em chave própria (`flag-atlas:daily-missions`).
 
 ## Como rodar
 
@@ -126,8 +140,8 @@ O deploy é feito pelo GitHub Actions (`.github/workflows/deploy.yml`): a cada p
 ## Pendências futuras
 
 - Ativar o GitHub Pages (ver seção Deploy).
-- Possível code splitting do bundle (~508 kB minificado; Motion e Howler poderiam ser carregados sob demanda).
-- Features fora do MVP listadas em `.specs/PRODUCT_DECISIONS.md` (login, ranking, modo digitação, revisão inteligente completa, missões, etc.) permanecem não implementadas por decisão de escopo.
+- Possível code splitting do bundle (~530 kB minificado; Motion e Howler poderiam ser carregados sob demanda).
+- Features fora de escopo listadas em `.specs/PRODUCT_DECISIONS.md` (login, ranking, loja, moedas, mascote, multiplayer, etc.) permanecem não implementadas por decisão de escopo.
 
 ## Documentação
 

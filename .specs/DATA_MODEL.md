@@ -200,3 +200,64 @@ type SessionConfig = {
 
 O `PROGRESS_SCHEMA_VERSION` permanece 1: o campo novo é opcional e é
 normalizado com segurança ao carregar; progresso antigo não é apagado.
+
+## Versão 3 — Extensões
+
+```ts
+// UserProgress ganha campos novos, normalizados com defaults (schema segue v1):
+
+type DailyStreak = {
+  currentStreak: number;
+  bestStreak: number;
+  lastActiveDate?: string; // YYYY-MM-DD local
+  restDaysAvailable: number; // 0..1
+};
+
+type SurvivalStats = {
+  bestScore: number;
+  bestStreak: number;
+  sessionsCompleted: number;
+};
+
+// UserProgress += {
+//   achievementsUnlocked: Record<string, string>;  // id da conquista → data ISO
+//   dailyStreak: DailyStreak;
+//   survival: SurvivalStats;
+// }
+```
+
+### Missões diárias (chave própria)
+
+```ts
+type DailyMission = {
+  id: string; // "<YYYY-MM-DD>:<tipo>"
+  type: DailyMissionType;
+  target: number;
+  progress: number;
+  completed: boolean;
+  completedAt?: string;
+  rewardXp: number;
+};
+
+type DailyMissionsState = {
+  date: string; // dia local YYYY-MM-DD
+  missions: DailyMission[];
+};
+```
+
+Storage key nova: `flag-atlas:daily-missions` (envelope versionado próprio,
+`MISSIONS_SCHEMA_VERSION = 1`). Dados corrompidos regeneram as missões do dia.
+
+### Conquistas
+
+O catálogo (`achievement.catalog.ts`) é código, não storage: só o mapa
+`achievementsUnlocked` (id → data de desbloqueio) é persistido no progresso.
+Conquistas derivadas (países vistos, domínio, continentes) são reavaliadas a
+cada resposta; conquistas de evento (sessão perfeita, modos, sobrevivência)
+são avaliadas ao concluir sessão e dependem do registro persistido.
+
+### Compatibilidade
+
+Progresso V1/V2 carrega com defaults: `achievementsUnlocked = {}`,
+`dailyStreak = { 0, 0, restDaysAvailable: 1 }`, `survival = { 0, 0, 0 }`.
+Nenhum dado antigo é descartado; `PROGRESS_SCHEMA_VERSION` permanece 1.
