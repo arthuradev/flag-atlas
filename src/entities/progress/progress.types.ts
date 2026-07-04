@@ -20,13 +20,49 @@ export type CountryProgress = {
   lastWrongAt?: string;
 };
 
+/** Sequência de dias ativos (não confundir com a sequência de acertos na sessão). */
+export type DailyStreak = {
+  currentStreak: number;
+  bestStreak: number;
+  /** Último dia ativo, como YYYY-MM-DD local. */
+  lastActiveDate?: string;
+  /** Descansos disponíveis para proteger a sequência (0..1). */
+  restDaysAvailable: number;
+};
+
+export type SurvivalStats = {
+  bestScore: number;
+  bestStreak: number;
+  sessionsCompleted: number;
+};
+
 export type UserProgress = {
   totalXp: number;
   level: number;
   countries: Record<string, CountryProgress>;
   completedSessions: number;
+  /** Conquista desbloqueada → data ISO do desbloqueio. */
+  achievementsUnlocked: Record<string, string>;
+  dailyStreak: DailyStreak;
+  survival: SurvivalStats;
   lastPlayedAt?: string;
 };
+
+export function createInitialDailyStreak(): DailyStreak {
+  return {
+    currentStreak: 0,
+    bestStreak: 0,
+    restDaysAvailable: 1,
+  };
+}
+
+export function createInitialSurvivalStats(): SurvivalStats {
+  return {
+    bestScore: 0,
+    bestStreak: 0,
+    sessionsCompleted: 0,
+  };
+}
 
 export function createInitialUserProgress(): UserProgress {
   return {
@@ -34,6 +70,9 @@ export function createInitialUserProgress(): UserProgress {
     level: 1,
     countries: {},
     completedSessions: 0,
+    achievementsUnlocked: {},
+    dailyStreak: createInitialDailyStreak(),
+    survival: createInitialSurvivalStats(),
   };
 }
 

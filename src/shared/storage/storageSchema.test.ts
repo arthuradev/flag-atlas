@@ -117,3 +117,68 @@ describe("confusions normalization (V2)", () => {
     expect(result.countries.br?.masteryLevel).toBe("learned");
   });
 });
+
+describe("V3 fields normalization", () => {
+  it("gives V3 defaults to progress saved before V3 without losing countries", () => {
+    const result = normalizeUserProgress({
+      totalXp: 120,
+      completedSessions: 4,
+      countries: { br: { seenCount: 3, correctCount: 3, masteryPoints: 3 } },
+    });
+    expect(result.countries.br?.masteryLevel).toBe("learned");
+    expect(result.achievementsUnlocked).toEqual({});
+    expect(result.dailyStreak).toEqual({
+      currentStreak: 0,
+      bestStreak: 0,
+      restDaysAvailable: 1,
+    });
+    expect(result.survival).toEqual({ bestScore: 0, bestStreak: 0, sessionsCompleted: 0 });
+  });
+
+  it("keeps valid V3 fields", () => {
+    const result = normalizeUserProgress({
+      countries: {},
+      achievementsUnlocked: { firstSteps: "2026-07-04T10:00:00.000Z" },
+      dailyStreak: {
+        currentStreak: 3,
+        bestStreak: 8,
+        lastActiveDate: "2026-07-04",
+        restDaysAvailable: 1,
+      },
+      survival: { bestScore: 21, bestStreak: 9, sessionsCompleted: 2 },
+    });
+    expect(result.achievementsUnlocked).toEqual({ firstSteps: "2026-07-04T10:00:00.000Z" });
+    expect(result.dailyStreak.currentStreak).toBe(3);
+    expect(result.dailyStreak.bestStreak).toBe(8);
+    expect(result.dailyStreak.lastActiveDate).toBe("2026-07-04");
+    expect(result.survival.bestScore).toBe(21);
+  });
+
+  it("discards invalid V3 data safely", () => {
+    const result = normalizeUserProgress({
+      countries: {},
+      achievementsUnlocked: { firstSteps: 123, "": "2026-01-01T00:00:00.000Z", ok: "date" },
+      dailyStreak: {
+        currentStreak: -2,
+        bestStreak: "many",
+        lastActiveDate: "ontem",
+        restDaysAvailable: 99,
+      },
+      survival: { bestScore: "high", bestStreak: -1, sessionsCompleted: null },
+    });
+    expect(result.achievementsUnlocked).toEqual({ ok: "date" });
+    expect(result.dailyStreak.currentStreak).toBe(0);
+    expect(result.dailyStreak.bestStreak).toBe(0);
+    expect(result.dailyStreak.lastActiveDate).toBeUndefined();
+    expect(result.dailyStreak.restDaysAvailable).toBe(1);
+    expect(result.survival).toEqual({ bestScore: 0, bestStreak: 0, sessionsCompleted: 0 });
+  });
+
+  it("never lets bestStreak fall below currentStreak", () => {
+    const result = normalizeUserProgress({
+      countries: {},
+      dailyStreak: { currentStreak: 5, bestStreak: 2, lastActiveDate: "2026-07-04" },
+    });
+    expect(result.dailyStreak.bestStreak).toBe(5);
+  });
+});

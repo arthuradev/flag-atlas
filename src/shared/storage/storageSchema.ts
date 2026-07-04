@@ -1,6 +1,10 @@
 import {
   type CountryProgress,
+  createInitialDailyStreak,
+  createInitialSurvivalStats,
   createInitialUserProgress,
+  type DailyStreak,
+  type SurvivalStats,
   type UserProgress,
 } from "@/entities/progress/progress.types";
 import {
@@ -11,9 +15,11 @@ import {
   THEME_PREFERENCES,
   type ThemePreference,
 } from "@/entities/settings/settings.types";
+import { MAX_REST_DAYS } from "@/features/progress/logic/dailyStreak";
 import { MAX_MASTERY_POINTS, masteryLevelForPoints } from "@/features/progress/logic/mastery";
 import { computeLevel } from "@/features/progress/logic/xp";
 import { isLocale } from "@/shared/i18n/locale";
+import { isDateKey } from "@/shared/utils/dateKey";
 
 export const SETTINGS_SCHEMA_VERSION = 1;
 export const PROGRESS_SCHEMA_VERSION = 1;
@@ -80,11 +86,57 @@ export function normalizeUserProgress(value: unknown): UserProgress {
     level: computeLevel(totalXp),
     countries,
     completedSessions: toSafeCount(value.completedSessions),
+    // Campos da Versão 3: progresso V1/V2 sem eles segue válido com defaults.
+    achievementsUnlocked: normalizeAchievementsUnlocked(value.achievementsUnlocked),
+    dailyStreak: normalizeDailyStreak(value.dailyStreak),
+    survival: normalizeSurvivalStats(value.survival),
   };
   if (typeof value.lastPlayedAt === "string") {
     progress.lastPlayedAt = value.lastPlayedAt;
   }
   return progress;
+}
+
+function normalizeAchievementsUnlocked(value: unknown): Record<string, string> {
+  const unlocked: Record<string, string> = {};
+  if (isRecord(value)) {
+    for (const [id, unlockedAt] of Object.entries(value)) {
+      if (id.length > 0 && typeof unlockedAt === "string") {
+        unlocked[id] = unlockedAt;
+      }
+    }
+  }
+  return unlocked;
+}
+
+function normalizeDailyStreak(value: unknown): DailyStreak {
+  if (!isRecord(value)) {
+    return createInitialDailyStreak();
+  }
+  const currentStreak = toSafeCount(value.currentStreak);
+  const streak: DailyStreak = {
+    currentStreak,
+    bestStreak: Math.max(currentStreak, toSafeCount(value.bestStreak)),
+    restDaysAvailable:
+      typeof value.restDaysAvailable === "number"
+        ? Math.min(MAX_REST_DAYS, toSafeCount(value.restDaysAvailable))
+        : MAX_REST_DAYS,
+  };
+  if (isDateKey(value.lastActiveDate)) {
+    streak.lastActiveDate = value.lastActiveDate;
+  }
+  return streak;
+}
+
+function normalizeSurvivalStats(value: unknown): SurvivalStats {
+  if (!isRecord(value)) {
+    return createInitialSurvivalStats();
+  }
+  return {
+    bestScore: toSafeCount(value.bestScore),
+    bestStreak: toSafeCount(value.bestStreak),
+    sessionsCompleted: toSafeCount(value.sessionsCompleted),
+  };
 }
 
 function normalizeCountryProgress(countryId: string, value: unknown): CountryProgress | null {
