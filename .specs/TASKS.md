@@ -232,3 +232,55 @@ Commit sugerido:
 ```txt
 docs: complete mvp handoff documentation
 ```
+
+# Versão 2 — Aprendizado real
+
+Objetivo: transformar o quiz em experiência de aprendizado, mantendo a simplicidade.
+
+## V2.1 — Normalização e aliases
+
+- [x] Criar `answerNormalization.ts` (NFD, acentos, pontuação, espaços).
+- [x] `getAcceptedAnswers` com nomes pt-BR/en-US + aliases.
+- [x] `matchTypedAnswer`/`isTypedAnswerCorrect`.
+- [x] Testes de acentos, aliases, vazios, compostos.
+
+## V2.2 — Modelo de sessão
+
+- [x] `QuestionType` (choice/typing) e `SessionMode` (+review, +similar).
+- [x] `SessionQuestion` sem alternativas no modo digitação.
+- [x] `SessionAnswer` com typedAnswer/normalizedTypedAnswer/acceptedAnswerUsed.
+- [x] Compatibilidade preservada com múltipla escolha.
+
+## V2.3 — Modo digitação
+
+- [x] Input grande com foco automático, Enter envia, vazio bloqueado.
+- [x] Feedback com resposta certa e o que foi digitado.
+- [x] XP/streak/domínio/revisão funcionando.
+- [x] Página Desafios (/challenges) com card do modo.
+
+## V2.4 — Revisão inteligente inicial
+
+- [x] `selectReviewCountries` prioriza needsReview + fracos.
+- [x] CTA “Revisar erros” na Home e no resumo.
+- [x] Fallback amigável sem nada para revisar.
+- [x] Testes de priorização, determinismo e não-repetição.
+
+## V2.5 — Bandeiras parecidas
+
+- [x] `similarFlags.ts` com 10 grupos curados.
+- [x] Alternativas priorizam o mesmo grupo.
+- [x] Card na página Desafios.
+- [x] Testes de validade dos grupos e das alternativas.
+
+## V2.6 — Estatísticas
+
+- [x] Confusões registradas no progresso (schema v1 compatível).
+- [x] Seletores puros de estatísticas.
+- [x] StatsPage (/stats) com resumo e listas.
+- [x] Testes de precisão, difíceis e confusões.
+
+## V2.7 — Qualidade e docs
+
+- [x] i18n pt-BR/en-US completo.
+- [x] E2E dos novos fluxos.
+- [x] Documentação atualizada (README, SESSION_ALGORITHM, DATA_MODEL, V2_ACCEPTANCE_CRITERIA).

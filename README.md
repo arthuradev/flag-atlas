@@ -66,7 +66,19 @@ O MVP implementa:
 
 ## Status
 
-O MVP está implementado, testado e validado (Fases 0–9 de `.specs/TASKS.md`).
+- **MVP**: completo (Fases 0–9 de `.specs/TASKS.md`).
+- **Versão 2**: completa — aprendizado real por cima do quiz.
+
+## Versão 2
+
+A Versão 2 adiciona:
+
+- **Modo digitação** (`Desafios → Modo digitação`): digite o nome do país da bandeira. Aceita nomes em pt-BR, en-US e aliases (EUA, USA, Santa Sé, UK...), com normalização de acentos, pontuação e espaços. Código ISO2 não é aceito de propósito.
+- **Revisão inteligente inicial** (`Revisar erros` na Home e no resumo da sessão): prioriza países marcados para revisão e completa com países fracos. Ainda não é revisão espaçada completa — é uma primeira versão.
+- **Bandeiras parecidas** (`Desafios → Bandeiras parecidas`): treino focado em grupos manuais de bandeiras confundíveis (Chade×Romênia, Eslováquia×Eslovênia, etc.), com alternativas erradas vindas do próprio grupo.
+- **Estatísticas** (`/stats`, atalho na Home): países vistos/aprendidos/dominados, precisão geral, mais difíceis, para revisar e confusões comuns (qual bandeira você trocou por qual). Tudo local, derivado do progresso local.
+
+Continua sem backend, login e ranking. O progresso antigo é preservado (schema v1 mantido, campos novos opcionais).
 
 ## Como rodar
 

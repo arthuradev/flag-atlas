@@ -173,3 +173,30 @@ flag-atlas:onboarding
 ```
 
 Todos os dados do storage devem ter schema versionado e validação.
+
+## Versão 2 — Extensões
+
+```ts
+type QuestionType = "choice" | "typing";
+
+type SessionMode = "continue" | "continent" | "review" | "similar";
+
+type SessionConfig = {
+  mode: SessionMode;
+  questionType: QuestionType;
+  continentId?: ContinentId;
+  similarGroupId?: string;
+  size: SessionSize;
+};
+
+// SessionQuestion: optionCountryIds ausente no modo digitação.
+// SessionAnswer ganha campos opcionais:
+//   selectedCountryId (múltipla escolha)
+//   typedAnswer, normalizedTypedAnswer, acceptedAnswerUsed (digitação)
+
+// CountryProgress ganha campo opcional, compatível com dados antigos (schema v1):
+//   confusions?: Record<string, number>  // países com que esta bandeira foi confundida
+```
+
+O `PROGRESS_SCHEMA_VERSION` permanece 1: o campo novo é opcional e é
+normalizado com segurança ao carregar; progresso antigo não é apagado.

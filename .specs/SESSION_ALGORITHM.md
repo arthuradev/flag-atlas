@@ -107,3 +107,32 @@ Ao final, gerar resumo com:
 - XP ganho;
 - países evoluídos;
 - países para revisar.
+
+## 11. Versão 2 — Novos modos de sessão
+
+### Modo digitação (`questionType: "typing"`)
+
+- A pergunta não gera alternativas; o usuário digita o nome do país.
+- A resposta é normalizada (minúsculas, sem acentos, pontuação/hífens viram espaço, espaços colapsados) e comparada com nomes pt-BR/en-US e aliases (`answerNormalization.ts`).
+- Resposta vazia não é registrada.
+- Acertos e erros alimentam XP, streak, domínio e revisão exatamente como na múltipla escolha.
+- O código ISO2 não é aceito de propósito.
+
+### Modo revisão (`mode: "review"`)
+
+Seleção em `selectReviewCountries.ts`:
+
+1. prioriza países com `needsReview`;
+2. completa com países já vistos e fracos (menos pontos de domínio, mais erros);
+3. nunca repete país — com pouco material, a sessão fica mais curta;
+4. sem histórico, retorna vazio e a UI oferece treino normal.
+
+### Modo bandeiras parecidas (`mode: "similar"`)
+
+- O pool de perguntas vem dos grupos manuais de `src/shared/data/similarFlags.ts`.
+- As alternativas erradas priorizam países do mesmo grupo (`generateSimilarOptions`), completando com o mesmo continente e depois com o pool global.
+- `similarGroupId` opcional restringe a sessão a um único grupo.
+
+### Confusões
+
+Ao errar uma alternativa de múltipla escolha, o país correto registra com qual país foi confundido (`CountryProgress.confusions`). O modo digitação não infere confusão.

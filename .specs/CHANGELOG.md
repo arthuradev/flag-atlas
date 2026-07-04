@@ -4,6 +4,16 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 
 ## Unreleased
 
+### Versão 2 — Aprendizado real
+
+- Modo digitação: bandeira + input com foco automático, Enter envia, resposta vazia bloqueada; aceita nomes pt-BR/en-US e aliases com normalização robusta (acentos, pontuação, espaços); erros marcam revisão; XP/streak/domínio preservados.
+- Revisão inteligente inicial: `mode: "review"` prioriza países com `needsReview` e completa com países fracos, sem repetir; CTA “Revisar erros” na Home e no resumo; fallback amigável quando não há nada a revisar.
+- Bandeiras parecidas: 10 grupos curados em `similarFlags.ts`; alternativas erradas priorizam o mesmo grupo, completando com continente/global; acessível pela nova página Desafios (`/challenges`).
+- Estatísticas locais (`/stats`): países vistos/aprendidos/dominados, precisão geral, sessões, mais difíceis, para revisar, baixo domínio e confusões comuns (registradas ao errar alternativa); schema de progresso permanece v1, campo `confusions` opcional e normalizado — progresso antigo preservado.
+- 33 novos testes unitários e 5 novos fluxos E2E (desktop + mobile); i18n pt-BR/en-US completo; docs atualizadas (SESSION_ALGORITHM, DATA_MODEL, V2_ACCEPTANCE_CRITERIA).
+
+### MVP
+
 - Tela de treino redesenhada para desktop: container `max-w-5xl` (PageShell ganhou variante `wide`), bandeira maior (até ~720px de largura em telas grandes, `object-contain`), alternativas em grade 2×2 com botões de 80px/`text-xl` no desktop (64px/1 coluna no mobile); stack de fontes agora inclui `"Nunito"` como fallback nomeado (a fonte já era Nunito via `@fontsource-variable/nunito`, local e offline).
 - Project package created.
 - Fase 0: scaffold Vite + React + TypeScript strict com pnpm, Tailwind CSS 4, Biome, Vitest e Playwright configurados; estrutura modular de pastas criada; repositório privado `arthuradev/flag-atlas` criado.
