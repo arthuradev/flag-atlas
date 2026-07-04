@@ -8,6 +8,7 @@ import { HomePage } from "@/pages/HomePage/HomePage";
 import { OnboardingPage } from "@/pages/OnboardingPage/OnboardingPage";
 import { SessionResultPage } from "@/pages/SessionResultPage/SessionResultPage";
 import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
+import { StatsPage } from "@/pages/StatsPage/StatsPage";
 import { TrainingPage } from "@/pages/TrainingPage/TrainingPage";
 
 function RootRedirect() {
@@ -28,6 +29,7 @@ export function AppRouter() {
         <Route path="/continents/:continentId" element={<ContinentPage />} />
         <Route path="/collection" element={<CollectionPage />} />
         <Route path="/challenges" element={<ChallengesPage />} />
+        <Route path="/stats" element={<StatsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>

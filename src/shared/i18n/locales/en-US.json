@@ -131,6 +131,24 @@
     "cta": "Review misses",
     "nothingToReview": "Nothing to review right now. How about discovering new countries?"
   },
+  "stats": {
+    "title": "Statistics",
+    "seen": "Countries seen",
+    "learned": "Learned",
+    "mastered": "Expert or Master",
+    "toReview": "To review",
+    "toReviewList": "To review",
+    "accuracy": "Overall accuracy",
+    "sessions": "Sessions completed",
+    "hardest": "Hardest ones",
+    "lowMastery": "Low mastery",
+    "confusions": "Common mix-ups",
+    "confusedWith": "confused with",
+    "wrongCount": "{{count}} misses",
+    "wrongCount_one": "{{count}} miss",
+    "empty": "Play a few sessions to see your statistics.",
+    "trainNow": "Train now"
+  },
   "mastery": {
     "new": "New",
     "recognized": "Recognized",

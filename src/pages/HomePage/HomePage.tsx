@@ -18,6 +18,7 @@ const SHORTCUTS = [
   { to: "/challenges", emoji: "🎯", labelKey: "home.challenges" },
   { to: "/continents", emoji: "🧭", labelKey: "home.continents" },
   { to: "/collection", emoji: "🎒", labelKey: "home.collection" },
+  { to: "/stats", emoji: "📊", labelKey: "home.stats" },
   { to: "/settings", emoji: "⚙️", labelKey: "home.settings" },
 ] as const;
 

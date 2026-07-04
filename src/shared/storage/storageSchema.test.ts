@@ -96,3 +96,24 @@ describe("envelope", () => {
     expect(unwrapEnvelope({ data: {} }, 1)).toBeNull();
   });
 });
+
+describe("confusions normalization (V2)", () => {
+  it("keeps valid confusion counts and drops invalid ones", () => {
+    const result = normalizeUserProgress({
+      countries: {
+        td: { seenCount: 2, wrongCount: 2, confusions: { ro: 2, sn: -1, "": 3, xx: "many" } },
+      },
+    });
+    expect(result.countries.td?.confusions).toEqual({ ro: 2 });
+  });
+
+  it("loads v1 progress saved before confusions existed", () => {
+    const result = normalizeUserProgress({
+      totalXp: 50,
+      countries: { br: { seenCount: 3, correctCount: 3, masteryPoints: 3 } },
+    });
+    expect(result.countries.br?.confusions).toBeUndefined();
+    expect(result.totalXp).toBe(50);
+    expect(result.countries.br?.masteryLevel).toBe("learned");
+  });
+});

@@ -131,6 +131,24 @@
     "cta": "Revisar erros",
     "nothingToReview": "Nada para revisar por enquanto. Que tal descobrir países novos?"
   },
+  "stats": {
+    "title": "Estatísticas",
+    "seen": "Países vistos",
+    "learned": "Aprendidos",
+    "mastered": "Dominados ou Mestre",
+    "toReview": "Para revisar",
+    "toReviewList": "Para revisar",
+    "accuracy": "Precisão geral",
+    "sessions": "Sessões concluídas",
+    "hardest": "Mais difíceis",
+    "lowMastery": "Baixo domínio",
+    "confusions": "Confusões comuns",
+    "confusedWith": "confundido com",
+    "wrongCount": "{{count}} erros",
+    "wrongCount_one": "{{count}} erro",
+    "empty": "Jogue algumas sessões para ver suas estatísticas.",
+    "trainNow": "Treinar agora"
+  },
   "mastery": {
     "new": "Novo",
     "recognized": "Reconhecido",
