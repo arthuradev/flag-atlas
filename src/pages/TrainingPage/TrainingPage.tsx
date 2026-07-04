@@ -6,6 +6,10 @@ import { getCountryById, getCountryName } from "@/entities/country/country.selec
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { OptionButton } from "@/features/training/components/OptionButton";
 import { TypedAnswerForm } from "@/features/training/components/TypedAnswerForm";
+import {
+  getSurvivalLivesRemaining,
+  SURVIVAL_STARTING_LIVES,
+} from "@/features/training/logic/survival";
 import { useSessionStore } from "@/features/training/store/sessionStore";
 import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
@@ -98,21 +102,42 @@ export function TrainingPage() {
   }
 
   const isTyping = session.config.questionType === "typing";
+  const isSurvival = session.config.mode === "survival";
   const current = session.currentIndex + 1;
   const total = session.questions.length;
+  const livesRemaining = getSurvivalLivesRemaining(session);
+  const score = session.answers.filter((answer) => answer.isCorrect).length;
   const selectedCountry = feedback?.selectedCountryId
     ? getCountryById(feedback.selectedCountryId)
     : undefined;
 
   return (
-    <PageShell backTo="/home" title={t("training.title")} width="wide">
+    <PageShell backTo="/home" title={t(isSurvival ? "survival.title" : "training.title")} width="wide">
       <div className="flex flex-1 flex-col gap-4 sm:gap-5">
         <div className="flex items-center justify-between text-sm font-bold text-text-muted sm:text-base">
-          <span>
-            <span className="sr-only">{t("training.questionLabel", { current, total })}</span>
-            <span aria-hidden="true">{t("training.questionShort", { current, total })}</span>
-          </span>
+          {isSurvival ? (
+            <span data-testid="survival-lives">
+              <span className="sr-only">
+                {t("survival.livesLabel", { lives: livesRemaining, total: SURVIVAL_STARTING_LIVES })}
+              </span>
+              <span aria-hidden="true" className="text-base sm:text-lg">
+                {"❤️".repeat(livesRemaining)}
+                {"🖤".repeat(SURVIVAL_STARTING_LIVES - livesRemaining)}
+              </span>
+            </span>
+          ) : (
+            <span>
+              <span className="sr-only">{t("training.questionLabel", { current, total })}</span>
+              <span aria-hidden="true">{t("training.questionShort", { current, total })}</span>
+            </span>
+          )}
           <span className="flex items-center gap-3">
+            {isSurvival && (
+              <span data-testid="survival-score">
+                <span className="sr-only">{t("survival.scoreLabel", { score })}</span>
+                <span aria-hidden="true">🏆 {score}</span>
+              </span>
+            )}
             <span>
               <span className="sr-only">{t("training.streak", { count: currentStreak })}</span>
               <span aria-hidden="true">🔥 {currentStreak}</span>
@@ -123,13 +148,15 @@ export function TrainingPage() {
             </span>
           </span>
         </div>
-        <ProgressBar
-          value={current - 1}
-          max={total}
-          size="thin"
-          label={t("training.questionLabel", { current, total })}
-          colorClassName="bg-primary"
-        />
+        {!isSurvival && (
+          <ProgressBar
+            value={current - 1}
+            max={total}
+            size="thin"
+            label={t("training.questionLabel", { current, total })}
+            colorClassName="bg-primary"
+          />
+        )}
 
         <h2 className="text-center text-xl font-extrabold sm:text-2xl">
           {t(isTyping ? "typing.prompt" : "training.whichCountry")}

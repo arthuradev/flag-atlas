@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { getCountryById } from "@/entities/country/country.selectors";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { normalizeAnswer } from "@/features/training/logic/answerNormalization";
+import { getSurvivalLivesRemaining } from "@/features/training/logic/survival";
 import { useSessionStore } from "./sessionStore";
 
 function currentCountry() {
@@ -89,6 +90,129 @@ describe("sessionStore similar mode", () => {
       expect(question.optionCountryIds).toHaveLength(4);
       expect(question.optionCountryIds).toContain(question.countryId);
     }
+  });
+});
+
+describe("sessionStore survival mode", () => {
+  beforeEach(() => {
+    useSessionStore.getState().clearSession();
+    useProgressStore.getState().resetProgress();
+    useSessionStore.getState().startSession({
+      mode: "survival",
+      questionType: "choice",
+      size: 10,
+    });
+  });
+
+  function answerWrong() {
+    const state = useSessionStore.getState();
+    const question = state.session?.questions[state.session.currentIndex];
+    const wrongOption = question?.optionCountryIds?.find((id) => id !== question.countryId);
+    if (!wrongOption) {
+      throw new Error("expected a wrong option");
+    }
+    state.answerCurrentQuestion(wrongOption);
+    useSessionStore.getState().advance();
+  }
+
+  function answerRight() {
+    const state = useSessionStore.getState();
+    const question = state.session?.questions[state.session.currentIndex];
+    if (!question) {
+      throw new Error("expected a question");
+    }
+    state.answerCurrentQuestion(question.countryId);
+    useSessionStore.getState().advance();
+  }
+
+  it("queues up to the cap without repeating countries", () => {
+    const session = useSessionStore.getState().session;
+    expect(session?.questions.length).toBe(100);
+    const ids = session?.questions.map((question) => question.countryId) ?? [];
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("starts with all lives and loses one per wrong answer only", () => {
+    const session = useSessionStore.getState().session;
+    if (!session) {
+      throw new Error("expected a session");
+    }
+    expect(getSurvivalLivesRemaining(session)).toBe(3);
+
+    answerRight();
+    const afterRight = useSessionStore.getState().session;
+    expect(afterRight && getSurvivalLivesRemaining(afterRight)).toBe(3);
+
+    answerWrong();
+    const afterWrong = useSessionStore.getState().session;
+    expect(afterWrong && getSurvivalLivesRemaining(afterWrong)).toBe(2);
+  });
+
+  it("ends the session when lives run out and reports the score", () => {
+    answerRight();
+    answerRight();
+    answerWrong();
+    answerWrong();
+    expect(useSessionStore.getState().session).not.toBeNull();
+    answerWrong();
+
+    const { session, summary } = useSessionStore.getState();
+    expect(session).toBeNull();
+    expect(summary?.survival).toEqual({ score: 2, previousBest: 0, isNewRecord: true });
+    expect(summary?.correctCount).toBe(2);
+    expect(summary?.wrongCount).toBe(3);
+
+    const progress = useProgressStore.getState().progress;
+    expect(progress.survival.bestScore).toBe(2);
+    expect(progress.survival.sessionsCompleted).toBe(1);
+  });
+
+  it("keeps the previous record when the new score is lower", () => {
+    // Primeira rodada: 1 acerto.
+    answerRight();
+    answerWrong();
+    answerWrong();
+    answerWrong();
+    expect(useSessionStore.getState().summary?.survival?.isNewRecord).toBe(true);
+
+    useSessionStore.getState().startSession({
+      mode: "survival",
+      questionType: "choice",
+      size: 10,
+    });
+    answerWrong();
+    answerWrong();
+    answerWrong();
+    const summary = useSessionStore.getState().summary;
+    expect(summary?.survival).toEqual({ score: 0, previousBest: 1, isNewRecord: false });
+    expect(useProgressStore.getState().progress.survival.bestScore).toBe(1);
+  });
+});
+
+describe("sessionStore normal flow with v3 summary", () => {
+  beforeEach(() => {
+    useSessionStore.getState().clearSession();
+    useProgressStore.getState().resetProgress();
+    useSessionStore.getState().startSession({ mode: "continue", questionType: "choice", size: 5 });
+  });
+
+  it("completes a normal session without survival data and with streak info", () => {
+    for (let i = 0; i < 5; i++) {
+      const state = useSessionStore.getState();
+      const question = state.session?.questions[state.session.currentIndex];
+      if (!question) {
+        throw new Error("expected a question");
+      }
+      state.answerCurrentQuestion(question.countryId);
+      useSessionStore.getState().advance();
+    }
+    const summary = useSessionStore.getState().summary;
+    expect(summary?.survival).toBeUndefined();
+    expect(summary?.dailyStreak.countedToday).toBe(true);
+    expect(summary?.dailyStreak.current).toBe(1);
+    expect(summary?.unlockedAchievementIds).toContain("firstSteps");
+    // 5/5 em sessão de 5 perguntas também rende a conquista de precisão.
+    expect(summary?.unlockedAchievementIds).toContain("flawless");
   });
 });
 

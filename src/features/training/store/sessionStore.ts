@@ -13,6 +13,7 @@ import type {
   SessionSummary,
   TrainingSession,
 } from "@/entities/session/session.types";
+import { useMissionsStore } from "@/features/missions/store/missionsStore";
 import { applyAnswerToCountryProgress } from "@/features/progress/logic/mastery";
 import { computeAnswerXp, computeLevel } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
@@ -20,6 +21,10 @@ import { matchTypedAnswer, normalizeAnswer } from "@/features/training/logic/ans
 import { generateOptions, generateSimilarOptions } from "@/features/training/logic/generateOptions";
 import { selectReviewCountries } from "@/features/training/logic/selectReviewCountries";
 import { selectSessionCountries } from "@/features/training/logic/selectSessionCountries";
+import {
+  isSurvivalOver,
+  SURVIVAL_MAX_QUESTIONS,
+} from "@/features/training/logic/survival";
 import { COUNTRIES } from "@/shared/data/countries";
 import {
   getSimilarGroupById,
@@ -55,6 +60,8 @@ type SessionState = {
   currentStreak: number;
   bestStreak: number;
   summary: SessionSummary | null;
+  /** Conquistas desbloqueadas por respostas desta sessão (vai para o resumo). */
+  unlockedDuringSession: string[];
   startSession: (config: SessionConfig) => void;
   answerCurrentQuestion: (selectedCountryId: string) => void;
   answerCurrentQuestionTyped: (typedAnswer: string) => void;
@@ -79,6 +86,12 @@ function selectCountryIds(config: SessionConfig, pool: readonly Country[], rng: 
   const progress = useProgressStore.getState().progress;
   if (config.mode === "review") {
     return selectReviewCountries({ pool, progress, size: config.size, rng });
+  }
+  if (config.mode === "survival") {
+    // A fila cobre o pool inteiro (até o teto): quem decide o fim são as
+    // vidas, e perguntas não repetem enquanto houver países disponíveis.
+    const size = Math.min(SURVIVAL_MAX_QUESTIONS, pool.length);
+    return selectSessionCountries({ pool, progress, size, rng });
   }
   return selectSessionCountries({ pool, progress, size: config.size, rng });
 }
@@ -130,7 +143,16 @@ export const useSessionStore = create<SessionState>((set, get) => {
     const streakAfter = input.isCorrect ? currentStreak + 1 : 0;
     const xpGained = computeAnswerXp({ isCorrect: input.isCorrect, promoted, streakAfter });
 
-    progressStore.registerAnswer(next, xpGained, answeredAt);
+    const unlockedByAnswer = progressStore.registerAnswer(next, xpGained, answeredAt);
+    useMissionsStore.getState().recordAnswer(
+      {
+        isCorrect: input.isCorrect,
+        mode: session.config.mode,
+        promoted,
+        sessionStreak: streakAfter,
+      },
+      answeredAt,
+    );
 
     const answer: SessionAnswer = {
       countryId: question.countryId,
@@ -168,6 +190,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
       sessionXp: sessionXp + xpGained,
       currentStreak: streakAfter,
       bestStreak: Math.max(bestStreak, streakAfter),
+      unlockedDuringSession: [...get().unlockedDuringSession, ...unlockedByAnswer],
     });
   };
 
@@ -178,6 +201,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     currentStreak: 0,
     bestStreak: 0,
     summary: null,
+    unlockedDuringSession: [],
 
     startSession: (config) => {
       const rng = createRng();
@@ -202,6 +226,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         currentStreak: 0,
         bestStreak: 0,
         summary: null,
+        unlockedDuringSession: [],
       });
     },
 
@@ -244,13 +269,14 @@ export const useSessionStore = create<SessionState>((set, get) => {
     },
 
     advance: () => {
-      const { session, sessionXp, bestStreak } = get();
+      const { session, sessionXp, bestStreak, unlockedDuringSession } = get();
       if (!session) {
         return;
       }
 
       const isLastQuestion = session.currentIndex >= session.questions.length - 1;
-      if (!isLastQuestion) {
+      const outOfLives = session.config.mode === "survival" && isSurvivalOver(session);
+      if (!isLastQuestion && !outOfLives) {
         set({
           session: { ...session, currentIndex: session.currentIndex + 1 },
           feedback: null,
@@ -258,12 +284,34 @@ export const useSessionStore = create<SessionState>((set, get) => {
         return;
       }
 
-      const progressStore = useProgressStore.getState();
-      progressStore.registerCompletedSession();
-      const progress = useProgressStore.getState().progress;
-
       const correctCount = session.answers.filter((answer) => answer.isCorrect).length;
       const wrongCount = session.answers.length - correctCount;
+      const accuracy =
+        session.answers.length === 0
+          ? 0
+          : Math.round((correctCount / session.answers.length) * 100);
+      const completedAt = new Date().toISOString();
+
+      const completion = useProgressStore.getState().registerCompletedSession({
+        mode: session.config.mode,
+        questionType: session.config.questionType,
+        questionCount: session.answers.length,
+        correctCount,
+        accuracy,
+        bestStreak,
+      });
+      useMissionsStore.getState().recordSessionCompleted(
+        {
+          mode: session.config.mode,
+          questionType: session.config.questionType,
+          accuracy,
+          questionCount: session.answers.length,
+        },
+        completedAt,
+      );
+      // XP de missão entra depois: o nível do resumo vem do progresso final.
+      const progress = useProgressStore.getState().progress;
+
       const promotions: MasteryPromotion[] = session.answers
         .filter((answer) => answer.isCorrect && answer.masteryAfter !== answer.masteryBefore)
         .map((answer) => ({
@@ -283,20 +331,28 @@ export const useSessionStore = create<SessionState>((set, get) => {
       set({
         session: null,
         feedback: null,
+        unlockedDuringSession: [],
         summary: {
           config: session.config,
           correctCount,
           wrongCount,
-          accuracy:
-            session.answers.length === 0
-              ? 0
-              : Math.round((correctCount / session.answers.length) * 100),
+          accuracy,
           bestStreak,
           xpEarned: sessionXp,
           promotions,
           toReviewCountryIds,
           levelBefore: computeLevel(xpBefore),
           levelAfter: progress.level,
+          unlockedAchievementIds: [
+            ...new Set([...unlockedDuringSession, ...completion.unlockedAchievementIds]),
+          ],
+          dailyStreak: {
+            current: completion.dailyStreak.streak.currentStreak,
+            countedToday: completion.dailyStreak.countedToday,
+            usedRestDay: completion.dailyStreak.usedRestDay,
+            restDaysAvailable: completion.dailyStreak.streak.restDaysAvailable,
+          },
+          ...(completion.survival !== undefined && { survival: completion.survival }),
         },
       });
     },
@@ -309,6 +365,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         currentStreak: 0,
         bestStreak: 0,
         summary: null,
+        unlockedDuringSession: [],
       });
     },
   };

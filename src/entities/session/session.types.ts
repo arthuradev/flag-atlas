@@ -4,7 +4,7 @@ import type { SessionSize } from "@/entities/settings/settings.types";
 
 export type QuestionType = "choice" | "typing";
 
-export type SessionMode = "continue" | "continent" | "review" | "similar";
+export type SessionMode = "continue" | "continent" | "review" | "similar" | "survival";
 
 export type SessionConfig = {
   mode: SessionMode;
@@ -52,6 +52,20 @@ export type MasteryPromotion = {
   to: MasteryLevel;
 };
 
+export type SummaryDailyStreak = {
+  current: number;
+  /** true quando esta sessão fez o dia de hoje contar. */
+  countedToday: boolean;
+  usedRestDay: boolean;
+  restDaysAvailable: number;
+};
+
+export type SummarySurvival = {
+  score: number;
+  previousBest: number;
+  isNewRecord: boolean;
+};
+
 export type SessionSummary = {
   config: SessionConfig;
   correctCount: number;
@@ -63,4 +77,9 @@ export type SessionSummary = {
   toReviewCountryIds: string[];
   levelBefore: number;
   levelAfter: number;
+  /** Conquistas desbloqueadas ao longo desta sessão (Versão 3). */
+  unlockedAchievementIds: string[];
+  dailyStreak: SummaryDailyStreak;
+  /** Presente apenas em sessões de sobrevivência. */
+  survival?: SummarySurvival;
 };
