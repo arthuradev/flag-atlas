@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { MISSION_COIN_REWARD } from "@/features/cosmetics/logic/coinRewards";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { loadDailyMissions } from "@/shared/storage/missionsRepository";
 import { getLocalDateKey } from "@/shared/utils/dateKey";
@@ -78,10 +79,13 @@ describe("missionsStore", () => {
       .missions.missions.find((mission) => mission.type === "completeSession");
     expect(completeMission?.completed).toBe(true);
     expect(useProgressStore.getState().progress.totalXp).toBe(completeMission?.rewardXp);
+    // A missão também paga Moedas Atlas cosméticas, uma única vez.
+    expect(useProgressStore.getState().progress.cosmetics.coins).toBe(MISSION_COIN_REWARD);
 
     // Concluir outra sessão no mesmo dia não paga a missão de novo.
     useMissionsStore.getState().recordSessionCompleted(sessionEvent, completedAt);
     expect(useProgressStore.getState().progress.totalXp).toBe(completeMission?.rewardXp);
+    expect(useProgressStore.getState().progress.cosmetics.coins).toBe(MISSION_COIN_REWARD);
   });
 
   it("rolls over to the new day when recording after midnight", () => {

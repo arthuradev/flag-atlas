@@ -1,3 +1,8 @@
+import {
+  type CosmeticInventory,
+  createInitialCosmeticInventory,
+} from "@/entities/cosmetic/cosmetic.types";
+
 export const MASTERY_LEVELS = ["new", "recognized", "learned", "dominated", "master"] as const;
 
 export type MasteryLevel = (typeof MASTERY_LEVELS)[number];
@@ -45,6 +50,8 @@ export type UserProgress = {
   achievementsUnlocked: Record<string, string>;
   dailyStreak: DailyStreak;
   survival: SurvivalStats;
+  /** Inventário cosmético da Versão 4: Moedas Atlas, itens e equipamento. */
+  cosmetics: CosmeticInventory;
   lastPlayedAt?: string;
 };
 
@@ -73,6 +80,7 @@ export function createInitialUserProgress(): UserProgress {
     achievementsUnlocked: {},
     dailyStreak: createInitialDailyStreak(),
     survival: createInitialSurvivalStats(),
+    cosmetics: createInitialCosmeticInventory(),
   };
 }
 

@@ -1,0 +1,291 @@
+import type { CosmeticItem } from "./cosmetic.types";
+
+/**
+ * Catálogo de cosméticos da Versão 4. É código, não storage: só o inventário
+ * do jogador (moedas, itens comprados e equipados) é persistido.
+ *
+ * Convenções:
+ * - ids são estáveis e prefixados pelo tipo (theme-, sound-, frame-, ...);
+ * - itens com price 0 são gratuitos e sempre possuídos;
+ * - itens isDefault são o padrão equipado do seu tipo e nunca podem ser vendidos.
+ */
+
+const THEMES: readonly CosmeticItem[] = [
+  {
+    id: "theme-default",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-default.name",
+    descriptionKey: "cosmetics.items.theme-default.description",
+    price: 0,
+    rarity: "common",
+    preview: "🌗",
+    isDefault: true,
+  },
+  {
+    id: "theme-mapa-antigo",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-mapa-antigo.name",
+    descriptionKey: "cosmetics.items.theme-mapa-antigo.description",
+    price: 120,
+    rarity: "rare",
+    preview: "🗺️",
+  },
+  {
+    id: "theme-neon",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-neon.name",
+    descriptionKey: "cosmetics.items.theme-neon.description",
+    price: 150,
+    rarity: "epic",
+    preview: "🌈",
+  },
+  {
+    id: "theme-oceano",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-oceano.name",
+    descriptionKey: "cosmetics.items.theme-oceano.description",
+    price: 120,
+    rarity: "rare",
+    preview: "🌊",
+  },
+  {
+    id: "theme-espaco",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-espaco.name",
+    descriptionKey: "cosmetics.items.theme-espaco.description",
+    price: 150,
+    rarity: "epic",
+    preview: "🪐",
+  },
+  {
+    id: "theme-biblioteca",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-biblioteca.name",
+    descriptionKey: "cosmetics.items.theme-biblioteca.description",
+    price: 120,
+    rarity: "rare",
+    preview: "📚",
+  },
+  {
+    id: "theme-minimalista",
+    type: "theme",
+    nameKey: "cosmetics.items.theme-minimalista.name",
+    descriptionKey: "cosmetics.items.theme-minimalista.description",
+    price: 100,
+    rarity: "common",
+    preview: "◽",
+  },
+];
+
+const SOUND_PACKS: readonly CosmeticItem[] = [
+  {
+    id: "sound-default",
+    type: "soundPack",
+    nameKey: "cosmetics.items.sound-default.name",
+    descriptionKey: "cosmetics.items.sound-default.description",
+    price: 0,
+    rarity: "common",
+    preview: "🔊",
+    isDefault: true,
+  },
+  {
+    id: "sound-silent",
+    type: "soundPack",
+    nameKey: "cosmetics.items.sound-silent.name",
+    descriptionKey: "cosmetics.items.sound-silent.description",
+    price: 0,
+    rarity: "common",
+    preview: "🔇",
+  },
+  {
+    id: "sound-suave",
+    type: "soundPack",
+    nameKey: "cosmetics.items.sound-suave.name",
+    descriptionKey: "cosmetics.items.sound-suave.description",
+    price: 80,
+    rarity: "common",
+    preview: "🎐",
+  },
+  {
+    id: "sound-arcade",
+    type: "soundPack",
+    nameKey: "cosmetics.items.sound-arcade.name",
+    descriptionKey: "cosmetics.items.sound-arcade.description",
+    price: 110,
+    rarity: "rare",
+    preview: "🕹️",
+  },
+  {
+    id: "sound-digital",
+    type: "soundPack",
+    nameKey: "cosmetics.items.sound-digital.name",
+    descriptionKey: "cosmetics.items.sound-digital.description",
+    price: 110,
+    rarity: "rare",
+    preview: "💾",
+  },
+];
+
+const FLAG_FRAMES: readonly CosmeticItem[] = [
+  {
+    id: "frame-default",
+    type: "flagFrame",
+    nameKey: "cosmetics.items.frame-default.name",
+    descriptionKey: "cosmetics.items.frame-default.description",
+    price: 0,
+    rarity: "common",
+    preview: "⬜",
+    isDefault: true,
+  },
+  {
+    id: "frame-atlas",
+    type: "flagFrame",
+    nameKey: "cosmetics.items.frame-atlas.name",
+    descriptionKey: "cosmetics.items.frame-atlas.description",
+    price: 90,
+    rarity: "common",
+    preview: "🧭",
+  },
+  {
+    id: "frame-madeira",
+    type: "flagFrame",
+    nameKey: "cosmetics.items.frame-madeira.name",
+    descriptionKey: "cosmetics.items.frame-madeira.description",
+    price: 110,
+    rarity: "rare",
+    preview: "🪵",
+  },
+  {
+    id: "frame-neon",
+    type: "flagFrame",
+    nameKey: "cosmetics.items.frame-neon.name",
+    descriptionKey: "cosmetics.items.frame-neon.description",
+    price: 140,
+    rarity: "epic",
+    preview: "💡",
+  },
+  {
+    id: "frame-oceano",
+    type: "flagFrame",
+    nameKey: "cosmetics.items.frame-oceano.name",
+    descriptionKey: "cosmetics.items.frame-oceano.description",
+    price: 110,
+    rarity: "rare",
+    preview: "🌊",
+  },
+  {
+    id: "frame-biblioteca",
+    type: "flagFrame",
+    nameKey: "cosmetics.items.frame-biblioteca.name",
+    descriptionKey: "cosmetics.items.frame-biblioteca.description",
+    price: 110,
+    rarity: "rare",
+    preview: "📖",
+  },
+];
+
+const MASCOTS: readonly CosmeticItem[] = [
+  {
+    id: "mascot-none",
+    type: "mascot",
+    nameKey: "cosmetics.items.mascot-none.name",
+    descriptionKey: "cosmetics.items.mascot-none.description",
+    price: 0,
+    rarity: "common",
+    preview: "🚫",
+    isDefault: true,
+  },
+  {
+    id: "mascot-globe",
+    type: "mascot",
+    nameKey: "cosmetics.items.mascot-globe.name",
+    descriptionKey: "cosmetics.items.mascot-globe.description",
+    price: 100,
+    rarity: "common",
+    preview: "🌍",
+  },
+  {
+    id: "mascot-compass",
+    type: "mascot",
+    nameKey: "cosmetics.items.mascot-compass.name",
+    descriptionKey: "cosmetics.items.mascot-compass.description",
+    price: 120,
+    rarity: "rare",
+    preview: "🧭",
+  },
+  {
+    id: "mascot-owl",
+    type: "mascot",
+    nameKey: "cosmetics.items.mascot-owl.name",
+    descriptionKey: "cosmetics.items.mascot-owl.description",
+    price: 160,
+    rarity: "epic",
+    preview: "🦉",
+  },
+  {
+    id: "mascot-rocket",
+    type: "mascot",
+    nameKey: "cosmetics.items.mascot-rocket.name",
+    descriptionKey: "cosmetics.items.mascot-rocket.description",
+    price: 140,
+    rarity: "rare",
+    preview: "🚀",
+  },
+];
+
+const VISUAL_EFFECTS: readonly CosmeticItem[] = [
+  {
+    id: "effect-none",
+    type: "visualEffect",
+    nameKey: "cosmetics.items.effect-none.name",
+    descriptionKey: "cosmetics.items.effect-none.description",
+    price: 0,
+    rarity: "common",
+    preview: "🚫",
+    isDefault: true,
+  },
+  {
+    id: "effect-glow",
+    type: "visualEffect",
+    nameKey: "cosmetics.items.effect-glow.name",
+    descriptionKey: "cosmetics.items.effect-glow.description",
+    price: 90,
+    rarity: "common",
+    preview: "✨",
+  },
+  {
+    id: "effect-confetti",
+    type: "visualEffect",
+    nameKey: "cosmetics.items.effect-confetti.name",
+    descriptionKey: "cosmetics.items.effect-confetti.description",
+    price: 130,
+    rarity: "rare",
+    preview: "🎉",
+  },
+  {
+    id: "effect-neon-pulse",
+    type: "visualEffect",
+    nameKey: "cosmetics.items.effect-neon-pulse.name",
+    descriptionKey: "cosmetics.items.effect-neon-pulse.description",
+    price: 130,
+    rarity: "rare",
+    preview: "💗",
+  },
+  {
+    id: "effect-stars",
+    type: "visualEffect",
+    nameKey: "cosmetics.items.effect-stars.name",
+    descriptionKey: "cosmetics.items.effect-stars.description",
+    price: 110,
+    rarity: "common",
+    preview: "⭐",
+  },
+];
+
+export const COSMETIC_CATALOG: readonly CosmeticItem[] = [
+  ...THEMES,
+  ...SOUND_PACKS,
+  ...FLAG_FRAMES,
+  ...MASCOTS,
+  ...VISUAL_EFFECTS,
+];

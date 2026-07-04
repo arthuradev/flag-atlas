@@ -1,33 +1,34 @@
 import { useEffect } from "react";
-import type { ThemePreference } from "@/entities/settings/settings.types";
+import { isSpecialTheme, resolveDataTheme } from "@/features/cosmetics/logic/themes";
+import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 
-function resolveTheme(preference: ThemePreference, systemPrefersDark: boolean): "light" | "dark" {
-  if (preference === "system") {
-    return systemPrefersDark ? "dark" : "light";
-  }
-  return preference;
+function applyTheme(dataTheme: string): void {
+  document.documentElement.dataset.theme = dataTheme;
 }
 
-function applyTheme(theme: "light" | "dark"): void {
-  document.documentElement.dataset.theme = theme;
-}
-
-/** Mantém o atributo data-theme do <html> em sincronia com a preferência do usuário. */
+/**
+ * Mantém o atributo data-theme do <html> em sincronia com a preferência
+ * claro/escuro/sistema e com o tema cosmético equipado (Versão 4). O tema
+ * padrão segue a preferência; temas cosméticos especiais aplicam sua paleta.
+ */
 export function useTheme(): void {
   const preference = useSettingsStore((state) => state.theme);
+  const themeId = useEquippedId("theme");
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    applyTheme(resolveTheme(preference, media.matches));
+    applyTheme(resolveDataTheme(themeId, preference, media.matches));
 
-    if (preference !== "system") {
+    // Só o tema padrão em modo "system" precisa reagir à mudança do SO.
+    const followsSystem = !isSpecialTheme(themeId) && preference === "system";
+    if (!followsSystem) {
       return;
     }
     const onChange = (event: MediaQueryListEvent) => {
-      applyTheme(resolveTheme(preference, event.matches));
+      applyTheme(resolveDataTheme(themeId, preference, event.matches));
     };
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
-  }, [preference]);
+  }, [preference, themeId]);
 }
