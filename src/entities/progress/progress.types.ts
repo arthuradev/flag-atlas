@@ -13,6 +13,8 @@ export type CountryProgress = {
   masteryPoints: number;
   masteryLevel: MasteryLevel;
   needsReview: boolean;
+  /** Quantas vezes este país foi confundido com cada outro país (múltipla escolha). */
+  confusions?: Record<string, number>;
   lastSeenAt?: string;
   lastCorrectAt?: string;
   lastWrongAt?: string;

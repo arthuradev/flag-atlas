@@ -36,7 +36,7 @@ export function TrainingPage() {
   // Entrada direta pelo CTA "Continuar treino": inicia sessão padrão.
   useEffect(() => {
     if (!session && !summary) {
-      startSession({ mode: "continue", size: defaultSessionSize });
+      startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize });
     }
   }, [session, summary, startSession, defaultSessionSize]);
 
@@ -79,7 +79,9 @@ export function TrainingPage() {
 
   const current = session.currentIndex + 1;
   const total = session.questions.length;
-  const selectedCountry = feedback ? getCountryById(feedback.selectedCountryId) : undefined;
+  const selectedCountry = feedback?.selectedCountryId
+    ? getCountryById(feedback.selectedCountryId)
+    : undefined;
 
   return (
     <PageShell backTo="/home" title={t("training.title")} width="wide">
@@ -129,7 +131,7 @@ export function TrainingPage() {
           </Card>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-            {question.optionCountryIds.map((optionId) => {
+            {(question.optionCountryIds ?? []).map((optionId) => {
               const option = getCountryById(optionId);
               if (!option) {
                 return null;

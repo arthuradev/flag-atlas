@@ -37,6 +37,8 @@ function hasRecentWrong(progress: CountryProgress): boolean {
 type ApplyAnswerParams = {
   isCorrect: boolean;
   answeredAt: string;
+  /** País escolhido por engano (múltipla escolha): registrado como confusão. */
+  confusedWithCountryId?: string;
 };
 
 /**
@@ -49,7 +51,7 @@ type ApplyAnswerParams = {
  */
 export function applyAnswerToCountryProgress(
   previous: CountryProgress,
-  { isCorrect, answeredAt }: ApplyAnswerParams,
+  { isCorrect, answeredAt, confusedWithCountryId }: ApplyAnswerParams,
 ): CountryProgress {
   if (isCorrect) {
     const points = clampPoints(previous.masteryPoints + 1);
@@ -71,7 +73,7 @@ export function applyAnswerToCountryProgress(
   const points = hasRecentWrong(previous)
     ? clampPoints(previous.masteryPoints - 1)
     : previous.masteryPoints;
-  return {
+  const next: CountryProgress = {
     ...previous,
     seenCount: previous.seenCount + 1,
     wrongCount: previous.wrongCount + 1,
@@ -82,4 +84,10 @@ export function applyAnswerToCountryProgress(
     lastSeenAt: answeredAt,
     lastWrongAt: answeredAt,
   };
+  if (confusedWithCountryId && confusedWithCountryId !== previous.countryId) {
+    const confusions = { ...(previous.confusions ?? {}) };
+    confusions[confusedWithCountryId] = (confusions[confusedWithCountryId] ?? 0) + 1;
+    next.confusions = confusions;
+  }
+  return next;
 }

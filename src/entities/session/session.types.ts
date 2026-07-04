@@ -2,28 +2,39 @@ import type { ContinentId } from "@/entities/continent/continent.types";
 import type { MasteryLevel } from "@/entities/progress/progress.types";
 import type { SessionSize } from "@/entities/settings/settings.types";
 
-export type SessionMode = "continue" | "continent";
+export type QuestionType = "choice" | "typing";
+
+export type SessionMode = "continue" | "continent" | "review" | "similar";
 
 export type SessionConfig = {
   mode: SessionMode;
+  questionType: QuestionType;
   continentId?: ContinentId;
+  /** Restringe o modo "similar" a um grupo específico (opcional). */
+  similarGroupId?: string;
   size: SessionSize;
 };
 
 export type SessionQuestion = {
   countryId: string;
-  /** 4 alternativas embaralhadas, incluindo a correta. */
-  optionCountryIds: readonly string[];
+  /** 4 alternativas embaralhadas, incluindo a correta. Ausente no modo digitação. */
+  optionCountryIds?: readonly string[];
 };
 
 export type SessionAnswer = {
   countryId: string;
-  selectedCountryId: string;
   isCorrect: boolean;
   answeredAt: string;
   xpGained: number;
   masteryBefore: MasteryLevel;
   masteryAfter: MasteryLevel;
+  /** Alternativa escolhida (apenas múltipla escolha). */
+  selectedCountryId?: string;
+  /** Texto digitado pelo usuário (apenas modo digitação). */
+  typedAnswer?: string;
+  normalizedTypedAnswer?: string;
+  /** Resposta aceita que casou com o texto digitado (nome ou alias). */
+  acceptedAnswerUsed?: string;
 };
 
 export type TrainingSession = {

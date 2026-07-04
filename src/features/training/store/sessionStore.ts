@@ -16,19 +16,36 @@ import type {
 import { applyAnswerToCountryProgress } from "@/features/progress/logic/mastery";
 import { computeAnswerXp, computeLevel } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
-import { generateOptions } from "@/features/training/logic/generateOptions";
+import { matchTypedAnswer, normalizeAnswer } from "@/features/training/logic/answerNormalization";
+import { generateOptions, generateSimilarOptions } from "@/features/training/logic/generateOptions";
+import { selectReviewCountries } from "@/features/training/logic/selectReviewCountries";
 import { selectSessionCountries } from "@/features/training/logic/selectSessionCountries";
 import { COUNTRIES } from "@/shared/data/countries";
-import { createRng } from "@/shared/utils/rng";
+import {
+  getSimilarGroupById,
+  getSimilarPeerIds,
+  listSimilarCountryIds,
+} from "@/shared/data/similarFlags";
+import { createRng, type Rng } from "@/shared/utils/rng";
 
 export type AnswerFeedback = {
   isCorrect: boolean;
   correctCountryId: string;
-  selectedCountryId: string;
+  selectedCountryId?: string;
+  typedAnswer?: string;
   xpGained: number;
   masteryBefore: MasteryLevel;
   masteryAfter: MasteryLevel;
   promoted: boolean;
+};
+
+type AnswerInput = {
+  isCorrect: boolean;
+  selectedCountryId?: string;
+  typedAnswer?: string;
+  normalizedTypedAnswer?: string;
+  acceptedAnswerUsed?: string;
+  confusedWithCountryId?: string;
 };
 
 type SessionState = {
@@ -40,6 +57,7 @@ type SessionState = {
   summary: SessionSummary | null;
   startSession: (config: SessionConfig) => void;
   answerCurrentQuestion: (selectedCountryId: string) => void;
+  answerCurrentQuestionTyped: (typedAnswer: string) => void;
   advance: () => void;
   clearSession: () => void;
 };
@@ -48,48 +66,45 @@ function poolForConfig(config: SessionConfig): readonly Country[] {
   if (config.mode === "continent" && config.continentId) {
     return listCountriesByContinent(config.continentId);
   }
+  if (config.mode === "similar") {
+    const ids = config.similarGroupId
+      ? (getSimilarGroupById(config.similarGroupId)?.countryIds ?? [])
+      : listSimilarCountryIds();
+    return ids.map(getCountryById).filter((country): country is Country => country !== undefined);
+  }
   return COUNTRIES;
 }
 
-export const useSessionStore = create<SessionState>((set, get) => ({
-  session: null,
-  feedback: null,
-  sessionXp: 0,
-  currentStreak: 0,
-  bestStreak: 0,
-  summary: null,
+function selectCountryIds(config: SessionConfig, pool: readonly Country[], rng: Rng): string[] {
+  const progress = useProgressStore.getState().progress;
+  if (config.mode === "review") {
+    return selectReviewCountries({ pool, progress, size: config.size, rng });
+  }
+  return selectSessionCountries({ pool, progress, size: config.size, rng });
+}
 
-  startSession: (config) => {
-    const rng = createRng();
-    const pool = poolForConfig(config);
-    const progress = useProgressStore.getState().progress;
-    const countryIds = selectSessionCountries({ pool, progress, size: config.size, rng });
-    const questions: SessionQuestion[] = countryIds.flatMap((countryId) => {
-      const correct = getCountryById(countryId);
-      if (!correct) {
-        return [];
-      }
-      return [{ countryId, optionCountryIds: generateOptions({ correct, pool: COUNTRIES, rng }) }];
-    });
+function buildQuestion(config: SessionConfig, countryId: string, rng: Rng): SessionQuestion | null {
+  if (config.questionType === "typing") {
+    return { countryId };
+  }
+  const correct = getCountryById(countryId);
+  if (!correct) {
+    return null;
+  }
+  const optionCountryIds =
+    config.mode === "similar"
+      ? generateSimilarOptions({
+          correct,
+          pool: COUNTRIES,
+          peerIds: getSimilarPeerIds(countryId),
+          rng,
+        })
+      : generateOptions({ correct, pool: COUNTRIES, rng });
+  return { countryId, optionCountryIds };
+}
 
-    set({
-      session: {
-        id: `${Date.now()}-${Math.floor(rng() * 1e6)}`,
-        config,
-        questions,
-        currentIndex: 0,
-        answers: [],
-        startedAt: new Date().toISOString(),
-      },
-      feedback: null,
-      sessionXp: 0,
-      currentStreak: 0,
-      bestStreak: 0,
-      summary: null,
-    });
-  },
-
-  answerCurrentQuestion: (selectedCountryId) => {
+export const useSessionStore = create<SessionState>((set, get) => {
+  const submitAnswer = (input: AnswerInput) => {
     const { session, feedback, currentStreak, bestStreak, sessionXp } = get();
     if (!session || feedback) {
       return;
@@ -100,111 +115,201 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
 
     const answeredAt = new Date().toISOString();
-    const isCorrect = selectedCountryId === question.countryId;
     const progressStore = useProgressStore.getState();
     const previous =
       progressStore.progress.countries[question.countryId] ??
       createInitialCountryProgress(question.countryId);
-    const next = applyAnswerToCountryProgress(previous, { isCorrect, answeredAt });
-    const promoted = next.masteryLevel !== previous.masteryLevel && isCorrect;
-    const streakAfter = isCorrect ? currentStreak + 1 : 0;
-    const xpGained = computeAnswerXp({ isCorrect, promoted, streakAfter });
+    const next = applyAnswerToCountryProgress(previous, {
+      isCorrect: input.isCorrect,
+      answeredAt,
+      ...(input.confusedWithCountryId !== undefined && {
+        confusedWithCountryId: input.confusedWithCountryId,
+      }),
+    });
+    const promoted = next.masteryLevel !== previous.masteryLevel && input.isCorrect;
+    const streakAfter = input.isCorrect ? currentStreak + 1 : 0;
+    const xpGained = computeAnswerXp({ isCorrect: input.isCorrect, promoted, streakAfter });
 
     progressStore.registerAnswer(next, xpGained, answeredAt);
 
     const answer: SessionAnswer = {
       countryId: question.countryId,
-      selectedCountryId,
-      isCorrect,
+      isCorrect: input.isCorrect,
       answeredAt,
       xpGained,
       masteryBefore: previous.masteryLevel,
       masteryAfter: next.masteryLevel,
+      ...(input.selectedCountryId !== undefined && {
+        selectedCountryId: input.selectedCountryId,
+      }),
+      ...(input.typedAnswer !== undefined && { typedAnswer: input.typedAnswer }),
+      ...(input.normalizedTypedAnswer !== undefined && {
+        normalizedTypedAnswer: input.normalizedTypedAnswer,
+      }),
+      ...(input.acceptedAnswerUsed !== undefined && {
+        acceptedAnswerUsed: input.acceptedAnswerUsed,
+      }),
     };
 
     set({
       session: { ...session, answers: [...session.answers, answer] },
       feedback: {
-        isCorrect,
+        isCorrect: input.isCorrect,
         correctCountryId: question.countryId,
-        selectedCountryId,
         xpGained,
         masteryBefore: previous.masteryLevel,
         masteryAfter: next.masteryLevel,
         promoted,
+        ...(input.selectedCountryId !== undefined && {
+          selectedCountryId: input.selectedCountryId,
+        }),
+        ...(input.typedAnswer !== undefined && { typedAnswer: input.typedAnswer }),
       },
       sessionXp: sessionXp + xpGained,
       currentStreak: streakAfter,
       bestStreak: Math.max(bestStreak, streakAfter),
     });
-  },
+  };
 
-  advance: () => {
-    const { session, sessionXp, bestStreak } = get();
-    if (!session) {
-      return;
-    }
+  return {
+    session: null,
+    feedback: null,
+    sessionXp: 0,
+    currentStreak: 0,
+    bestStreak: 0,
+    summary: null,
 
-    const isLastQuestion = session.currentIndex >= session.questions.length - 1;
-    if (!isLastQuestion) {
-      set({
-        session: { ...session, currentIndex: session.currentIndex + 1 },
-        feedback: null,
+    startSession: (config) => {
+      const rng = createRng();
+      const pool = poolForConfig(config);
+      const countryIds = selectCountryIds(config, pool, rng);
+      const questions = countryIds.flatMap((countryId) => {
+        const question = buildQuestion(config, countryId, rng);
+        return question ? [question] : [];
       });
-      return;
-    }
 
-    const progressStore = useProgressStore.getState();
-    progressStore.registerCompletedSession();
-    const progress = useProgressStore.getState().progress;
+      set({
+        session: {
+          id: `${Date.now()}-${Math.floor(rng() * 1e6)}`,
+          config,
+          questions,
+          currentIndex: 0,
+          answers: [],
+          startedAt: new Date().toISOString(),
+        },
+        feedback: null,
+        sessionXp: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        summary: null,
+      });
+    },
 
-    const correctCount = session.answers.filter((answer) => answer.isCorrect).length;
-    const wrongCount = session.answers.length - correctCount;
-    const promotions: MasteryPromotion[] = session.answers
-      .filter((answer) => answer.isCorrect && answer.masteryAfter !== answer.masteryBefore)
-      .map((answer) => ({
-        countryId: answer.countryId,
-        from: answer.masteryBefore,
-        to: answer.masteryAfter,
-      }));
-    const toReviewCountryIds = [
-      ...new Set(
-        session.answers
-          .filter((answer) => progress.countries[answer.countryId]?.needsReview)
-          .map((answer) => answer.countryId),
-      ),
-    ];
-    const xpBefore = progress.totalXp - sessionXp;
+    answerCurrentQuestion: (selectedCountryId) => {
+      const { session } = get();
+      const question = session?.questions[session?.currentIndex ?? 0];
+      if (!question) {
+        return;
+      }
+      const isCorrect = selectedCountryId === question.countryId;
+      submitAnswer({
+        isCorrect,
+        selectedCountryId,
+        ...(!isCorrect && { confusedWithCountryId: selectedCountryId }),
+      });
+    },
 
-    set({
-      session: null,
-      feedback: null,
-      summary: {
-        config: session.config,
-        correctCount,
-        wrongCount,
-        accuracy:
-          session.answers.length === 0
-            ? 0
-            : Math.round((correctCount / session.answers.length) * 100),
-        bestStreak,
-        xpEarned: sessionXp,
-        promotions,
-        toReviewCountryIds,
-        levelBefore: computeLevel(xpBefore),
-        levelAfter: progress.level,
-      },
-    });
-  },
+    answerCurrentQuestionTyped: (typedAnswer) => {
+      const { session } = get();
+      const question = session?.questions[session?.currentIndex ?? 0];
+      if (!question) {
+        return;
+      }
+      const normalized = normalizeAnswer(typedAnswer);
+      if (normalized.length === 0) {
+        // Resposta vazia não é registrada.
+        return;
+      }
+      const country = getCountryById(question.countryId);
+      if (!country) {
+        return;
+      }
+      const matched = matchTypedAnswer(country, typedAnswer);
+      submitAnswer({
+        isCorrect: matched !== null,
+        typedAnswer: typedAnswer.trim(),
+        normalizedTypedAnswer: normalized,
+        ...(matched !== null && { acceptedAnswerUsed: matched }),
+      });
+    },
 
-  clearSession: () => {
-    set({
-      session: null,
-      feedback: null,
-      sessionXp: 0,
-      currentStreak: 0,
-      bestStreak: 0,
-      summary: null,
-    });
-  },
-}));
+    advance: () => {
+      const { session, sessionXp, bestStreak } = get();
+      if (!session) {
+        return;
+      }
+
+      const isLastQuestion = session.currentIndex >= session.questions.length - 1;
+      if (!isLastQuestion) {
+        set({
+          session: { ...session, currentIndex: session.currentIndex + 1 },
+          feedback: null,
+        });
+        return;
+      }
+
+      const progressStore = useProgressStore.getState();
+      progressStore.registerCompletedSession();
+      const progress = useProgressStore.getState().progress;
+
+      const correctCount = session.answers.filter((answer) => answer.isCorrect).length;
+      const wrongCount = session.answers.length - correctCount;
+      const promotions: MasteryPromotion[] = session.answers
+        .filter((answer) => answer.isCorrect && answer.masteryAfter !== answer.masteryBefore)
+        .map((answer) => ({
+          countryId: answer.countryId,
+          from: answer.masteryBefore,
+          to: answer.masteryAfter,
+        }));
+      const toReviewCountryIds = [
+        ...new Set(
+          session.answers
+            .filter((answer) => progress.countries[answer.countryId]?.needsReview)
+            .map((answer) => answer.countryId),
+        ),
+      ];
+      const xpBefore = progress.totalXp - sessionXp;
+
+      set({
+        session: null,
+        feedback: null,
+        summary: {
+          config: session.config,
+          correctCount,
+          wrongCount,
+          accuracy:
+            session.answers.length === 0
+              ? 0
+              : Math.round((correctCount / session.answers.length) * 100),
+          bestStreak,
+          xpEarned: sessionXp,
+          promotions,
+          toReviewCountryIds,
+          levelBefore: computeLevel(xpBefore),
+          levelAfter: progress.level,
+        },
+      });
+    },
+
+    clearSession: () => {
+      set({
+        session: null,
+        feedback: null,
+        sessionXp: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        summary: null,
+      });
+    },
+  };
+});

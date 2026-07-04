@@ -39,7 +39,12 @@ export function ContinentPage() {
   const handleTrain = () => {
     playSound("click");
     navigate("/training");
-    startSession({ mode: "continent", continentId: continent.id, size: defaultSessionSize });
+    startSession({
+      mode: "continent",
+      questionType: "choice",
+      continentId: continent.id,
+      size: defaultSessionSize,
+    });
   };
 
   return (

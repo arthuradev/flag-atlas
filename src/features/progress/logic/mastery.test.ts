@@ -98,3 +98,46 @@ describe("applyAnswerToCountryProgress", () => {
     expect(progress.currentCorrectStreak).toBe(1);
   });
 });
+
+describe("confusion tracking", () => {
+  it("records which country the user confused the flag with", () => {
+    let progress = createInitialCountryProgress("td");
+    progress = applyAnswerToCountryProgress(progress, {
+      isCorrect: false,
+      answeredAt: T0,
+      confusedWithCountryId: "ro",
+    });
+    progress = applyAnswerToCountryProgress(progress, {
+      isCorrect: false,
+      answeredAt: T1,
+      confusedWithCountryId: "ro",
+    });
+    progress = applyAnswerToCountryProgress(progress, {
+      isCorrect: false,
+      answeredAt: T2,
+      confusedWithCountryId: "sn",
+    });
+    expect(progress.confusions).toEqual({ ro: 2, sn: 1 });
+  });
+
+  it("keeps confusions untouched on correct answers and errors without selection", () => {
+    let progress = createInitialCountryProgress("td");
+    progress = applyAnswerToCountryProgress(progress, {
+      isCorrect: false,
+      answeredAt: T0,
+      confusedWithCountryId: "ro",
+    });
+    progress = applyAnswerToCountryProgress(progress, { isCorrect: true, answeredAt: T1 });
+    progress = applyAnswerToCountryProgress(progress, { isCorrect: false, answeredAt: T2 });
+    expect(progress.confusions).toEqual({ ro: 1 });
+  });
+
+  it("ignores self-confusion", () => {
+    const progress = applyAnswerToCountryProgress(createInitialCountryProgress("td"), {
+      isCorrect: false,
+      answeredAt: T0,
+      confusedWithCountryId: "td",
+    });
+    expect(progress.confusions).toBeUndefined();
+  });
+});

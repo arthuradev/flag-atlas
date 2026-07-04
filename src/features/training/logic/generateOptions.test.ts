@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getCountryById } from "@/entities/country/country.selectors";
 import { COUNTRIES } from "@/shared/data/countries";
 import { createRng } from "@/shared/utils/rng";
-import { generateOptions, OPTIONS_PER_QUESTION } from "./generateOptions";
+import { generateOptions, generateSimilarOptions, OPTIONS_PER_QUESTION } from "./generateOptions";
 
 describe("generateOptions", () => {
   it("always includes the correct answer among 4 unique options", () => {
@@ -53,5 +53,58 @@ describe("generateOptions", () => {
     const a = generateOptions({ correct: vatican, pool: COUNTRIES, rng: createRng(5) });
     const b = generateOptions({ correct: vatican, pool: COUNTRIES, rng: createRng(5) });
     expect(a).toEqual(b);
+  });
+});
+
+describe("generateSimilarOptions", () => {
+  it("prioritizes countries from the same similar group", () => {
+    const chad = COUNTRIES.find((country) => country.id === "td");
+    if (!chad) {
+      throw new Error("missing td in dataset");
+    }
+    const rng = createRng(11);
+    for (let i = 0; i < 20; i++) {
+      const options = generateSimilarOptions({
+        correct: chad,
+        pool: COUNTRIES,
+        peerIds: ["ro"],
+        rng,
+      });
+      expect(options).toContain("td");
+      expect(options).toContain("ro");
+      expect(options).toHaveLength(OPTIONS_PER_QUESTION);
+      expect(new Set(options).size).toBe(OPTIONS_PER_QUESTION);
+    }
+  });
+
+  it("uses all peers when the group is large enough", () => {
+    const guinea = COUNTRIES.find((country) => country.id === "gn");
+    if (!guinea) {
+      throw new Error("missing gn in dataset");
+    }
+    const options = generateSimilarOptions({
+      correct: guinea,
+      pool: COUNTRIES,
+      peerIds: ["ml", "sn", "cm"],
+      rng: createRng(12),
+    });
+    expect(options.sort()).toEqual(["cm", "gn", "ml", "sn"]);
+  });
+
+  it("falls back to continent and global pool for small groups", () => {
+    const indonesia = COUNTRIES.find((country) => country.id === "id");
+    if (!indonesia) {
+      throw new Error("missing id in dataset");
+    }
+    const options = generateSimilarOptions({
+      correct: indonesia,
+      pool: COUNTRIES,
+      peerIds: ["mc"],
+      rng: createRng(13),
+    });
+    expect(options).toContain("id");
+    expect(options).toContain("mc");
+    expect(options).toHaveLength(OPTIONS_PER_QUESTION);
+    expect(new Set(options).size).toBe(OPTIONS_PER_QUESTION);
   });
 });

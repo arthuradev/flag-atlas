@@ -113,6 +113,19 @@ function normalizeCountryProgress(countryId: string, value: unknown): CountryPro
   if (typeof value.lastWrongAt === "string") {
     normalized.lastWrongAt = value.lastWrongAt;
   }
+  // Campo opcional adicionado na Versão 2: dados antigos sem ele seguem válidos.
+  if (isRecord(value.confusions)) {
+    const confusions: Record<string, number> = {};
+    for (const [id, count] of Object.entries(value.confusions)) {
+      const safe = toSafeCount(count);
+      if (id.length > 0 && safe > 0) {
+        confusions[id] = safe;
+      }
+    }
+    if (Object.keys(confusions).length > 0) {
+      normalized.confusions = confusions;
+    }
+  }
   return normalized;
 }
 
