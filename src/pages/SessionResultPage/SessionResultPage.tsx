@@ -59,6 +59,12 @@ export function SessionResultPage() {
     startSession(summary.config);
   };
 
+  const handleReview = () => {
+    playSound("click");
+    navigate("/training", { replace: true });
+    startSession({ mode: "review", questionType: "choice", size: summary.config.size });
+  };
+
   const handleBackHome = () => {
     playSound("click");
     clearSession();
@@ -130,6 +136,11 @@ export function SessionResultPage() {
         <Button size="lg" fullWidth onClick={handlePlayAgain}>
           {t("result.playAgain")}
         </Button>
+        {summary.toReviewCountryIds.length > 0 && (
+          <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
+            🔁 {t("review.cta")}
+          </Button>
+        )}
         <Button variant="secondary" size="lg" fullWidth onClick={handleBackHome}>
           {t("common.backToHome")}
         </Button>

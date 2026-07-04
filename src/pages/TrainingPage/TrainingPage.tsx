@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { OptionButton } from "@/features/training/components/OptionButton";
+import { TypedAnswerForm } from "@/features/training/components/TypedAnswerForm";
 import { useSessionStore } from "@/features/training/store/sessionStore";
 import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
@@ -24,6 +25,7 @@ export function TrainingPage() {
   const { session, feedback, sessionXp, currentStreak, summary } = useSessionStore();
   const startSession = useSessionStore((state) => state.startSession);
   const answerCurrentQuestion = useSessionStore((state) => state.answerCurrentQuestion);
+  const answerCurrentQuestionTyped = useSessionStore((state) => state.answerCurrentQuestionTyped);
   const advance = useSessionStore((state) => state.advance);
 
   // Sessão terminou nesta tela: mostra o resumo.
@@ -70,13 +72,32 @@ export function TrainingPage() {
   const question = session.questions[session.currentIndex];
   const country = question ? getCountryById(question.countryId) : undefined;
   if (!question || !country) {
+    // Sessão sem material (ex.: revisão sem histórico): explica e oferece treino normal.
     return (
       <PageShell title={t("training.title")} backTo="/home" width="wide">
-        <p className="py-10 text-center text-text-muted">{t("training.emptyPool")}</p>
+        <div className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center gap-4 text-center">
+          <p className="text-4xl" aria-hidden="true">
+            🌱
+          </p>
+          <p className="text-text-muted">
+            {session.config.mode === "review"
+              ? t("review.nothingToReview")
+              : t("training.emptyPool")}
+          </p>
+          <Button
+            size="lg"
+            onClick={() =>
+              startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize })
+            }
+          >
+            {t("home.continueTraining")}
+          </Button>
+        </div>
       </PageShell>
     );
   }
 
+  const isTyping = session.config.questionType === "typing";
   const current = session.currentIndex + 1;
   const total = session.questions.length;
   const selectedCountry = feedback?.selectedCountryId
@@ -111,7 +132,7 @@ export function TrainingPage() {
         />
 
         <h2 className="text-center text-xl font-extrabold sm:text-2xl">
-          {t("training.whichCountry")}
+          {t(isTyping ? "typing.prompt" : "training.whichCountry")}
         </h2>
 
         <motion.div
@@ -130,30 +151,38 @@ export function TrainingPage() {
             />
           </Card>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-            {(question.optionCountryIds ?? []).map((optionId) => {
-              const option = getCountryById(optionId);
-              if (!option) {
-                return null;
-              }
-              const state = !feedback
-                ? "idle"
-                : optionId === feedback.correctCountryId
-                  ? "correct"
-                  : optionId === feedback.selectedCountryId
-                    ? "wrong"
-                    : "dimmed";
-              return (
-                <OptionButton
-                  key={optionId}
-                  label={getCountryName(option, locale)}
-                  state={state}
-                  disabled={feedback !== null}
-                  onSelect={() => answerCurrentQuestion(optionId)}
-                />
-              );
-            })}
-          </div>
+          {isTyping ? (
+            <TypedAnswerForm
+              key={session.currentIndex}
+              disabled={feedback !== null}
+              onSubmit={answerCurrentQuestionTyped}
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+              {(question.optionCountryIds ?? []).map((optionId) => {
+                const option = getCountryById(optionId);
+                if (!option) {
+                  return null;
+                }
+                const state = !feedback
+                  ? "idle"
+                  : optionId === feedback.correctCountryId
+                    ? "correct"
+                    : optionId === feedback.selectedCountryId
+                      ? "wrong"
+                      : "dimmed";
+                return (
+                  <OptionButton
+                    key={optionId}
+                    label={getCountryName(option, locale)}
+                    state={state}
+                    disabled={feedback !== null}
+                    onSelect={() => answerCurrentQuestion(optionId)}
+                  />
+                );
+              })}
+            </div>
+          )}
         </motion.div>
 
         <div aria-live="polite" className="min-h-28">
@@ -179,6 +208,9 @@ export function TrainingPage() {
                     </span>
                   )}
                 </div>
+                {feedback.isCorrect && isTyping && (
+                  <p className="font-bold">{getCountryName(country, locale)}</p>
+                )}
                 {!feedback.isCorrect && (
                   <>
                     <p className="text-text-muted">
@@ -189,6 +221,11 @@ export function TrainingPage() {
                         {t("training.youChose", {
                           country: getCountryName(selectedCountry, locale),
                         })}
+                      </p>
+                    )}
+                    {feedback.typedAnswer !== undefined && (
+                      <p className="text-text-muted">
+                        {t("typing.youTyped", { answer: feedback.typedAnswer })}
                       </p>
                     )}
                     <p className="text-sm text-text-muted">{t("training.markedForReview")}</p>

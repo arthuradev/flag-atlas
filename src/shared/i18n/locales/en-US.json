@@ -30,6 +30,8 @@
     "continents": "Continents",
     "collection": "Collection",
     "settings": "Settings",
+    "challenges": "Challenges",
+    "stats": "Statistics",
     "level": "Level {{level}}",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Level progress"
@@ -109,6 +111,25 @@
     "resetDone": "Progress reset.",
     "about": "About",
     "flagAttribution": "Flag images sourced from Flagpedia.net (public domain)."
+  },
+  "challenges": {
+    "title": "Challenges",
+    "typingTitle": "Typing mode",
+    "typingDescription": "No options: type the name of the country for the flag.",
+    "similarTitle": "Similar flags",
+    "similarDescription": "Train the flag pairs everyone mixes up.",
+    "start": "Start challenge"
+  },
+  "typing": {
+    "prompt": "Type the country for this flag",
+    "inputLabel": "Your answer",
+    "placeholder": "Country name...",
+    "submit": "Answer",
+    "youTyped": "You typed: {{answer}}"
+  },
+  "review": {
+    "cta": "Review misses",
+    "nothingToReview": "Nothing to review right now. How about discovering new countries?"
   },
   "mastery": {
     "new": "New",

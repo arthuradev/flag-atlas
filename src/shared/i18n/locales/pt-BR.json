@@ -30,6 +30,8 @@
     "continents": "Continentes",
     "collection": "Coleção",
     "settings": "Configurações",
+    "challenges": "Desafios",
+    "stats": "Estatísticas",
     "level": "Nível {{level}}",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Progresso do nível"
@@ -109,6 +111,25 @@
     "resetDone": "Progresso resetado.",
     "about": "Sobre",
     "flagAttribution": "Imagens de bandeiras obtidas do Flagpedia.net (domínio público)."
+  },
+  "challenges": {
+    "title": "Desafios",
+    "typingTitle": "Modo digitação",
+    "typingDescription": "Sem alternativas: digite o nome do país da bandeira.",
+    "similarTitle": "Bandeiras parecidas",
+    "similarDescription": "Treine os pares de bandeiras que todo mundo confunde.",
+    "start": "Começar desafio"
+  },
+  "typing": {
+    "prompt": "Digite o país desta bandeira",
+    "inputLabel": "Sua resposta",
+    "placeholder": "Nome do país...",
+    "submit": "Responder",
+    "youTyped": "Você digitou: {{answer}}"
+  },
+  "review": {
+    "cta": "Revisar erros",
+    "nothingToReview": "Nada para revisar por enquanto. Que tal descobrir países novos?"
   },
   "mastery": {
     "new": "Novo",

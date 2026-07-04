@@ -1,5 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
+import { ChallengesPage } from "@/pages/ChallengesPage/ChallengesPage";
 import { CollectionPage } from "@/pages/CollectionPage/CollectionPage";
 import { ContinentPage } from "@/pages/ContinentPage/ContinentPage";
 import { ContinentsPage } from "@/pages/ContinentsPage/ContinentsPage";
@@ -26,6 +27,7 @@ export function AppRouter() {
         <Route path="/continents" element={<ContinentsPage />} />
         <Route path="/continents/:continentId" element={<ContinentPage />} />
         <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/challenges" element={<ChallengesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>

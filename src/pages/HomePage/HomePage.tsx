@@ -1,8 +1,13 @@
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { countLearnedCountries } from "@/entities/progress/progress.selectors";
+import {
+  countLearnedCountries,
+  listCountriesNeedingReview,
+} from "@/entities/progress/progress.selectors";
 import { useProgressStore } from "@/features/progress/store/progressStore";
+import { useSettingsStore } from "@/features/settings/store/settingsStore";
+import { useSessionStore } from "@/features/training/store/sessionStore";
 import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
@@ -10,6 +15,7 @@ import { ProgressBar } from "@/shared/components/ProgressBar";
 import { COUNTRIES } from "@/shared/data/countries";
 
 const SHORTCUTS = [
+  { to: "/challenges", emoji: "🎯", labelKey: "home.challenges" },
   { to: "/continents", emoji: "🧭", labelKey: "home.continents" },
   { to: "/collection", emoji: "🎒", labelKey: "home.collection" },
   { to: "/settings", emoji: "⚙️", labelKey: "home.settings" },
@@ -19,12 +25,21 @@ export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const progress = useProgressStore((state) => state.progress);
+  const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
+  const startSession = useSessionStore((state) => state.startSession);
   const learned = countLearnedCountries(progress);
   const total = COUNTRIES.length;
+  const reviewCount = listCountriesNeedingReview(progress).length;
 
   const handleContinueTraining = () => {
     playSound("click");
     navigate("/training");
+  };
+
+  const handleReview = () => {
+    playSound("click");
+    navigate("/training");
+    startSession({ mode: "review", questionType: "choice", size: defaultSessionSize });
   };
 
   return (
@@ -57,9 +72,16 @@ export function HomePage() {
         />
       </Card>
 
-      <Button size="lg" fullWidth onClick={handleContinueTraining}>
-        {t("home.continueTraining")}
-      </Button>
+      <div className="flex flex-col gap-3">
+        <Button size="lg" fullWidth onClick={handleContinueTraining}>
+          {t("home.continueTraining")}
+        </Button>
+        {reviewCount > 0 && (
+          <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
+            🔁 {t("review.cta")}
+          </Button>
+        )}
+      </div>
 
       <nav aria-label={t("app.name")} className="grid grid-cols-3 gap-3">
         {SHORTCUTS.map((shortcut) => (
