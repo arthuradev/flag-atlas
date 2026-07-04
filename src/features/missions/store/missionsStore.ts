@@ -33,9 +33,7 @@ function missionsForToday(): DailyMissionsState {
 }
 
 export const useMissionsStore = create<MissionsState>((set, get) => {
-  const applyUpdate = (
-    recipe: (state: DailyMissionsState) => DailyMissionsState["missions"],
-  ) => {
+  const applyUpdate = (recipe: (state: DailyMissionsState) => DailyMissionsState["missions"]) => {
     // Sempre parte do dia atual: uma sessão que atravessa a meia-noite
     // progride as missões do dia novo, não as de ontem.
     const current = ensureToday();

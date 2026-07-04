@@ -32,9 +32,142 @@
     "settings": "Configurações",
     "challenges": "Desafios",
     "stats": "Estatísticas",
+    "achievements": "Conquistas",
     "level": "Nível {{level}}",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Progresso do nível"
+  },
+  "streak": {
+    "days": "🔥 {{count}} dias explorando o mundo",
+    "days_one": "🔥 {{count}} dia explorando o mundo",
+    "restAvailable": "🧊 1 descanso disponível",
+    "countsToday": "Hoje já conta para sua sequência",
+    "usedRest": "Seu descanso cobriu um dia de pausa.",
+    "noPressure": "Sem pressão. O mundo continua aqui quando você voltar."
+  },
+  "missions": {
+    "title": "Missões de hoje",
+    "completed": "Concluída",
+    "progress": "{{progress}}/{{target}}",
+    "rewardXp": "+{{xp}} XP",
+    "types": {
+      "correctAnswers": "Acerte {{target}} bandeiras",
+      "completeSession": "Complete {{target}} sessão",
+      "reviewAnswers": "Revise {{target}} erros",
+      "masteryUp": "Evolua o domínio de {{target}} país",
+      "typingSession": "Jogue {{target}} sessão de digitação",
+      "similarSession": "Jogue {{target}} desafio de bandeiras parecidas",
+      "answerStreak": "Acerte {{target}} bandeiras seguidas",
+      "accuracySession": "Complete uma sessão com 80% de acerto"
+    }
+  },
+  "achievements": {
+    "title": "Conquistas",
+    "unlockedCount": "{{unlocked}}/{{total}} desbloqueadas",
+    "locked": "Bloqueada",
+    "unlocked": "Desbloqueada",
+    "unlockedTitle": "Conquistas desbloqueadas",
+    "items": {
+      "firstSteps": {
+        "title": "Primeiros Passos",
+        "description": "Complete sua primeira sessão."
+      },
+      "earlyExplorer": {
+        "title": "Explorador Iniciante",
+        "description": "Veja 25 países diferentes."
+      },
+      "halfWorld": {
+        "title": "Meio Mundo",
+        "description": "Veja 100 países diferentes."
+      },
+      "livingAtlas": {
+        "title": "Atlas Vivo",
+        "description": "Veja todos os 195 países."
+      },
+      "firstMastery": {
+        "title": "Primeiro Domínio",
+        "description": "Alcance domínio alto em 1 país."
+      },
+      "collector": {
+        "title": "Colecionador",
+        "description": "Alcance domínio alto em 25 países."
+      },
+      "worldMaster": {
+        "title": "Mestre do Mundo",
+        "description": "Alcance domínio alto em todos os países."
+      },
+      "explorerAmerica": {
+        "title": "Explorador da América",
+        "description": "Aprenda metade dos países da América."
+      },
+      "explorerEurope": {
+        "title": "Explorador da Europa",
+        "description": "Aprenda metade dos países da Europa."
+      },
+      "explorerAfrica": {
+        "title": "Explorador da África",
+        "description": "Aprenda metade dos países da África."
+      },
+      "explorerAsia": {
+        "title": "Explorador da Ásia",
+        "description": "Aprenda metade dos países da Ásia."
+      },
+      "explorerOceania": {
+        "title": "Explorador da Oceania",
+        "description": "Aprenda metade dos países da Oceania."
+      },
+      "flawless": {
+        "title": "Sem Errar",
+        "description": "Complete uma sessão com 100% de acerto."
+      },
+      "hotStreak": {
+        "title": "Sequência Quente",
+        "description": "Acerte 10 bandeiras seguidas em uma sessão."
+      },
+      "honestReview": {
+        "title": "Revisão Honesta",
+        "description": "Complete uma sessão de revisão."
+      },
+      "vexillologist": {
+        "title": "Vexilólogo",
+        "description": "Complete uma sessão de bandeiras parecidas."
+      },
+      "globalTypist": {
+        "title": "Digitador Global",
+        "description": "Complete uma sessão no modo digitação."
+      },
+      "survivor": {
+        "title": "Sobrevivente",
+        "description": "Faça 15 pontos no modo sobrevivência."
+      }
+    }
+  },
+  "survival": {
+    "title": "Sobrevivência",
+    "livesLabel": "Vidas: {{lives}} de {{total}}",
+    "scoreLabel": "Pontuação: {{score}}",
+    "resultTitle": "Fim da sobrevivência!",
+    "resultScore": "Você chegou a {{score}} pontos.",
+    "newRecord": "Novo recorde!",
+    "previousBest": "Recorde anterior: {{score}}"
+  },
+  "share": {
+    "share": "Compartilhar resultado",
+    "copy": "Copiar resultado",
+    "copied": "Resultado copiado!",
+    "copyFailed": "Não foi possível copiar. Selecione o texto abaixo:",
+    "textLabel": "Texto do resultado",
+    "header": "Flag Atlas 🌍",
+    "sessionTitle": "Sessão concluída!",
+    "survivalTitle": "Modo Sobrevivência",
+    "correctLine": "✅ {{correct}}/{{total}} acertos",
+    "bestStreakLine": "🔥 Melhor sequência: {{count}}",
+    "xpLine": "⭐ +{{xp}} XP",
+    "seenLine": "🌎 Países vistos: {{seen}}/{{total}}",
+    "scoreLine": "🏆 Pontuação: {{score}}",
+    "survivalCorrectLine": "✅ Acertos: {{count}}",
+    "survivalWrongLine": "❌ Erros: {{count}}",
+    "playToo": "Jogue também: {{url}}"
   },
   "training": {
     "title": "Treino",
@@ -118,6 +251,18 @@
     "typingDescription": "Sem alternativas: digite o nome do país da bandeira.",
     "similarTitle": "Bandeiras parecidas",
     "similarDescription": "Treine os pares de bandeiras que todo mundo confunde.",
+    "reviewTitle": "Revisar erros",
+    "reviewDescription": "Volte nos países que escaparam da última vez.",
+    "survivalTitle": "Sobrevivência",
+    "survivalDescription": "Continue jogando até perder as 3 vidas.",
+    "quickTitle": "Desafio rápido",
+    "quickDescription": "Uma rodada curta para qualquer intervalo.",
+    "perfectTitle": "Desafio perfeito",
+    "perfectDescription": "Tente completar 10 perguntas sem errar nenhuma.",
+    "questionTypeChoice": "Múltipla escolha",
+    "questionTypeTyping": "Digitação",
+    "durationUntilLives": "Até acabarem as vidas",
+    "bestScore": "Recorde: {{score}}",
     "start": "Começar desafio"
   },
   "typing": {

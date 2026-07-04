@@ -112,13 +112,20 @@ export function TrainingPage() {
     : undefined;
 
   return (
-    <PageShell backTo="/home" title={t(isSurvival ? "survival.title" : "training.title")} width="wide">
+    <PageShell
+      backTo="/home"
+      title={t(isSurvival ? "survival.title" : "training.title")}
+      width="wide"
+    >
       <div className="flex flex-1 flex-col gap-4 sm:gap-5">
         <div className="flex items-center justify-between text-sm font-bold text-text-muted sm:text-base">
           {isSurvival ? (
             <span data-testid="survival-lives">
               <span className="sr-only">
-                {t("survival.livesLabel", { lives: livesRemaining, total: SURVIVAL_STARTING_LIVES })}
+                {t("survival.livesLabel", {
+                  lives: livesRemaining,
+                  total: SURVIVAL_STARTING_LIVES,
+                })}
               </span>
               <span aria-hidden="true" className="text-base sm:text-lg">
                 {"❤️".repeat(livesRemaining)}

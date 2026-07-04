@@ -29,7 +29,13 @@ function answer(overrides: Partial<MissionAnswerEvent>): MissionAnswerEvent {
 }
 
 function session(overrides: Partial<MissionSessionEvent>): MissionSessionEvent {
-  return { mode: "continue", questionType: "choice", accuracy: 80, questionCount: 10, ...overrides };
+  return {
+    mode: "continue",
+    questionType: "choice",
+    accuracy: 80,
+    questionCount: 10,
+    ...overrides,
+  };
 }
 
 describe("generateDailyMissions", () => {

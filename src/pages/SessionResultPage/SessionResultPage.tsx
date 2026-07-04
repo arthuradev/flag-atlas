@@ -3,12 +3,18 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
+import { countSeenCountries } from "@/entities/progress/progress.selectors";
+import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
+import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
+import { ShareResultButton } from "@/features/share/components/ShareResultButton";
+import { buildShareText } from "@/features/share/logic/shareText";
 import { useSessionStore } from "@/features/training/store/sessionStore";
 import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
+import { COUNTRIES } from "@/shared/data/countries";
 
 function CountryRow({ countryId, detail }: { countryId: string; detail?: string }) {
   const locale = useSettingsStore((state) => state.locale);
@@ -35,6 +41,7 @@ export function SessionResultPage() {
   const storeSummary = useSessionStore((state) => state.summary);
   const startSession = useSessionStore((state) => state.startSession);
   const clearSession = useSessionStore((state) => state.clearSession);
+  const progress = useProgressStore((state) => state.progress);
   // Congelado no mount: iniciar "mais uma" limpa o summary do store e esta
   // página não deve redirecionar para a Home durante a transição de rota.
   const [summary] = useState(storeSummary);
@@ -50,6 +57,7 @@ export function SessionResultPage() {
   }
 
   const leveledUp = summary.levelAfter > summary.levelBefore;
+  const isSurvival = summary.survival !== undefined;
 
   const handlePlayAgain = () => {
     playSound("click");
@@ -86,12 +94,33 @@ export function SessionResultPage() {
           className="text-5xl"
           aria-hidden="true"
         >
-          🎉
+          {isSurvival ? "🛡️" : "🎉"}
         </motion.p>
-        <h1 className="mt-2 text-3xl font-extrabold">{t("result.title")}</h1>
+        <h1 className="mt-2 text-3xl font-extrabold">
+          {t(isSurvival ? "survival.resultTitle" : "result.title")}
+        </h1>
+        {summary.survival && (
+          <p className="mt-1 text-lg font-bold">
+            {t("survival.resultScore", { score: summary.survival.score })}
+          </p>
+        )}
+        {summary.survival?.isNewRecord && (
+          <p className="mt-1 font-bold text-warning">🏆 {t("survival.newRecord")}</p>
+        )}
+        {summary.survival && !summary.survival.isNewRecord && summary.survival.previousBest > 0 && (
+          <p className="mt-1 text-sm font-semibold text-text-muted">
+            {t("survival.previousBest", { score: summary.survival.previousBest })}
+          </p>
+        )}
         {leveledUp && (
           <p className="mt-1 font-bold text-success">
             {t("result.levelUp", { level: summary.levelAfter })}
+          </p>
+        )}
+        {summary.dailyStreak.countedToday && (
+          <p className="mt-1 text-sm font-semibold text-text-muted" data-testid="result-streak">
+            {t("streak.countsToday")} · {t("streak.days", { count: summary.dailyStreak.current })}
+            {summary.dailyStreak.usedRestDay && <> · {t("streak.usedRest")}</>}
           </p>
         )}
       </header>
@@ -105,6 +134,24 @@ export function SessionResultPage() {
           {t("result.accuracy", { percent: summary.accuracy })}
         </span>
       </Card>
+
+      {summary.unlockedAchievementIds.length > 0 && (
+        <Card data-testid="result-achievements">
+          <h2 className="mb-2 font-extrabold">🏆 {t("achievements.unlockedTitle")}</h2>
+          <ul className="flex flex-col gap-1.5">
+            {summary.unlockedAchievementIds.map((achievementId) => (
+              <li key={achievementId} className="flex items-center gap-2">
+                <span className="font-bold">{t(`achievements.items.${achievementId}.title`)}</span>
+                <span className="text-sm text-text-muted">
+                  {t(`achievements.items.${achievementId}.description`)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      <DailyMissionsCard />
 
       {summary.promotions.length > 0 && (
         <Card>
@@ -141,6 +188,14 @@ export function SessionResultPage() {
             🔁 {t("review.cta")}
           </Button>
         )}
+        <ShareResultButton
+          text={buildShareText({
+            summary,
+            seenCount: countSeenCountries(progress),
+            totalCountries: COUNTRIES.length,
+            t,
+          })}
+        />
         <Button variant="secondary" size="lg" fullWidth onClick={handleBackHome}>
           {t("common.backToHome")}
         </Button>

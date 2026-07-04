@@ -86,7 +86,7 @@ export const useProgressStore = create<ProgressState>((set) => {
 
     registerCompletedSession: (event) => {
       const completedAt = new Date().toISOString();
-      let result: SessionCompletionResult | null = null;
+      let result: SessionCompletionResult | undefined;
       update((previous) => {
         let progress: UserProgress = {
           ...previous,
@@ -121,17 +121,11 @@ export const useProgressStore = create<ProgressState>((set) => {
         };
         return progress;
       });
-      // update() roda de forma síncrona; o fallback nunca deve acontecer.
-      return (
-        result ?? {
-          unlockedAchievementIds: [],
-          dailyStreak: {
-            streak: useProgressStore.getState().progress.dailyStreak,
-            countedToday: false,
-            usedRestDay: false,
-          },
-        }
-      );
+      if (result === undefined) {
+        // update() roda de forma síncrona: isto é inalcançável.
+        throw new Error("registerCompletedSession did not run");
+      }
+      return result;
     },
 
     addBonusXp: (xp) => {

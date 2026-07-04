@@ -5,6 +5,8 @@ import {
   countLearnedCountries,
   listCountriesNeedingReview,
 } from "@/entities/progress/progress.selectors";
+import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
+import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
@@ -18,6 +20,7 @@ const SHORTCUTS = [
   { to: "/challenges", emoji: "🎯", labelKey: "home.challenges" },
   { to: "/continents", emoji: "🧭", labelKey: "home.continents" },
   { to: "/collection", emoji: "🎒", labelKey: "home.collection" },
+  { to: "/achievements", emoji: "🏆", labelKey: "home.achievements" },
   { to: "/stats", emoji: "📊", labelKey: "home.stats" },
   { to: "/settings", emoji: "⚙️", labelKey: "home.settings" },
 ] as const;
@@ -72,6 +75,10 @@ export function HomePage() {
           label={t("home.learnedCount", { learned, total })}
         />
       </Card>
+
+      <DailyStreakLine streak={progress.dailyStreak} />
+
+      <DailyMissionsCard />
 
       <div className="flex flex-col gap-3">
         <Button size="lg" fullWidth onClick={handleContinueTraining}>

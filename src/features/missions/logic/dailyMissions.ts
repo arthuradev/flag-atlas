@@ -92,11 +92,7 @@ function advance(mission: DailyMission, amount: number, completedAt: string): Da
 }
 
 /** answerStreak progride para o melhor valor do dia, sem somar. */
-function advanceToAtLeast(
-  mission: DailyMission,
-  value: number,
-  completedAt: string,
-): DailyMission {
+function advanceToAtLeast(mission: DailyMission, value: number, completedAt: string): DailyMission {
   if (mission.completed || value <= mission.progress) {
     return mission;
   }

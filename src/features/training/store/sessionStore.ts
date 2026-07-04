@@ -21,10 +21,7 @@ import { matchTypedAnswer, normalizeAnswer } from "@/features/training/logic/ans
 import { generateOptions, generateSimilarOptions } from "@/features/training/logic/generateOptions";
 import { selectReviewCountries } from "@/features/training/logic/selectReviewCountries";
 import { selectSessionCountries } from "@/features/training/logic/selectSessionCountries";
-import {
-  isSurvivalOver,
-  SURVIVAL_MAX_QUESTIONS,
-} from "@/features/training/logic/survival";
+import { isSurvivalOver, SURVIVAL_MAX_QUESTIONS } from "@/features/training/logic/survival";
 import { COUNTRIES } from "@/shared/data/countries";
 import {
   getSimilarGroupById,

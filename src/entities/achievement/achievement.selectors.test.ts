@@ -68,9 +68,9 @@ describe("evaluateNewAchievements", () => {
     expect(evaluateNewAchievements({ progress: progressWithCountries(100) })).toContain(
       "halfWorld",
     );
-    expect(evaluateNewAchievements({ progress: progressWithCountries(COUNTRIES.length) })).toContain(
-      "livingAtlas",
-    );
+    expect(
+      evaluateNewAchievements({ progress: progressWithCountries(COUNTRIES.length) }),
+    ).toContain("livingAtlas");
   });
 
   it("unlocks mastery milestones from dominated countries", () => {

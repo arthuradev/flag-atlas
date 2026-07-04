@@ -32,9 +32,142 @@
     "settings": "Settings",
     "challenges": "Challenges",
     "stats": "Statistics",
+    "achievements": "Achievements",
     "level": "Level {{level}}",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Level progress"
+  },
+  "streak": {
+    "days": "🔥 {{count}} days exploring the world",
+    "days_one": "🔥 {{count}} day exploring the world",
+    "restAvailable": "🧊 1 rest day available",
+    "countsToday": "Today already counts toward your streak",
+    "usedRest": "Your rest day covered a break.",
+    "noPressure": "No pressure. The world will still be here when you come back."
+  },
+  "missions": {
+    "title": "Today's missions",
+    "completed": "Done",
+    "progress": "{{progress}}/{{target}}",
+    "rewardXp": "+{{xp}} XP",
+    "types": {
+      "correctAnswers": "Get {{target}} flags right",
+      "completeSession": "Complete {{target}} session",
+      "reviewAnswers": "Review {{target}} misses",
+      "masteryUp": "Level up {{target}} country's mastery",
+      "typingSession": "Play {{target}} typing session",
+      "similarSession": "Play {{target}} similar-flags challenge",
+      "answerStreak": "Get {{target}} flags right in a row",
+      "accuracySession": "Finish a session with 80% accuracy"
+    }
+  },
+  "achievements": {
+    "title": "Achievements",
+    "unlockedCount": "{{unlocked}}/{{total}} unlocked",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "unlockedTitle": "Achievements unlocked",
+    "items": {
+      "firstSteps": {
+        "title": "First Steps",
+        "description": "Complete your first session."
+      },
+      "earlyExplorer": {
+        "title": "Early Explorer",
+        "description": "See 25 different countries."
+      },
+      "halfWorld": {
+        "title": "Half the World",
+        "description": "See 100 different countries."
+      },
+      "livingAtlas": {
+        "title": "Living Atlas",
+        "description": "See all 195 countries."
+      },
+      "firstMastery": {
+        "title": "First Mastery",
+        "description": "Reach high mastery on 1 country."
+      },
+      "collector": {
+        "title": "Collector",
+        "description": "Reach high mastery on 25 countries."
+      },
+      "worldMaster": {
+        "title": "World Master",
+        "description": "Reach high mastery on every country."
+      },
+      "explorerAmerica": {
+        "title": "America Explorer",
+        "description": "Learn half of the countries in America."
+      },
+      "explorerEurope": {
+        "title": "Europe Explorer",
+        "description": "Learn half of the countries in Europe."
+      },
+      "explorerAfrica": {
+        "title": "Africa Explorer",
+        "description": "Learn half of the countries in Africa."
+      },
+      "explorerAsia": {
+        "title": "Asia Explorer",
+        "description": "Learn half of the countries in Asia."
+      },
+      "explorerOceania": {
+        "title": "Oceania Explorer",
+        "description": "Learn half of the countries in Oceania."
+      },
+      "flawless": {
+        "title": "Flawless",
+        "description": "Complete a session with 100% accuracy."
+      },
+      "hotStreak": {
+        "title": "Hot Streak",
+        "description": "Get 10 flags right in a row in one session."
+      },
+      "honestReview": {
+        "title": "Honest Review",
+        "description": "Complete a review session."
+      },
+      "vexillologist": {
+        "title": "Vexillologist",
+        "description": "Complete a similar-flags session."
+      },
+      "globalTypist": {
+        "title": "Global Typist",
+        "description": "Complete a typing-mode session."
+      },
+      "survivor": {
+        "title": "Survivor",
+        "description": "Score 15 points in survival mode."
+      }
+    }
+  },
+  "survival": {
+    "title": "Survival",
+    "livesLabel": "Lives: {{lives}} of {{total}}",
+    "scoreLabel": "Score: {{score}}",
+    "resultTitle": "Survival over!",
+    "resultScore": "You reached {{score}} points.",
+    "newRecord": "New record!",
+    "previousBest": "Previous best: {{score}}"
+  },
+  "share": {
+    "share": "Share result",
+    "copy": "Copy result",
+    "copied": "Result copied!",
+    "copyFailed": "Couldn't copy. Select the text below:",
+    "textLabel": "Result text",
+    "header": "Flag Atlas 🌍",
+    "sessionTitle": "Session complete!",
+    "survivalTitle": "Survival Mode",
+    "correctLine": "✅ {{correct}}/{{total}} correct",
+    "bestStreakLine": "🔥 Best streak: {{count}}",
+    "xpLine": "⭐ +{{xp}} XP",
+    "seenLine": "🌎 Countries seen: {{seen}}/{{total}}",
+    "scoreLine": "🏆 Score: {{score}}",
+    "survivalCorrectLine": "✅ Correct: {{count}}",
+    "survivalWrongLine": "❌ Misses: {{count}}",
+    "playToo": "Play too: {{url}}"
   },
   "training": {
     "title": "Training",
@@ -118,6 +251,18 @@
     "typingDescription": "No options: type the name of the country for the flag.",
     "similarTitle": "Similar flags",
     "similarDescription": "Train the flag pairs everyone mixes up.",
+    "reviewTitle": "Review misses",
+    "reviewDescription": "Revisit the countries that got away last time.",
+    "survivalTitle": "Survival",
+    "survivalDescription": "Keep playing until you lose all 3 lives.",
+    "quickTitle": "Quick challenge",
+    "quickDescription": "A short round for any break.",
+    "perfectTitle": "Perfect challenge",
+    "perfectDescription": "Try to finish 10 questions without a single miss.",
+    "questionTypeChoice": "Multiple choice",
+    "questionTypeTyping": "Typing",
+    "durationUntilLives": "Until you run out of lives",
+    "bestScore": "Best: {{score}}",
     "start": "Start challenge"
   },
   "typing": {

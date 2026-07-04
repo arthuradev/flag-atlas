@@ -31,8 +31,7 @@ const CONTINENT_EXPLORERS: AchievementDefinition[] = CONTINENTS.map((continent) 
     id: `explorer${capitalized}`,
     category: "continent",
     emoji: continent.emoji,
-    isUnlocked: ({ progress }) =>
-      countLearnedCountriesIn(progress, continent.countryIds) >= target,
+    isUnlocked: ({ progress }) => countLearnedCountriesIn(progress, continent.countryIds) >= target,
     getProgress: (progress) =>
       cappedProgress(countLearnedCountriesIn(progress, continent.countryIds), target),
   };
@@ -126,8 +125,7 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
     category: "survival",
     emoji: "🛡️",
     isUnlocked: ({ progress }) => progress.survival.bestScore >= SURVIVOR_TARGET_SCORE,
-    getProgress: (progress) =>
-      cappedProgress(progress.survival.bestScore, SURVIVOR_TARGET_SCORE),
+    getProgress: (progress) => cappedProgress(progress.survival.bestScore, SURVIVOR_TARGET_SCORE),
   },
 ];
 
