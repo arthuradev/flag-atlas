@@ -88,7 +88,11 @@ export function ChallengesPage() {
     <PageShell title={t("challenges.title")} backTo="/home">
       <div className="grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2">
         {challenges.map((challenge) => (
-          <Card key={challenge.titleKey} className="flex flex-col gap-3">
+          <Card
+            key={challenge.titleKey}
+            data-testid="challenge-card"
+            className="flex flex-col gap-3"
+          >
             <div className="flex items-center gap-3">
               <span className="text-3xl" aria-hidden="true">
                 {challenge.emoji}
