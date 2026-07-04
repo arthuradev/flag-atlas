@@ -1,8 +1,11 @@
 import { motion } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
+import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
+import { flagFrameClass } from "@/features/cosmetics/logic/flagFrames";
+import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { OptionButton } from "@/features/training/components/OptionButton";
 import { TypedAnswerForm } from "@/features/training/components/TypedAnswerForm";
@@ -26,6 +29,8 @@ export function TrainingPage() {
   const navigate = useNavigate();
   const locale = useSettingsStore((state) => state.locale);
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
+  const flagFrameId = useEquippedId("flagFrame");
+  const [effectKey, setEffectKey] = useState(0);
   const { session, feedback, sessionXp, currentStreak, summary } = useSessionStore();
   const startSession = useSessionStore((state) => state.startSession);
   const answerCurrentQuestion = useSessionStore((state) => state.answerCurrentQuestion);
@@ -62,6 +67,13 @@ export function TrainingPage() {
   useEffect(() => {
     if (feedback) {
       playSound(feedback.isCorrect ? "success" : "error");
+    }
+  }, [feedback]);
+
+  // Efeito visual cosmético no acerto (sutil e opcional, respeita reduced motion).
+  useEffect(() => {
+    if (feedback?.isCorrect) {
+      setEffectKey((key) => key + 1);
     }
   }, [feedback]);
 
@@ -176,13 +188,16 @@ export function TrainingPage() {
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="flex flex-col gap-4 sm:gap-6"
         >
-          <Card className="mx-auto flex h-52 w-full max-w-3xl items-center justify-center bg-surface-raised p-4 sm:h-72 sm:p-6 lg:h-[29rem]">
+          <Card
+            className={`relative mx-auto flex h-52 w-full max-w-3xl items-center justify-center bg-surface-raised p-4 sm:h-72 sm:p-6 lg:h-[29rem] ${flagFrameClass(flagFrameId)}`}
+          >
             <FlagImage
               key={question.countryId}
               flagPath={country.flagPath}
               alt={t("training.flagAlt")}
               className="max-h-full max-w-full rounded-lg object-contain shadow-md"
             />
+            <VisualEffectBurst playKey={effectKey} className="rounded-3xl" />
           </Card>
 
           {isTyping ? (

@@ -44,6 +44,124 @@
   color-scheme: dark;
 }
 
+/* ── Temas cosméticos da Versão 4 ──────────────────────────────────────────
+   Puramente estéticos: só trocam a paleta de CSS Variables, nunca o layout
+   nem a legibilidade. Locais, sem imagens externas, funcionam offline. */
+
+[data-theme="mapa-antigo"] {
+  /* Mapa Antigo — pergaminho sépia, claro e aconchegante */
+  --fa-background: #efe6d2;
+  --fa-surface: #f7f0e0;
+  --fa-surface-raised: #fbf6ea;
+  --fa-text: #4a3826;
+  --fa-text-muted: #8a745a;
+  --fa-primary: #9a6b3f;
+  --fa-primary-foreground: #fff8ec;
+  --fa-success: #4d7c2f;
+  --fa-warning: #b45309;
+  --fa-danger: #b23a2e;
+  --fa-border: #d8c6a5;
+  --fa-ring: #9a6b3f;
+  --fa-progress: #b8863b;
+
+  color-scheme: light;
+}
+
+[data-theme="neon"] {
+  /* Neon Atlas — escuro com acentos vivos */
+  --fa-background: #0a0a16;
+  --fa-surface: #14142a;
+  --fa-surface-raised: #1d1d3d;
+  --fa-text: #eef0ff;
+  --fa-text-muted: #9aa0d0;
+  --fa-primary: #ff3fbf;
+  --fa-primary-foreground: #10001a;
+  --fa-success: #39ff88;
+  --fa-warning: #ffd23f;
+  --fa-danger: #ff5470;
+  --fa-border: #33336a;
+  --fa-ring: #ff5ccd;
+  --fa-progress: #22d3ee;
+
+  color-scheme: dark;
+}
+
+[data-theme="oceano"] {
+  /* Oceano — azul profundo e calmo */
+  --fa-background: #06283d;
+  --fa-surface: #0b3a56;
+  --fa-surface-raised: #114b6e;
+  --fa-text: #e6f4fb;
+  --fa-text-muted: #9cc4da;
+  --fa-primary: #2ec7c7;
+  --fa-primary-foreground: #04222f;
+  --fa-success: #4ade80;
+  --fa-warning: #fbbf24;
+  --fa-danger: #f87171;
+  --fa-border: #1c5a7e;
+  --fa-ring: #38d6d6;
+  --fa-progress: #38bdf8;
+
+  color-scheme: dark;
+}
+
+[data-theme="espaco"] {
+  /* Espaço — noite estrelada, índigo profundo */
+  --fa-background: #070713;
+  --fa-surface: #12122a;
+  --fa-surface-raised: #1b1b3a;
+  --fa-text: #e9e9ff;
+  --fa-text-muted: #9a9ac8;
+  --fa-primary: #8b7bff;
+  --fa-primary-foreground: #0a0620;
+  --fa-success: #5eead4;
+  --fa-warning: #fcd34d;
+  --fa-danger: #fb7185;
+  --fa-border: #2b2b52;
+  --fa-ring: #a99bff;
+  --fa-progress: #a78bfa;
+
+  color-scheme: dark;
+}
+
+[data-theme="biblioteca"] {
+  /* Biblioteca — madeira e creme, claro e sóbrio */
+  --fa-background: #ece3d4;
+  --fa-surface: #f5efe3;
+  --fa-surface-raised: #fbf7ee;
+  --fa-text: #3a2f25;
+  --fa-text-muted: #7b6b57;
+  --fa-primary: #7a5230;
+  --fa-primary-foreground: #fdf6ea;
+  --fa-success: #4d7c2f;
+  --fa-warning: #a86523;
+  --fa-danger: #a83a2e;
+  --fa-border: #d5c6ab;
+  --fa-ring: #7a5230;
+  --fa-progress: #a97b45;
+
+  color-scheme: light;
+}
+
+[data-theme="minimalista"] {
+  /* Minimalista — tons neutros, muito contraste, sem distração */
+  --fa-background: #f6f6f7;
+  --fa-surface: #ffffff;
+  --fa-surface-raised: #ffffff;
+  --fa-text: #1a1a1a;
+  --fa-text-muted: #6b6b6b;
+  --fa-primary: #2b2b2b;
+  --fa-primary-foreground: #ffffff;
+  --fa-success: #2e7d32;
+  --fa-warning: #b26a00;
+  --fa-danger: #c62828;
+  --fa-border: #e2e2e4;
+  --fa-ring: #2b2b2b;
+  --fa-progress: #4b4b4b;
+
+  color-scheme: light;
+}
+
 @theme inline {
   --color-background: var(--fa-background);
   --color-surface: var(--fa-surface);

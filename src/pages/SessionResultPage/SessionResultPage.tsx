@@ -1,9 +1,11 @@
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import { countSeenCountries } from "@/entities/progress/progress.selectors";
+import { Mascot } from "@/features/cosmetics/components/Mascot";
+import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
@@ -45,6 +47,8 @@ export function SessionResultPage() {
   // Congelado no mount: iniciar "mais uma" limpa o summary do store e esta
   // página não deve redirecionar para a Home durante a transição de rota.
   const [summary] = useState(storeSummary);
+  // Dispara o efeito visual cosmético uma vez ao abrir o resumo.
+  const [effectKey] = useState(1);
 
   useEffect(() => {
     if (summary) {
@@ -86,7 +90,8 @@ export function SessionResultPage() {
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-5 px-4 py-8"
     >
-      <header className="text-center">
+      <header className="relative text-center">
+        <VisualEffectBurst playKey={effectKey} className="-top-8 h-40" />
         <motion.p
           initial={{ scale: 0.4, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -96,6 +101,7 @@ export function SessionResultPage() {
         >
           {isSurvival ? "🛡️" : "🎉"}
         </motion.p>
+        <Mascot size="sm" className="ml-2 align-middle" />
         <h1 className="mt-2 text-3xl font-extrabold">
           {t(isSurvival ? "survival.resultTitle" : "result.title")}
         </h1>
@@ -130,6 +136,15 @@ export function SessionResultPage() {
         <span>❌ {t("result.wrong", { count: summary.wrongCount })}</span>
         <span>🔥 {t("result.bestStreak", { count: summary.bestStreak })}</span>
         <span className="text-warning">⭐ {t("result.xpEarned", { xp: summary.xpEarned })}</span>
+        {summary.coinsEarned > 0 && (
+          <span
+            className="col-span-2 inline-flex items-center gap-1 text-warning"
+            data-testid="result-coins"
+          >
+            <span aria-hidden="true">🪙</span>{" "}
+            {t("result.coinsEarned", { count: summary.coinsEarned })}
+          </span>
+        )}
         <span className="col-span-2 text-sm font-semibold text-text-muted">
           {t("result.accuracy", { percent: summary.accuracy })}
         </span>
@@ -199,6 +214,12 @@ export function SessionResultPage() {
         <Button variant="secondary" size="lg" fullWidth onClick={handleBackHome}>
           {t("common.backToHome")}
         </Button>
+        <Link
+          to="/shop"
+          className="text-center text-sm font-bold text-text-muted underline-offset-2 transition hover:text-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          🛍️ {t("shop.visitShort")}
+        </Link>
       </div>
     </motion.div>
   );

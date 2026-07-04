@@ -33,6 +33,7 @@
     "challenges": "Desafios",
     "stats": "Estatísticas",
     "achievements": "Conquistas",
+    "shop": "Loja",
     "level": "Nível {{level}}",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Progresso do nível"
@@ -196,6 +197,7 @@
     "wrong_one": "{{count}} erro",
     "bestStreak": "Melhor sequência: {{count}}",
     "xpEarned": "+{{xp}} XP",
+    "coinsEarned": "+{{count}} Moedas Atlas",
     "accuracy": "Precisão: {{percent}}%",
     "promoted": "Evoluíram",
     "toReview": "Para revisar",
@@ -243,6 +245,9 @@
     "resetConfirmAction": "Sim, resetar",
     "resetDone": "Progresso resetado.",
     "about": "Sobre",
+    "customization": "Personalização",
+    "customizationBody": "Temas, sons, molduras, mascotes e efeitos ficam na Loja.",
+    "openShop": "Abrir loja",
     "flagAttribution": "Imagens de bandeiras obtidas do Flagpedia.net (domínio público)."
   },
   "challenges": {
@@ -300,5 +305,151 @@
     "learned": "Aprendido",
     "dominated": "Dominado",
     "master": "Mestre"
+  },
+  "shop": {
+    "title": "Loja",
+    "tagline": "Personalize sua jornada",
+    "subtitle": "Itens cosméticos para deixar o Flag Atlas com a sua cara.",
+    "noRealMoney": "Sem dinheiro real",
+    "cosmeticOnly": "Apenas cosmético",
+    "visitShort": "Ver loja"
+  },
+  "cosmetics": {
+    "coinsName": "Moedas Atlas",
+    "free": "Grátis",
+    "owned": "Adquirido",
+    "equipped": "Equipado",
+    "equip": "Equipar",
+    "buy": "Comprar",
+    "insufficient": "Moedas insuficientes",
+    "purchased": "Compra realizada",
+    "itemEquipped": "Item equipado",
+    "categories": {
+      "theme": "Temas",
+      "soundPack": "Sons",
+      "flagFrame": "Molduras",
+      "mascot": "Mascotes",
+      "visualEffect": "Efeitos"
+    },
+    "rarity": {
+      "common": "Comum",
+      "rare": "Raro",
+      "epic": "Épico",
+      "legendary": "Lendário"
+    },
+    "items": {
+      "theme-default": {
+        "name": "Padrão",
+        "description": "Segue o tema claro/escuro das configurações."
+      },
+      "theme-mapa-antigo": {
+        "name": "Mapa Antigo",
+        "description": "Tons de pergaminho e sépia, como um atlas clássico."
+      },
+      "theme-neon": {
+        "name": "Neon Atlas",
+        "description": "Escuro com acentos neon vibrantes."
+      },
+      "theme-oceano": {
+        "name": "Oceano",
+        "description": "Azuis profundos e calmos do mar aberto."
+      },
+      "theme-espaco": {
+        "name": "Espaço",
+        "description": "Noite estrelada em tons de índigo."
+      },
+      "theme-biblioteca": {
+        "name": "Biblioteca",
+        "description": "Madeira e creme, silencioso e aconchegante."
+      },
+      "theme-minimalista": {
+        "name": "Minimalista",
+        "description": "Neutro e limpo, sem distrações."
+      },
+      "sound-default": {
+        "name": "Padrão",
+        "description": "Os sons originais do Flag Atlas."
+      },
+      "sound-silent": {
+        "name": "Silencioso",
+        "description": "Sem efeitos sonoros."
+      },
+      "sound-suave": {
+        "name": "Suave",
+        "description": "Sons delicados e discretos."
+      },
+      "sound-arcade": {
+        "name": "Arcade",
+        "description": "Bipes alegres de fliperama."
+      },
+      "sound-digital": {
+        "name": "Digital",
+        "description": "Sons eletrônicos e modernos."
+      },
+      "frame-default": {
+        "name": "Padrão",
+        "description": "Sem moldura extra na bandeira."
+      },
+      "frame-atlas": {
+        "name": "Atlas",
+        "description": "Um anel elegante ao redor da bandeira."
+      },
+      "frame-madeira": {
+        "name": "Madeira",
+        "description": "Borda de madeira, como um mapa antigo."
+      },
+      "frame-neon": {
+        "name": "Neon",
+        "description": "Contorno com brilho neon."
+      },
+      "frame-oceano": {
+        "name": "Oceano",
+        "description": "Borda azul com brilho marinho."
+      },
+      "frame-biblioteca": {
+        "name": "Biblioteca",
+        "description": "Moldura dupla em tom sépia."
+      },
+      "mascot-none": {
+        "name": "Nenhum",
+        "description": "Sem mascote."
+      },
+      "mascot-globe": {
+        "name": "Globo",
+        "description": "Um globo amigável te acompanha."
+      },
+      "mascot-compass": {
+        "name": "Bússola",
+        "description": "Uma bússola sempre apontando adiante."
+      },
+      "mascot-owl": {
+        "name": "Corujinha Atlas",
+        "description": "A sábia corujinha do Flag Atlas."
+      },
+      "mascot-rocket": {
+        "name": "Foguetinho",
+        "description": "Um foguetinho pronto para explorar."
+      },
+      "effect-none": {
+        "name": "Nenhum",
+        "description": "Sem efeitos visuais."
+      },
+      "effect-glow": {
+        "name": "Brilho suave",
+        "description": "Um brilho gentil nos acertos."
+      },
+      "effect-confetti": {
+        "name": "Confete leve",
+        "description": "Um confete discreto ao acertar."
+      },
+      "effect-neon-pulse": {
+        "name": "Pulso neon",
+        "description": "Um pulso neon rápido."
+      },
+      "effect-stars": {
+        "name": "Estrelas discretas",
+        "description": "Estrelinhas cintilantes."
+      }
+    }
   }
 }

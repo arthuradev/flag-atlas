@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { SESSION_SIZES } from "@/entities/settings/settings.types";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { OptionGroup } from "@/features/settings/components/OptionGroup";
@@ -54,6 +55,19 @@ export function SettingsPage() {
             value={settings.theme}
             onChange={settings.setTheme}
           />
+        </Card>
+
+        <Card className="flex flex-col gap-3">
+          <div>
+            <p className="font-bold">{t("settings.customization")}</p>
+            <p className="text-sm text-text-muted">{t("settings.customizationBody")}</p>
+          </div>
+          <Link
+            to="/shop"
+            className="inline-flex min-h-12 items-center justify-center gap-2 self-start rounded-2xl border border-border bg-surface px-5 font-bold transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            🛍️ {t("settings.openShop")}
+          </Link>
         </Card>
 
         <Card className="flex flex-col gap-4">

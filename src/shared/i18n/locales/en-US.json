@@ -33,6 +33,7 @@
     "challenges": "Challenges",
     "stats": "Statistics",
     "achievements": "Achievements",
+    "shop": "Shop",
     "level": "Level {{level}}",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Level progress"
@@ -196,6 +197,7 @@
     "wrong_one": "{{count}} miss",
     "bestStreak": "Best streak: {{count}}",
     "xpEarned": "+{{xp}} XP",
+    "coinsEarned": "+{{count}} Atlas Coins",
     "accuracy": "Accuracy: {{percent}}%",
     "promoted": "Leveled up",
     "toReview": "To review",
@@ -243,6 +245,9 @@
     "resetConfirmAction": "Yes, reset",
     "resetDone": "Progress reset.",
     "about": "About",
+    "customization": "Customization",
+    "customizationBody": "Themes, sounds, frames, mascots and effects live in the Shop.",
+    "openShop": "Open shop",
     "flagAttribution": "Flag images sourced from Flagpedia.net (public domain)."
   },
   "challenges": {
@@ -300,5 +305,151 @@
     "learned": "Learned",
     "dominated": "Expert",
     "master": "Master"
+  },
+  "shop": {
+    "title": "Shop",
+    "tagline": "Personalize your journey",
+    "subtitle": "Cosmetic items to make Flag Atlas your own.",
+    "noRealMoney": "No real money",
+    "cosmeticOnly": "Cosmetic only",
+    "visitShort": "Visit shop"
+  },
+  "cosmetics": {
+    "coinsName": "Atlas Coins",
+    "free": "Free",
+    "owned": "Owned",
+    "equipped": "Equipped",
+    "equip": "Equip",
+    "buy": "Buy",
+    "insufficient": "Not enough coins",
+    "purchased": "Purchase complete",
+    "itemEquipped": "Item equipped",
+    "categories": {
+      "theme": "Themes",
+      "soundPack": "Sounds",
+      "flagFrame": "Frames",
+      "mascot": "Mascots",
+      "visualEffect": "Effects"
+    },
+    "rarity": {
+      "common": "Common",
+      "rare": "Rare",
+      "epic": "Epic",
+      "legendary": "Legendary"
+    },
+    "items": {
+      "theme-default": {
+        "name": "Default",
+        "description": "Follows the light/dark theme from settings."
+      },
+      "theme-mapa-antigo": {
+        "name": "Old Map",
+        "description": "Parchment and sepia tones, like a classic atlas."
+      },
+      "theme-neon": {
+        "name": "Neon Atlas",
+        "description": "Dark with vibrant neon accents."
+      },
+      "theme-oceano": {
+        "name": "Ocean",
+        "description": "Deep, calm blues of the open sea."
+      },
+      "theme-espaco": {
+        "name": "Space",
+        "description": "Starry night in indigo tones."
+      },
+      "theme-biblioteca": {
+        "name": "Library",
+        "description": "Wood and cream, quiet and cozy."
+      },
+      "theme-minimalista": {
+        "name": "Minimalist",
+        "description": "Neutral and clean, no distractions."
+      },
+      "sound-default": {
+        "name": "Default",
+        "description": "The original Flag Atlas sounds."
+      },
+      "sound-silent": {
+        "name": "Silent",
+        "description": "No sound effects."
+      },
+      "sound-suave": {
+        "name": "Soft",
+        "description": "Gentle, understated sounds."
+      },
+      "sound-arcade": {
+        "name": "Arcade",
+        "description": "Cheerful arcade beeps."
+      },
+      "sound-digital": {
+        "name": "Digital",
+        "description": "Modern electronic sounds."
+      },
+      "frame-default": {
+        "name": "Default",
+        "description": "No extra frame around the flag."
+      },
+      "frame-atlas": {
+        "name": "Atlas",
+        "description": "An elegant ring around the flag."
+      },
+      "frame-madeira": {
+        "name": "Wood",
+        "description": "A wooden border, like an old map."
+      },
+      "frame-neon": {
+        "name": "Neon",
+        "description": "A glowing neon outline."
+      },
+      "frame-oceano": {
+        "name": "Ocean",
+        "description": "A blue border with a marine glow."
+      },
+      "frame-biblioteca": {
+        "name": "Library",
+        "description": "A double sepia-toned frame."
+      },
+      "mascot-none": {
+        "name": "None",
+        "description": "No mascot."
+      },
+      "mascot-globe": {
+        "name": "Globe",
+        "description": "A friendly globe tags along."
+      },
+      "mascot-compass": {
+        "name": "Compass",
+        "description": "A compass always pointing ahead."
+      },
+      "mascot-owl": {
+        "name": "Atlas Owl",
+        "description": "The wise Flag Atlas owl."
+      },
+      "mascot-rocket": {
+        "name": "Little Rocket",
+        "description": "A little rocket ready to explore."
+      },
+      "effect-none": {
+        "name": "None",
+        "description": "No visual effects."
+      },
+      "effect-glow": {
+        "name": "Soft Glow",
+        "description": "A gentle glow on correct answers."
+      },
+      "effect-confetti": {
+        "name": "Light Confetti",
+        "description": "A subtle confetti on a correct answer."
+      },
+      "effect-neon-pulse": {
+        "name": "Neon Pulse",
+        "description": "A quick neon pulse."
+      },
+      "effect-stars": {
+        "name": "Subtle Stars",
+        "description": "Little twinkling stars."
+      }
+    }
   }
 }
