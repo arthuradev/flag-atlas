@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { getCountryById } from "@/entities/country/country.selectors";
 import { useProgressStore } from "@/features/progress/store/progressStore";
+import { normalizeAnswer } from "@/features/training/logic/answerNormalization";
 import { useSessionStore } from "./sessionStore";
 
 function currentCountry() {
@@ -48,7 +49,11 @@ describe("sessionStore typing mode", () => {
     useSessionStore.getState().answerCurrentQuestionTyped(`  ${alias.toUpperCase()}  `);
     const { feedback, session } = useSessionStore.getState();
     expect(feedback?.isCorrect).toBe(true);
-    expect(session?.answers[0]?.acceptedAnswerUsed).toBe(alias);
+    // Nomes distintos podem normalizar igual (ex.: Zâmbia/Zambia): o match
+    // devolve o primeiro aceito, então a comparação é pela forma normalizada.
+    expect(normalizeAnswer(session?.answers[0]?.acceptedAnswerUsed ?? "")).toBe(
+      normalizeAnswer(alias),
+    );
   });
 
   it("marks the country for review on a wrong typed answer", () => {
