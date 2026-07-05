@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { getCountryById } from "@/entities/country/country.selectors";
+import { useMissionsStore } from "@/features/missions/store/missionsStore";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { normalizeAnswer } from "@/features/training/logic/answerNormalization";
 import { getSurvivalLivesRemaining } from "@/features/training/logic/survival";
@@ -25,6 +26,7 @@ describe("sessionStore typing mode", () => {
   beforeEach(() => {
     useSessionStore.getState().clearSession();
     useProgressStore.getState().resetProgress();
+    useMissionsStore.getState().resetMissions();
     useSessionStore.getState().startSession({ mode: "continue", questionType: "typing", size: 5 });
   });
 
@@ -80,6 +82,7 @@ describe("sessionStore similar mode", () => {
   beforeEach(() => {
     useSessionStore.getState().clearSession();
     useProgressStore.getState().resetProgress();
+    useMissionsStore.getState().resetMissions();
     useSessionStore.getState().startSession({ mode: "similar", questionType: "choice", size: 10 });
   });
 
@@ -97,6 +100,7 @@ describe("sessionStore survival mode", () => {
   beforeEach(() => {
     useSessionStore.getState().clearSession();
     useProgressStore.getState().resetProgress();
+    useMissionsStore.getState().resetMissions();
     useSessionStore.getState().startSession({
       mode: "survival",
       questionType: "choice",
@@ -193,6 +197,7 @@ describe("sessionStore normal flow with v3 summary", () => {
   beforeEach(() => {
     useSessionStore.getState().clearSession();
     useProgressStore.getState().resetProgress();
+    useMissionsStore.getState().resetMissions();
     useSessionStore.getState().startSession({ mode: "continue", questionType: "choice", size: 5 });
   });
 
@@ -213,6 +218,12 @@ describe("sessionStore normal flow with v3 summary", () => {
     expect(summary?.unlockedAchievementIds).toContain("firstSteps");
     // 5/5 em sessão de 5 perguntas também rende a conquista de precisão.
     expect(summary?.unlockedAchievementIds).toContain("flawless");
+    expect(summary?.xpEarned).toBe(
+      (summary?.answerXpEarned ?? 0) + (summary?.missionXpEarned ?? 0),
+    );
+    expect(summary?.baseAnswerXpEarned).toBe(50);
+    expect(summary?.missionXpEarned).toBeGreaterThanOrEqual(10);
+    expect(useProgressStore.getState().progress.totalXp).toBe(summary?.xpEarned);
   });
 });
 
@@ -220,6 +231,7 @@ describe("sessionStore choice mode confusion tracking", () => {
   beforeEach(() => {
     useSessionStore.getState().clearSession();
     useProgressStore.getState().resetProgress();
+    useMissionsStore.getState().resetMissions();
     useSessionStore.getState().startSession({ mode: "continue", questionType: "choice", size: 5 });
   });
 

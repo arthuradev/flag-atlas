@@ -16,7 +16,7 @@ import type {
 import { computeAchievementCoins } from "@/features/cosmetics/logic/coinRewards";
 import { useMissionsStore } from "@/features/missions/store/missionsStore";
 import { applyAnswerToCountryProgress } from "@/features/progress/logic/mastery";
-import { computeAnswerXp, computeLevel } from "@/features/progress/logic/xp";
+import { computeAnswerXp, computeLevel, XP_PER_CORRECT } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { matchTypedAnswer, normalizeAnswer } from "@/features/training/logic/answerNormalization";
 import { generateOptions, generateSimilarOptions } from "@/features/training/logic/generateOptions";
@@ -58,6 +58,7 @@ type SessionState = {
   session: TrainingSession | null;
   feedback: AnswerFeedback | null;
   sessionXp: number;
+  missionXpDuringSession: number;
   currentStreak: number;
   bestStreak: number;
   summary: SessionSummary | null;
@@ -151,7 +152,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     const xpGained = computeAnswerXp({ isCorrect: input.isCorrect, promoted, streakAfter });
 
     const unlockedByAnswer = progressStore.registerAnswer(next, xpGained, answeredAt);
-    useMissionsStore.getState().recordAnswer(
+    const missionReward = useMissionsStore.getState().recordAnswer(
       {
         isCorrect: input.isCorrect,
         mode: session.config.mode,
@@ -200,11 +201,14 @@ export const useSessionStore = create<SessionState>((set, get) => {
         ...(input.typedAnswer !== undefined && { typedAnswer: input.typedAnswer }),
       },
       sessionXp: sessionXp + xpGained,
+      missionXpDuringSession: get().missionXpDuringSession + missionReward.xpEarned,
       currentStreak: streakAfter,
       bestStreak: Math.max(bestStreak, streakAfter),
       unlockedDuringSession: [...get().unlockedDuringSession, ...unlockedByAnswer],
       coinsDuringSession:
-        get().coinsDuringSession + computeAchievementCoins(unlockedByAnswer.length),
+        get().coinsDuringSession +
+        computeAchievementCoins(unlockedByAnswer.length) +
+        missionReward.coinsEarned,
     });
   };
 
@@ -212,6 +216,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     session: null,
     feedback: null,
     sessionXp: 0,
+    missionXpDuringSession: 0,
     currentStreak: 0,
     bestStreak: 0,
     summary: null,
@@ -238,6 +243,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         },
         feedback: null,
         sessionXp: 0,
+        missionXpDuringSession: 0,
         currentStreak: 0,
         bestStreak: 0,
         summary: null,
@@ -285,7 +291,14 @@ export const useSessionStore = create<SessionState>((set, get) => {
     },
 
     advance: () => {
-      const { session, sessionXp, bestStreak, unlockedDuringSession, coinsDuringSession } = get();
+      const {
+        session,
+        sessionXp,
+        missionXpDuringSession,
+        bestStreak,
+        unlockedDuringSession,
+        coinsDuringSession,
+      } = get();
       if (!session) {
         return;
       }
@@ -316,7 +329,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         accuracy,
         bestStreak,
       });
-      useMissionsStore.getState().recordSessionCompleted(
+      const missionCompletionReward = useMissionsStore.getState().recordSessionCompleted(
         {
           mode: session.config.mode,
           questionType: session.config.questionType,
@@ -327,6 +340,10 @@ export const useSessionStore = create<SessionState>((set, get) => {
       );
       // XP de missão entra depois: o nível do resumo vem do progresso final.
       const progress = useProgressStore.getState().progress;
+      const missionXpEarned = missionXpDuringSession + missionCompletionReward.xpEarned;
+      const totalXpEarned = sessionXp + missionXpEarned;
+      const baseAnswerXpEarned = correctCount * XP_PER_CORRECT;
+      const answerBonusXpEarned = Math.max(0, sessionXp - baseAnswerXpEarned);
 
       const promotions: MasteryPromotion[] = session.answers
         .filter((answer) => answer.isCorrect && answer.masteryAfter !== answer.masteryBefore)
@@ -348,11 +365,12 @@ export const useSessionStore = create<SessionState>((set, get) => {
             .map((answer) => answer.countryId),
         ),
       ];
-      const xpBefore = progress.totalXp - sessionXp;
+      const xpBefore = Math.max(0, progress.totalXp - totalXpEarned);
 
       set({
         session: null,
         feedback: null,
+        missionXpDuringSession: 0,
         unlockedDuringSession: [],
         coinsDuringSession: 0,
         summary: {
@@ -361,7 +379,11 @@ export const useSessionStore = create<SessionState>((set, get) => {
           wrongCount,
           accuracy,
           bestStreak,
-          xpEarned: sessionXp,
+          xpEarned: totalXpEarned,
+          answerXpEarned: sessionXp,
+          baseAnswerXpEarned,
+          answerBonusXpEarned,
+          missionXpEarned,
           promotions,
           toReviewCountryIds,
           levelBefore: computeLevel(xpBefore),
@@ -369,7 +391,8 @@ export const useSessionStore = create<SessionState>((set, get) => {
           unlockedAchievementIds: [
             ...new Set([...unlockedDuringSession, ...completion.unlockedAchievementIds]),
           ],
-          coinsEarned: coinsDuringSession + completion.coinsEarned,
+          coinsEarned:
+            coinsDuringSession + completion.coinsEarned + missionCompletionReward.coinsEarned,
           dailyStreak: {
             current: completion.dailyStreak.streak.currentStreak,
             countedToday: completion.dailyStreak.countedToday,
@@ -386,6 +409,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         session: null,
         feedback: null,
         sessionXp: 0,
+        missionXpDuringSession: 0,
         currentStreak: 0,
         bestStreak: 0,
         summary: null,

@@ -77,7 +77,16 @@ export type SessionSummary = {
   wrongCount: number;
   accuracy: number;
   bestStreak: number;
+  /** XP total realmente adicionado ao progresso durante a sessÃ£o. */
   xpEarned: number;
+  /** XP vindo das respostas, incluindo bÃ´nus de sequÃªncia e promoÃ§Ã£o. */
+  answerXpEarned: number;
+  /** Parte do XP de respostas que veio do valor base por acerto. */
+  baseAnswerXpEarned: number;
+  /** Parte do XP de respostas que veio de sequÃªncia ou promoÃ§Ã£o de domÃ­nio. */
+  answerBonusXpEarned: number;
+  /** XP concedido por missÃµes concluÃ­das durante ou ao fechar a sessÃ£o. */
+  missionXpEarned: number;
   promotions: MasteryPromotion[];
   toReviewCountryIds: string[];
   levelBefore: number;

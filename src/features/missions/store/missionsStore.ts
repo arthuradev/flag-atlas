@@ -13,12 +13,18 @@ import { useProgressStore } from "@/features/progress/store/progressStore";
 import { loadDailyMissions, saveDailyMissions } from "@/shared/storage/missionsRepository";
 import { getLocalDateKey } from "@/shared/utils/dateKey";
 
+export type MissionRewardResult = {
+  completedMissionIds: string[];
+  xpEarned: number;
+  coinsEarned: number;
+};
+
 type MissionsState = {
   missions: DailyMissionsState;
   /** Garante que o estado pertence ao dia atual (renova na virada do dia). */
   refreshForToday: () => void;
-  recordAnswer: (event: MissionAnswerEvent, answeredAt: string) => void;
-  recordSessionCompleted: (event: MissionSessionEvent, completedAt: string) => void;
+  recordAnswer: (event: MissionAnswerEvent, answeredAt: string) => MissionRewardResult;
+  recordSessionCompleted: (event: MissionSessionEvent, completedAt: string) => MissionRewardResult;
   resetMissions: () => void;
 };
 
@@ -34,7 +40,9 @@ function missionsForToday(): DailyMissionsState {
 }
 
 export const useMissionsStore = create<MissionsState>((set, get) => {
-  const applyUpdate = (recipe: (state: DailyMissionsState) => DailyMissionsState["missions"]) => {
+  const applyUpdate = (
+    recipe: (state: DailyMissionsState) => DailyMissionsState["missions"],
+  ): MissionRewardResult => {
     // Sempre parte do dia atual: uma sessão que atravessa a meia-noite
     // progride as missões do dia novo, não as de ontem.
     const current = ensureToday();
@@ -53,6 +61,11 @@ export const useMissionsStore = create<MissionsState>((set, get) => {
     const next: DailyMissionsState = { date: current.date, missions };
     saveDailyMissions(next);
     set({ missions: next });
+    return {
+      completedMissionIds: completedNow.map((mission) => mission.id),
+      xpEarned: rewardXp,
+      coinsEarned: rewardCoins,
+    };
   };
 
   const ensureToday = (): DailyMissionsState => {
@@ -74,11 +87,11 @@ export const useMissionsStore = create<MissionsState>((set, get) => {
     },
 
     recordAnswer: (event, answeredAt) => {
-      applyUpdate((state) => applyAnswerToMissions(state.missions, event, answeredAt));
+      return applyUpdate((state) => applyAnswerToMissions(state.missions, event, answeredAt));
     },
 
     recordSessionCompleted: (event, completedAt) => {
-      applyUpdate((state) => applySessionToMissions(state.missions, event, completedAt));
+      return applyUpdate((state) => applySessionToMissions(state.missions, event, completedAt));
     },
 
     resetMissions: () => {
