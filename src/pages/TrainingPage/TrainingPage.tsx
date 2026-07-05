@@ -140,10 +140,6 @@ export function TrainingPage() {
                   total: SURVIVAL_STARTING_LIVES,
                 })}
               </span>
-              <span aria-hidden="true" className="sr-only">
-                {"❤️".repeat(livesRemaining)}
-                {"🖤".repeat(SURVIVAL_STARTING_LIVES - livesRemaining)}
-              </span>
               {SURVIVAL_LIFE_SLOTS.map((slot, index) => (
                 <Icon
                   key={slot}

@@ -1,3 +1,4 @@
+import type { IconName } from "@/shared/components/Icon";
 import type { Locale } from "@/shared/i18n/locale";
 
 export const CONTINENT_IDS = ["america", "europe", "africa", "asia", "oceania"] as const;
@@ -11,7 +12,7 @@ export function isContinentId(value: unknown): value is ContinentId {
 export type Continent = {
   id: ContinentId;
   names: Record<Locale, string>;
-  emoji: string;
+  icon: IconName;
   order: number;
   countryIds: readonly string[];
 };

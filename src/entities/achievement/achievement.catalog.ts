@@ -35,7 +35,7 @@ const CONTINENT_EXPLORERS: AchievementDefinition[] = CONTINENTS.map((continent) 
   return {
     id: `explorer${capitalized}`,
     category: "continent",
-    emoji: continent.emoji,
+    icon: continent.icon,
     isUnlocked: ({ progress }) => countLearnedCountriesIn(progress, continent.countryIds) >= target,
     getProgress: (progress) =>
       cappedProgress(countLearnedCountriesIn(progress, continent.countryIds), target),
@@ -46,60 +46,60 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
   {
     id: "firstSteps",
     category: "session",
-    emoji: "👣",
+    icon: "footprints",
     isUnlocked: ({ progress }) => progress.completedSessions >= 1,
   },
   {
     id: "earlyExplorer",
     category: "progress",
-    emoji: "🧭",
+    icon: "compass",
     isUnlocked: ({ progress }) => countSeenCountries(progress) >= 25,
     getProgress: (progress) => cappedProgress(countSeenCountries(progress), 25),
   },
   {
     id: "halfWorld",
     category: "progress",
-    emoji: "🌗",
+    icon: "globe-half",
     isUnlocked: ({ progress }) => countSeenCountries(progress) >= 100,
     getProgress: (progress) => cappedProgress(countSeenCountries(progress), 100),
   },
   {
     id: "livingAtlas",
     category: "progress",
-    emoji: "🌍",
+    icon: "globe",
     isUnlocked: ({ progress }) => countSeenCountries(progress) >= COUNTRIES.length,
     getProgress: (progress) => cappedProgress(countSeenCountries(progress), COUNTRIES.length),
   },
   {
     id: "firstMastery",
     category: "mastery",
-    emoji: "🏅",
+    icon: "medal",
     isUnlocked: ({ progress }) => countGoldOrBetter(progress) >= 1,
   },
   {
     id: "collector",
     category: "mastery",
-    emoji: "🎒",
+    icon: "backpack",
     isUnlocked: ({ progress }) => countGoldOrBetter(progress) >= 25,
     getProgress: (progress) => cappedProgress(countGoldOrBetter(progress), 25),
   },
   {
     id: "firstPlatinum",
     category: "mastery",
-    emoji: "💠",
+    icon: "gem",
     isUnlocked: ({ progress }) => countPlatinum(progress) >= 1,
   },
   {
     id: "platinumCollector",
     category: "mastery",
-    emoji: "🔷",
+    icon: "gems",
     isUnlocked: ({ progress }) => countPlatinum(progress) >= 10,
     getProgress: (progress) => cappedProgress(countPlatinum(progress), 10),
   },
   {
     id: "worldMaster",
     category: "mastery",
-    emoji: "👑",
+    icon: "crown",
     isUnlocked: ({ progress }) => countPlatinum(progress) >= COUNTRIES.length,
     getProgress: (progress) => cappedProgress(countPlatinum(progress), COUNTRIES.length),
   },
@@ -107,7 +107,7 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
   {
     id: "flawless",
     category: "accuracy",
-    emoji: "💯",
+    icon: "seal-check",
     isUnlocked: ({ sessionEvent }) =>
       sessionEvent !== undefined &&
       sessionEvent.accuracy === 100 &&
@@ -116,32 +116,32 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
   {
     id: "hotStreak",
     category: "accuracy",
-    emoji: "🔥",
+    icon: "flame",
     isUnlocked: ({ sessionEvent }) =>
       sessionEvent !== undefined && sessionEvent.bestStreak >= HOT_STREAK_TARGET,
   },
   {
     id: "honestReview",
     category: "review",
-    emoji: "🔁",
+    icon: "refresh",
     isUnlocked: ({ sessionEvent }) => sessionEvent?.mode === "review",
   },
   {
     id: "vexillologist",
     category: "challenge",
-    emoji: "🎭",
+    icon: "layers",
     isUnlocked: ({ sessionEvent }) => sessionEvent?.mode === "similar",
   },
   {
     id: "globalTypist",
     category: "challenge",
-    emoji: "⌨️",
+    icon: "keyboard",
     isUnlocked: ({ sessionEvent }) => sessionEvent?.questionType === "typing",
   },
   {
     id: "survivor",
     category: "survival",
-    emoji: "🛡️",
+    icon: "shield",
     isUnlocked: ({ progress }) => progress.survival.bestScore >= SURVIVOR_TARGET_SCORE,
     getProgress: (progress) => cappedProgress(progress.survival.bestScore, SURVIVOR_TARGET_SCORE),
   },

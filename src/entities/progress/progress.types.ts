@@ -62,7 +62,7 @@ export type UserProgress = {
   level: number;
   countries: Record<string, CountryProgress>;
   completedSessions: number;
-  /** Conquista desbloqueada → data ISO do desbloqueio. */
+  /** Conquista desbloqueada -> data ISO do desbloqueio. */
   achievementsUnlocked: Record<string, string>;
   dailyStreak: DailyStreak;
   survival: SurvivalStats;

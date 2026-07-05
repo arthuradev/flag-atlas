@@ -1,5 +1,6 @@
 import type { UserProgress } from "@/entities/progress/progress.types";
 import type { QuestionType, SessionMode } from "@/entities/session/session.types";
+import type { IconName } from "@/shared/components/Icon";
 
 export const ACHIEVEMENT_CATEGORIES = [
   "progress",
@@ -40,7 +41,7 @@ export type AchievementDefinition = {
   /** Também é a base das chaves i18n: achievements.items.<id>.title/.description. */
   id: string;
   category: AchievementCategory;
-  emoji: string;
+  icon: IconName;
   isUnlocked: (context: AchievementContext) => boolean;
   /** Progresso parcial exibível; ausente em conquistas de evento tudo-ou-nada. */
   getProgress?: (progress: UserProgress) => AchievementProgress;
@@ -50,7 +51,7 @@ export type AchievementDefinition = {
 export type AchievementView = {
   id: string;
   category: AchievementCategory;
-  emoji: string;
+  icon: IconName;
   unlocked: boolean;
   unlockedAt?: string;
   progress?: AchievementProgress;

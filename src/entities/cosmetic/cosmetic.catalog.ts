@@ -18,7 +18,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-default.description",
     price: 0,
     rarity: "common",
-    preview: "🌗",
+    icon: "globe-half",
     isDefault: true,
   },
   {
@@ -28,7 +28,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-mapa-antigo.description",
     price: 120,
     rarity: "rare",
-    preview: "🗺️",
+    icon: "map",
   },
   {
     id: "theme-neon",
@@ -37,7 +37,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-neon.description",
     price: 150,
     rarity: "epic",
-    preview: "🌈",
+    icon: "zap",
   },
   {
     id: "theme-oceano",
@@ -46,7 +46,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-oceano.description",
     price: 120,
     rarity: "rare",
-    preview: "🌊",
+    icon: "waves",
   },
   {
     id: "theme-espaco",
@@ -55,7 +55,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-espaco.description",
     price: 150,
     rarity: "epic",
-    preview: "🪐",
+    icon: "planet",
   },
   {
     id: "theme-biblioteca",
@@ -64,7 +64,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-biblioteca.description",
     price: 120,
     rarity: "rare",
-    preview: "📚",
+    icon: "book",
   },
   {
     id: "theme-minimalista",
@@ -73,7 +73,7 @@ const THEMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.theme-minimalista.description",
     price: 100,
     rarity: "common",
-    preview: "◽",
+    icon: "minimal",
   },
 ];
 
@@ -85,7 +85,7 @@ const SOUND_PACKS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.sound-default.description",
     price: 0,
     rarity: "common",
-    preview: "🔊",
+    icon: "volume",
     isDefault: true,
   },
   {
@@ -95,7 +95,7 @@ const SOUND_PACKS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.sound-silent.description",
     price: 0,
     rarity: "common",
-    preview: "🔇",
+    icon: "volume-off",
   },
   {
     id: "sound-suave",
@@ -104,7 +104,7 @@ const SOUND_PACKS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.sound-suave.description",
     price: 80,
     rarity: "common",
-    preview: "🎐",
+    icon: "music",
   },
   {
     id: "sound-arcade",
@@ -113,7 +113,7 @@ const SOUND_PACKS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.sound-arcade.description",
     price: 110,
     rarity: "rare",
-    preview: "🕹️",
+    icon: "gamepad",
   },
   {
     id: "sound-digital",
@@ -122,7 +122,7 @@ const SOUND_PACKS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.sound-digital.description",
     price: 110,
     rarity: "rare",
-    preview: "💾",
+    icon: "waveform",
   },
 ];
 
@@ -134,7 +134,7 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.frame-default.description",
     price: 0,
     rarity: "common",
-    preview: "⬜",
+    icon: "square",
     isDefault: true,
   },
   {
@@ -144,7 +144,7 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.frame-atlas.description",
     price: 90,
     rarity: "common",
-    preview: "🧭",
+    icon: "compass",
   },
   {
     id: "frame-madeira",
@@ -153,7 +153,7 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.frame-madeira.description",
     price: 110,
     rarity: "rare",
-    preview: "🪵",
+    icon: "leaf",
   },
   {
     id: "frame-neon",
@@ -162,7 +162,7 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.frame-neon.description",
     price: 140,
     rarity: "epic",
-    preview: "💡",
+    icon: "zap",
   },
   {
     id: "frame-oceano",
@@ -171,7 +171,7 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.frame-oceano.description",
     price: 110,
     rarity: "rare",
-    preview: "🌊",
+    icon: "waves",
   },
   {
     id: "frame-biblioteca",
@@ -180,7 +180,7 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.frame-biblioteca.description",
     price: 110,
     rarity: "rare",
-    preview: "📖",
+    icon: "book",
   },
 ];
 
@@ -192,7 +192,7 @@ const MASCOTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.mascot-none.description",
     price: 0,
     rarity: "common",
-    preview: "🚫",
+    icon: "ban",
     isDefault: true,
   },
   {
@@ -202,7 +202,7 @@ const MASCOTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.mascot-globe.description",
     price: 100,
     rarity: "common",
-    preview: "🌍",
+    icon: "globe",
   },
   {
     id: "mascot-compass",
@@ -211,7 +211,7 @@ const MASCOTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.mascot-compass.description",
     price: 120,
     rarity: "rare",
-    preview: "🧭",
+    icon: "compass",
   },
   {
     id: "mascot-owl",
@@ -220,7 +220,7 @@ const MASCOTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.mascot-owl.description",
     price: 160,
     rarity: "epic",
-    preview: "🦉",
+    icon: "owl",
   },
   {
     id: "mascot-rocket",
@@ -229,7 +229,7 @@ const MASCOTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.mascot-rocket.description",
     price: 140,
     rarity: "rare",
-    preview: "🚀",
+    icon: "rocket",
   },
 ];
 
@@ -241,7 +241,7 @@ const VISUAL_EFFECTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.effect-none.description",
     price: 0,
     rarity: "common",
-    preview: "🚫",
+    icon: "ban",
     isDefault: true,
   },
   {
@@ -251,7 +251,7 @@ const VISUAL_EFFECTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.effect-glow.description",
     price: 90,
     rarity: "common",
-    preview: "✨",
+    icon: "sparkles",
   },
   {
     id: "effect-confetti",
@@ -260,7 +260,7 @@ const VISUAL_EFFECTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.effect-confetti.description",
     price: 130,
     rarity: "rare",
-    preview: "🎉",
+    icon: "party",
   },
   {
     id: "effect-neon-pulse",
@@ -269,7 +269,7 @@ const VISUAL_EFFECTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.effect-neon-pulse.description",
     price: 130,
     rarity: "rare",
-    preview: "💗",
+    icon: "activity",
   },
   {
     id: "effect-stars",
@@ -278,7 +278,7 @@ const VISUAL_EFFECTS: readonly CosmeticItem[] = [
     descriptionKey: "cosmetics.items.effect-stars.description",
     price: 110,
     rarity: "common",
-    preview: "⭐",
+    icon: "star",
   },
 ];
 

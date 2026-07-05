@@ -21,7 +21,7 @@ export function listAchievementViews(progress: UserProgress): AchievementView[] 
     return {
       id: achievement.id,
       category: achievement.category,
-      emoji: achievement.emoji,
+      icon: achievement.icon,
       unlocked: unlockedAt !== undefined,
       ...(unlockedAt !== undefined && { unlockedAt }),
       ...(achievement.getProgress && { progress: achievement.getProgress(progress) }),

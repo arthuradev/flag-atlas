@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/shared/components/Button";
+import { Icon } from "@/shared/components/Icon";
 import { type ShareOutcome, shareOrCopyText } from "../logic/shareText";
 
 type ShareResultButtonProps = {
@@ -24,7 +25,8 @@ export function ShareResultButton({ text }: ShareResultButtonProps) {
   return (
     <div className="flex flex-col gap-2">
       <Button variant="secondary" size="lg" fullWidth onClick={handleShare}>
-        📤 {t(canNativeShare ? "share.share" : "share.copy")}
+        <Icon name="share" size={19} />
+        {t(canNativeShare ? "share.share" : "share.copy")}
       </Button>
       <div aria-live="polite">
         {outcome === "copied" && (

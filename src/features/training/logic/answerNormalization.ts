@@ -5,8 +5,8 @@ import type { Country } from "@/entities/country/country.types";
  * minúsculas, sem acentos (NFD + remoção de marcas), pontuação e
  * hífens/apóstrofos viram espaço, espaços colapsados.
  *
- * "São Tomé e Príncipe" → "sao tome e principe"
- * "Côte d'Ivoire"       → "cote d ivoire"
+ * "São Tomé e Príncipe" -> "sao tome e principe"
+ * "Côte d'Ivoire"       -> "cote d ivoire"
  */
 export function normalizeAnswer(text: string): string {
   return text

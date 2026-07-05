@@ -17,6 +17,7 @@ import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
+import { Icon } from "@/shared/components/Icon";
 import { PageShell } from "@/shared/components/PageShell";
 import type { Locale } from "@/shared/i18n/locale";
 
@@ -63,9 +64,9 @@ export function StatsPage() {
     return (
       <PageShell title={t("stats.title")} backTo="/home">
         <div className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center gap-4 text-center">
-          <p className="text-4xl" aria-hidden="true">
-            📊
-          </p>
+          <span className="flex size-16 items-center justify-center rounded-xl2 bg-pine-soft text-primary">
+            <Icon name="chart" size={34} />
+          </span>
           <p className="text-text-muted">{t("stats.empty")}</p>
           <Button
             size="lg"
@@ -174,9 +175,7 @@ export function StatsPage() {
                   className="flex flex-wrap items-center gap-2"
                 >
                   <CountryLabel countryId={entry.countryId} locale={locale} />
-                  <span aria-hidden="true" className="text-text-muted">
-                    →
-                  </span>
+                  <Icon name="arrow-right" size={15} className="text-text-muted" />
                   <span className="sr-only">{t("stats.confusedWith")}</span>
                   <CountryLabel countryId={entry.confusedWithCountryId} locale={locale} />
                   <span className="ml-auto text-sm font-bold text-text-muted">{entry.count}×</span>

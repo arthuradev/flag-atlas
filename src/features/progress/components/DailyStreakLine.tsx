@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { DailyStreak } from "@/entities/progress/progress.types";
 import { getDailyStreakStatus } from "@/features/progress/logic/dailyStreak";
+import { Icon } from "@/shared/components/Icon";
 import { getLocalDateKey } from "@/shared/utils/dateKey";
 
 type DailyStreakLineProps = {
@@ -28,13 +29,19 @@ export function DailyStreakLine({ streak }: DailyStreakLineProps) {
   }
 
   return (
-    <p data-testid="daily-streak" className="text-center text-sm font-bold text-text-muted">
+    <p
+      data-testid="daily-streak"
+      className="flex flex-wrap items-center justify-center gap-x-1.5 text-center text-sm font-bold text-text-muted"
+    >
+      <Icon name="flame" size={16} className="text-danger" />
       {t("streak.days", { count: streak.currentStreak })}
       {status === "activeToday" && (
         <span className="font-semibold"> · {t("streak.countsToday")}</span>
       )}
       {status === "alive" && streak.restDaysAvailable > 0 && (
-        <span className="font-semibold"> · {t("streak.restAvailable")}</span>
+        <span className="inline-flex items-center gap-1 font-semibold">
+          · <Icon name="snowflake" size={15} /> {t("streak.restAvailable")}
+        </span>
       )}
     </p>
   );

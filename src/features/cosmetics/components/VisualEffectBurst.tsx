@@ -6,6 +6,7 @@ import {
 } from "@/features/cosmetics/logic/visualEffects";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
+import { Icon } from "@/shared/components/Icon";
 
 type VisualEffectBurstProps = {
   /** Muda (incrementa) para disparar o efeito uma vez. */
@@ -79,14 +80,14 @@ function EffectLayer({ kind }: { kind: VisualEffectKind }) {
         {STAR_POS.map(([x, y], i) => (
           <motion.span
             key={`${x}-${y}`}
-            className="absolute block text-lg"
+            className="absolute block text-warning"
             style={{ left: `${x}%`, top: `${y}%` }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: [0, 1, 0], scale: [0, 1.1, 0.4] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.9, delay: (i % 4) * 0.08 }}
           >
-            ✨
+            <Icon name="sparkles" size={18} />
           </motion.span>
         ))}
       </>

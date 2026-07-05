@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Icon } from "@/shared/components/Icon";
 import { runDebugCommand } from "./debugCommands";
 
 /**
- * ⚠️ FERRAMENTA DE TESTE TEMPORÁRIA (Versão 4). Console de debug para o
+ * ATENÇÃO: FERRAMENTA DE TESTE TEMPORÁRIA (Versão 4). Console de debug para o
  * desenvolvedor. Abre/fecha com a tecla ` (crase) — ou Ctrl+` dentro de um
  * campo de texto — e Esc fecha. Digite `help` para ver os comandos.
  *
@@ -130,13 +131,14 @@ export function DebugConsole() {
       style={{ backdropFilter: "blur(2px)" }}
     >
       <div className="mb-2 flex items-center justify-between text-emerald-400">
-        <span className="font-bold">⚙️ Debug console (temporário) — `help`</span>
+        <span className="font-bold">Debug console (temporário) — `help`</span>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded px-2 text-emerald-300 hover:bg-emerald-500/20"
+          aria-label="Fechar"
+          className="inline-flex items-center rounded px-2 text-emerald-300 hover:bg-emerald-500/20"
         >
-          ✕
+          <Icon name="x" size={16} />
         </button>
       </div>
       <div

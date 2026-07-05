@@ -9,7 +9,7 @@ export const CONTINENTS: readonly Continent[] = [
       "pt-BR": "América",
       "en-US": "America",
     },
-    emoji: "🌎",
+    icon: "continent-americas",
     order: 1,
     countryIds: [
       "ag",
@@ -55,7 +55,7 @@ export const CONTINENTS: readonly Continent[] = [
       "pt-BR": "Europa",
       "en-US": "Europe",
     },
-    emoji: "🇪🇺",
+    icon: "continent-europe",
     order: 2,
     countryIds: [
       "al",
@@ -110,7 +110,7 @@ export const CONTINENTS: readonly Continent[] = [
       "pt-BR": "África",
       "en-US": "Africa",
     },
-    emoji: "🌍",
+    icon: "continent-africa",
     order: 3,
     countryIds: [
       "ao",
@@ -175,7 +175,7 @@ export const CONTINENTS: readonly Continent[] = [
       "pt-BR": "Ásia",
       "en-US": "Asia",
     },
-    emoji: "🌏",
+    icon: "continent-asia",
     order: 4,
     countryIds: [
       "af",
@@ -234,7 +234,7 @@ export const CONTINENTS: readonly Continent[] = [
       "pt-BR": "Oceania",
       "en-US": "Oceania",
     },
-    emoji: "🌊",
+    icon: "continent-oceania",
     order: 5,
     countryIds: [
       "au",
