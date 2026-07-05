@@ -160,7 +160,7 @@ export type ConfusionStat = {
   count: number;
 };
 
-/** Pares "bandeira certa → país escolhido" mais confundidos. */
+/** Pares "bandeira certa -> país escolhido" mais confundidos. */
 export function listTopConfusions(progress: UserProgress, limit = 5): ConfusionStat[] {
   const pairs: ConfusionStat[] = [];
   for (const country of Object.values(progress.countries)) {

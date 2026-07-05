@@ -18,6 +18,7 @@ import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
+import { Icon } from "@/shared/components/Icon";
 import { COUNTRIES } from "@/shared/data/countries";
 
 function CountryRow({ countryId, detail }: { countryId: string; detail?: ReactNode }) {
@@ -91,15 +92,15 @@ export function SessionResultPage() {
     >
       <header className="relative text-center">
         <VisualEffectBurst playKey={effectKey} className="-top-8 h-40" />
-        <motion.p
+        <motion.div
           initial={{ scale: 0.4, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.1 }}
-          className="text-5xl"
+          className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-pine-soft text-primary"
           aria-hidden="true"
         >
-          {isSurvival ? "🛡️" : "🎉"}
-        </motion.p>
+          <Icon name={isSurvival ? "shield" : "party"} size={38} strokeWidth={1.8} />
+        </motion.div>
         <Mascot size="sm" className="ml-2 align-middle" />
         <h1 className="mt-2 text-3xl font-extrabold">
           {t(isSurvival ? "survival.resultTitle" : "result.title")}
@@ -110,7 +111,10 @@ export function SessionResultPage() {
           </p>
         )}
         {summary.survival?.isNewRecord && (
-          <p className="mt-1 font-bold text-warning">🏆 {t("survival.newRecord")}</p>
+          <p className="mt-1 inline-flex items-center justify-center gap-1.5 font-bold text-warning">
+            <Icon name="trophy" size={18} />
+            {t("survival.newRecord")}
+          </p>
         )}
         {summary.survival && !summary.survival.isNewRecord && summary.survival.previousBest > 0 && (
           <p className="mt-1 text-sm font-semibold text-text-muted">
@@ -131,16 +135,28 @@ export function SessionResultPage() {
       </header>
 
       <Card className="grid grid-cols-2 gap-3 text-lg font-bold">
-        <span>✅ {t("result.correct", { count: summary.correctCount })}</span>
-        <span>❌ {t("result.wrong", { count: summary.wrongCount })}</span>
-        <span>🔥 {t("result.bestStreak", { count: summary.bestStreak })}</span>
-        <span className="text-warning">⭐ {t("result.xpEarned", { xp: summary.xpEarned })}</span>
+        <span className="inline-flex items-center gap-1.5">
+          <Icon name="check-circle" size={20} className="text-success" />
+          {t("result.correct", { count: summary.correctCount })}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Icon name="x-circle" size={20} className="text-danger" />
+          {t("result.wrong", { count: summary.wrongCount })}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Icon name="flame" size={20} className="text-danger" />
+          {t("result.bestStreak", { count: summary.bestStreak })}
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-warning">
+          <Icon name="star" size={20} />
+          {t("result.xpEarned", { xp: summary.xpEarned })}
+        </span>
         {summary.coinsEarned > 0 && (
           <span
-            className="col-span-2 inline-flex items-center gap-1 text-warning"
+            className="col-span-2 inline-flex items-center gap-1.5 text-warning"
             data-testid="result-coins"
           >
-            <span aria-hidden="true">🪙</span>{" "}
+            <Icon name="coin" size={18} />
             {t("result.coinsEarned", { count: summary.coinsEarned })}
           </span>
         )}
@@ -151,7 +167,10 @@ export function SessionResultPage() {
 
       {summary.unlockedAchievementIds.length > 0 && (
         <Card data-testid="result-achievements">
-          <h2 className="mb-2 font-extrabold">🏆 {t("achievements.unlockedTitle")}</h2>
+          <h2 className="mb-2 inline-flex items-center gap-2 font-extrabold">
+            <Icon name="trophy" size={20} className="text-gold" />
+            {t("achievements.unlockedTitle")}
+          </h2>
           <ul className="flex flex-col gap-1.5">
             {summary.unlockedAchievementIds.map((achievementId) => (
               <li key={achievementId} className="flex items-center gap-2">
@@ -178,7 +197,7 @@ export function SessionResultPage() {
                 detail={
                   <span className="flex flex-wrap items-center justify-end gap-1.5">
                     <MasteryBadge masteryLevel={promotion.from} size="sm" showLabel={false} />
-                    <span aria-hidden="true">→</span>
+                    <Icon name="arrow-right" size={14} className="text-text-muted" />
                     <MasteryBadge masteryLevel={promotion.to} size="sm" showTier />
                     {promotion.pointsAfter !== undefined && (
                       <span>
@@ -210,7 +229,8 @@ export function SessionResultPage() {
         </Button>
         {summary.toReviewCountryIds.length > 0 && (
           <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
-            🔁 {t("review.cta")}
+            <Icon name="refresh" size={19} />
+            {t("review.cta")}
           </Button>
         )}
         <ShareResultButton
@@ -226,9 +246,10 @@ export function SessionResultPage() {
         </Button>
         <Link
           to="/shop"
-          className="text-center text-sm font-bold text-text-muted underline-offset-2 transition hover:text-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center justify-center gap-1.5 text-center text-sm font-bold text-text-muted underline-offset-2 transition hover:text-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          🛍️ {t("shop.visitShort")}
+          <Icon name="shop" size={16} />
+          {t("shop.visitShort")}
         </Link>
       </div>
     </motion.div>

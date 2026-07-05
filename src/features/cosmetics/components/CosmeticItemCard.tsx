@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { CosmeticItem } from "@/entities/cosmetic/cosmetic.types";
 import { Button } from "@/shared/components/Button";
+import { Icon } from "@/shared/components/Icon";
 
 type CosmeticItemCardProps = {
   item: CosmeticItem;
@@ -34,8 +35,12 @@ export function CosmeticItemCard({
       }`}
     >
       <div className="flex items-start gap-3">
-        <span className="text-3xl" aria-hidden="true">
-          {item.preview ?? "🎨"}
+        <span
+          className={`flex h-12 w-12 shrink-0 items-center justify-center bg-pine-soft text-primary ${
+            item.type === "mascot" ? "rounded-full" : "rounded-xl"
+          }`}
+        >
+          <Icon name={item.icon} size={26} strokeWidth={1.9} />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
@@ -58,7 +63,7 @@ export function CosmeticItemCard({
             <span className="text-text-muted">{t("cosmetics.owned")}</span>
           ) : (
             <span className="inline-flex items-center gap-1 text-warning">
-              <span aria-hidden="true">🪙</span>
+              <Icon name="coin" size={16} />
               {item.price}
               <span className="sr-only">{t("cosmetics.coinsName")}</span>
             </span>
@@ -70,7 +75,7 @@ export function CosmeticItemCard({
             className="inline-flex items-center gap-1 rounded-2xl bg-primary px-4 py-2 font-bold text-primary-foreground"
             data-testid="cosmetic-equipped-badge"
           >
-            <span aria-hidden="true">✓</span> {t("cosmetics.equipped")}
+            <Icon name="check" size={17} strokeWidth={2.4} /> {t("cosmetics.equipped")}
           </span>
         ) : owned ? (
           <Button size="md" onClick={() => onEquip(item.id)}>

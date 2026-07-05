@@ -75,7 +75,7 @@ describe("registerActiveDay", () => {
     });
     streak = registerActiveDay(streak, "2026-07-02").streak; // 6
     expect(streak.restDaysAvailable).toBe(0);
-    streak = registerActiveDay(streak, "2026-07-03").streak; // 7 → recarrega
+    streak = registerActiveDay(streak, "2026-07-03").streak; // 7 -> recarrega
     expect(streak.currentStreak).toBe(7);
     expect(streak.restDaysAvailable).toBe(MAX_REST_DAYS);
   });

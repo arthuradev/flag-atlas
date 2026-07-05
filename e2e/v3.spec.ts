@@ -125,7 +125,7 @@ test.describe("survival mode", () => {
     await survivalCard.getByRole("button", { name: "Começar desafio" }).click();
 
     // Começa com 3 vidas.
-    await expect(page.getByTestId("survival-lives")).toContainText("❤️❤️❤️");
+    await expect(page.getByTestId("survival-lives")).toContainText("Vidas: 3 de 3");
     await expect(page.getByTestId("survival-score")).toBeVisible();
     await expect(page.getByTestId("training-option")).toHaveCount(4);
 
@@ -138,9 +138,9 @@ test.describe("survival mode", () => {
     const copied = await page.evaluate(
       () => (window as unknown as { __copiedTexts: string[] }).__copiedTexts,
     );
-    expect(copied[0]).toContain("Flag Atlas 🌍");
+    expect(copied[0]).toContain("Flag Atlas");
     expect(copied[0]).toContain("Modo Sobrevivência");
-    expect(copied[0]).toContain("🏆 Pontuação:");
+    expect(copied[0]).toContain("Pontuação:");
   });
 });
 

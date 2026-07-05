@@ -302,7 +302,7 @@ describe("V4 cosmetics normalization", () => {
     });
     expect(result.cosmetics.coins).toBe(0);
     expect(result.cosmetics.ownedItemIds).toEqual(["theme-oceano"]);
-    // theme-neon e mascot-owl não são possuídos → voltam ao padrão.
+    // theme-neon e mascot-owl não são possuídos -> voltam ao padrão.
     expect(result.cosmetics.equipped.themeId).toBe("theme-default");
     expect(result.cosmetics.equipped.mascotId).toBe("mascot-none");
   });

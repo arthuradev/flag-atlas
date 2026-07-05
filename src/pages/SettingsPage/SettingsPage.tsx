@@ -8,6 +8,7 @@ import { ToggleRow } from "@/features/settings/components/ToggleRow";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
+import { Icon } from "@/shared/components/Icon";
 import { PageShell } from "@/shared/components/PageShell";
 import { SUPPORTED_LOCALES } from "@/shared/i18n/locale";
 
@@ -66,7 +67,8 @@ export function SettingsPage() {
             to="/shop"
             className="inline-flex min-h-12 items-center justify-center gap-2 self-start rounded-2xl border border-border bg-surface px-5 font-bold transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            🛍️ {t("settings.openShop")}
+            <Icon name="shop" size={19} />
+            {t("settings.openShop")}
           </Link>
         </Card>
 

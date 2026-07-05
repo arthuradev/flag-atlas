@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { countLearnedCountriesIn } from "@/entities/progress/progress.selectors";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
+import { Icon } from "@/shared/components/Icon";
 import { PageShell } from "@/shared/components/PageShell";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import { CONTINENTS } from "@/shared/data/continents";
@@ -28,7 +29,9 @@ export function ContinentsPage() {
               >
                 <span className="flex items-center justify-between">
                   <span className="flex items-center gap-2 text-lg font-extrabold">
-                    <span aria-hidden="true">{continent.emoji}</span>
+                    <span className="flex size-9 items-center justify-center rounded-xl bg-pine-soft text-primary">
+                      <Icon name={continent.icon} size={22} strokeWidth={1.9} />
+                    </span>
                     {continent.names[locale]}
                   </span>
                   <span className="text-sm font-bold text-text-muted">

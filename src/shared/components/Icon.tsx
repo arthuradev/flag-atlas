@@ -1,6 +1,20 @@
 import { type SVGProps, useId } from "react";
 
+/**
+ * Flag Atlas icon system.
+ *
+ * One line-icon language for the whole product: 24×24 grid, `fill="none"`,
+ * `stroke="currentColor"`, 2px stroke, round caps/joins — extended from the
+ * original nav set. "Hero" icons (achievements, mascots, shop previews,
+ * continents) add a soft duotone fill of the SAME color (`currentColor` +
+ * low `fillOpacity`) so they read richer without leaving the line language
+ * or breaking `currentColor` theming.
+ *
+ * Icons are decorative by default (`aria-hidden`); pass `title` to give one an
+ * accessible name (it then becomes `role="img"` + `<title>`).
+ */
 export type IconName =
+  // — UI / navigation (original set) —
   | "arrow-left"
   | "arrow-right"
   | "chart"
@@ -33,13 +47,65 @@ export type IconName =
   | "trophy"
   | "x"
   | "x-circle"
-  | "zap";
+  | "zap"
+  // — achievements —
+  | "footprints"
+  | "globe-half"
+  | "medal"
+  | "backpack"
+  | "gems"
+  | "crown"
+  | "seal-check"
+  // — cosmetics: themes —
+  | "waves"
+  | "planet"
+  | "book"
+  | "minimal"
+  // — cosmetics: sounds —
+  | "volume"
+  | "volume-off"
+  | "music"
+  | "gamepad"
+  | "waveform"
+  // — cosmetics: frames —
+  | "square"
+  | "leaf"
+  // — cosmetics: mascots —
+  | "owl"
+  | "rocket"
+  | "ban"
+  // — cosmetics: effects & status —
+  | "star"
+  | "party"
+  | "activity"
+  | "snowflake"
+  | "share"
+  | "sprout"
+  | "palette"
+  // — continents —
+  | "continent-americas"
+  | "continent-europe"
+  | "continent-africa"
+  | "continent-asia"
+  | "continent-oceania";
 
 type IconProps = Omit<SVGProps<SVGSVGElement>, "children" | "height" | "viewBox" | "width"> & {
   name: IconName;
   size?: number | string;
   title?: string;
 };
+
+/** Faint globe graticule shared by the continent icons. */
+function GlobeFrame({ ring = 0.4, line = 0.28 }: { ring?: number; line?: number }) {
+  return (
+    <>
+      <circle cx="12" cy="12" r="9" strokeOpacity={ring} />
+      <path d="M3.2 12h17.6" strokeOpacity={line} />
+      <path d="M12 3.1c2.6 2.4 2.6 15.4 0 17.8" strokeOpacity={line} />
+      <path d="M12 3.1c-2.6 2.4-2.6 15.4 0 17.8" strokeOpacity={line} />
+    </>
+  );
+}
 
 function IconPaths({ name }: { name: IconName }) {
   switch (name) {
@@ -270,6 +336,379 @@ function IconPaths({ name }: { name: IconName }) {
       );
     case "zap":
       return <path d="M13 2 4 14h7l-1 8 10-13h-7l1-7Z" />;
+
+    // ————————————————————— achievements —————————————————————
+    case "footprints":
+      return (
+        <>
+          <ellipse
+            cx="8.5"
+            cy="11"
+            rx="2.4"
+            ry="3.6"
+            transform="rotate(-16 8.5 11)"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <circle cx="11.6" cy="7.3" r="0.85" />
+          <circle cx="9.6" cy="6.1" r="0.85" />
+          <ellipse
+            cx="15.5"
+            cy="16"
+            rx="2.4"
+            ry="3.6"
+            transform="rotate(-16 15.5 16)"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <circle cx="18.6" cy="12.3" r="0.85" />
+          <circle cx="16.6" cy="11.1" r="0.85" />
+        </>
+      );
+    case "globe-half":
+      return (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor" fillOpacity="0.2" />
+          <path d="M12 3v18" />
+        </>
+      );
+    case "medal":
+      return (
+        <>
+          <path d="M9 3l2.4 4.6" />
+          <path d="M15 3l-2.4 4.6" />
+          <circle cx="12" cy="14" r="5.4" fill="currentColor" fillOpacity="0.16" />
+          <path d="M12 11.5l.9 1.85 2.05.3-1.48 1.44.35 2.03L12 16.2l-1.82.95.35-2.03-1.48-1.44 2.05-.3.9-1.85Z" />
+        </>
+      );
+    case "backpack":
+      return (
+        <>
+          <path
+            d="M7 10a5 5 0 0 1 10 0v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8Z"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <path d="M9.5 10a2.5 2.5 0 0 1 5 0" />
+          <path d="M9 14.2h6" />
+          <path d="M10.6 20v-3.4h2.8V20" />
+        </>
+      );
+    case "gems":
+      return (
+        <>
+          <path d="M6 9.2h8l-4 7.8L6 9.2Z" fill="currentColor" fillOpacity="0.16" />
+          <path d="M6 9.2l2-3.2h4l2 3.2" />
+          <path d="M6 9.2h8" />
+          <path d="M8.3 9.2 10 17 11.7 9.2" />
+          <path d="M17.6 5.6l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7.7-1.9Z" />
+        </>
+      );
+    case "crown":
+      return (
+        <>
+          <path
+            d="M4 8.5l3.5 3.2L12 5.5l4.5 6.2L20 8.5l-1.4 9.5H5.4L4 8.5Z"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <path d="M5.4 18h13.2" />
+        </>
+      );
+    case "seal-check":
+      return (
+        <>
+          <circle cx="12" cy="10" r="6" fill="currentColor" fillOpacity="0.16" />
+          <path d="M8.7 15.1l-1 5.9 4.3-2.2 4.3 2.2-1-5.9" />
+          <path d="M9.3 10l1.9 1.9 3.6-3.8" />
+        </>
+      );
+
+    // ————————————————————— cosmetics: themes —————————————————————
+    case "waves":
+      return (
+        <>
+          <path d="M3 8c1.6-1.4 3.4-1.4 5 0s3.4 1.4 5 0 3.4-1.4 5 0" />
+          <path d="M3 12c1.6-1.4 3.4-1.4 5 0s3.4 1.4 5 0 3.4-1.4 5 0" />
+          <path d="M3 16c1.6-1.4 3.4-1.4 5 0s3.4 1.4 5 0 3.4-1.4 5 0" />
+        </>
+      );
+    case "planet":
+      return (
+        <>
+          <circle cx="12" cy="11" r="5.4" fill="currentColor" fillOpacity="0.18" />
+          <path d="M7 15.2c-2.4.9-3.9 2-3.6 3 .4 1.4 4.6 1.2 9.4-.6 4.8-1.8 8.2-4.3 7.8-5.7-.2-.9-1.6-1.2-3.6-1" />
+        </>
+      );
+    case "book":
+      return (
+        <>
+          <path
+            d="M5 5.5A2.5 2.5 0 0 1 7.5 3H18v14H7.5A2.5 2.5 0 0 0 5 19.5z"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <path d="M5 19.5A2.5 2.5 0 0 1 7.5 17H18" />
+        </>
+      );
+    case "minimal":
+      return (
+        <>
+          <rect x="5" y="5" width="14" height="14" rx="4.5" />
+          <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+        </>
+      );
+
+    // ————————————————————— cosmetics: sounds —————————————————————
+    case "volume":
+      return (
+        <>
+          <path d="M4 9.5v5h3l4.5 3.5v-12L7 9.5z" fill="currentColor" fillOpacity="0.16" />
+          <path d="M15 10a3 3 0 0 1 0 4" />
+          <path d="M17.5 7.7a6.5 6.5 0 0 1 0 8.6" />
+        </>
+      );
+    case "volume-off":
+      return (
+        <>
+          <path d="M4 9.5v5h3l4.5 3.5v-12L7 9.5z" fill="currentColor" fillOpacity="0.16" />
+          <path d="M15.5 10l4 4" />
+          <path d="M19.5 10l-4 4" />
+        </>
+      );
+    case "music":
+      return (
+        <>
+          <path d="M9 17V6l9-1.8V15" />
+          <circle cx="6.8" cy="17" r="2.2" fill="currentColor" fillOpacity="0.16" />
+          <circle cx="15.8" cy="15" r="2.2" fill="currentColor" fillOpacity="0.16" />
+          <path d="M9 9.2l9-1.8" />
+        </>
+      );
+    case "gamepad":
+      return (
+        <>
+          <path
+            d="M7.5 9h9a4 4 0 0 1 3.9 3.1l.4 3.1a2.2 2.2 0 0 1-4 1.5L15.5 15h-7l-1.3 1.7a2.2 2.2 0 0 1-4-1.5l.4-3.1A4 4 0 0 1 7.5 9z"
+            fill="currentColor"
+            fillOpacity="0.14"
+          />
+          <path d="M7 12v2.2" />
+          <path d="M5.9 13.1h2.2" />
+          <circle cx="15.4" cy="12.4" r="0.7" fill="currentColor" stroke="none" />
+          <circle cx="17.1" cy="14" r="0.7" fill="currentColor" stroke="none" />
+        </>
+      );
+    case "waveform":
+      return (
+        <>
+          <path d="M5 10.5v3" />
+          <path d="M8.5 7.5v9" />
+          <path d="M12 5.5v13" />
+          <path d="M15.5 8.5v7" />
+          <path d="M19 10.5v3" />
+        </>
+      );
+
+    // ————————————————————— cosmetics: frames —————————————————————
+    case "square":
+      return (
+        <>
+          <rect
+            x="4.5"
+            y="4.5"
+            width="15"
+            height="15"
+            rx="3.5"
+            fill="currentColor"
+            fillOpacity="0.14"
+          />
+          <rect x="8.3" y="8.3" width="7.4" height="7.4" rx="1.8" />
+        </>
+      );
+    case "leaf":
+      return (
+        <>
+          <path
+            d="M5 19c0-7.5 4.8-13 14-13 0 8.5-4.8 13.5-14 13z"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <path d="M8 16c2.5-3 4.5-5 7.5-7" />
+        </>
+      );
+
+    // ————————————————————— cosmetics: mascots —————————————————————
+    case "owl":
+      return (
+        <>
+          <path
+            d="M12 4.4c-3.4 0-5.6 2.5-5.6 6.2 0 3.9 2.3 8.1 5.6 8.1s5.6-4.2 5.6-8.1c0-3.7-2.2-6.2-5.6-6.2z"
+            fill="currentColor"
+            fillOpacity="0.12"
+          />
+          <path d="M7.7 5.6 9.2 8" />
+          <path d="M16.3 5.6 14.8 8" />
+          <circle cx="9.7" cy="10.6" r="1.8" />
+          <circle cx="14.3" cy="10.6" r="1.8" />
+          <circle cx="9.7" cy="10.6" r="0.5" fill="currentColor" stroke="none" />
+          <circle cx="14.3" cy="10.6" r="0.5" fill="currentColor" stroke="none" />
+          <path d="M12 12.6l-1 1.5h2z" fill="currentColor" stroke="none" />
+        </>
+      );
+    case "rocket":
+      return (
+        <>
+          <path
+            d="M12 3.4c2.6 1.9 3.9 4.9 3.9 8.1l-1.2 3.1H9.3L8.1 11.5C8.1 8.3 9.4 5.3 12 3.4z"
+            fill="currentColor"
+            fillOpacity="0.12"
+          />
+          <circle cx="12" cy="9.2" r="1.6" />
+          <path d="M8.4 11.4 5.9 13.8l2.2.7" />
+          <path d="M15.6 11.4l2.5 2.4-2.2.7" />
+          <path d="M10.5 15.6c.3 1.7 1.5 3.4 1.5 3.4s1.2-1.7 1.5-3.4" />
+        </>
+      );
+    case "ban":
+      return (
+        <>
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M6 6l12 12" />
+        </>
+      );
+
+    // ————————————————————— effects & status —————————————————————
+    case "star":
+      return (
+        <path
+          d="M12 3.6l2.5 5.6 6.1.5-4.6 4 1.4 6-5.4-3.2-5.4 3.2 1.4-6-4.6-4 6.1-.5z"
+          fill="currentColor"
+          fillOpacity="0.16"
+        />
+      );
+    case "party":
+      return (
+        <>
+          <path d="M4 20l4.6-12.6 8 8L4 20z" fill="currentColor" fillOpacity="0.16" />
+          <path d="M8.6 7.4l8 8" />
+          <path d="M14 4.6l.4 1.4M17.6 6l1.3-.5M18.6 10.6l1.4.4M15.9 3.7l1 1" />
+        </>
+      );
+    case "activity":
+      return <path d="M3 12h3.5l2-5.5 4 11 2-5.5H21" />;
+    case "snowflake":
+      return (
+        <>
+          <path d="M12 3v18" />
+          <path d="M4.2 7.5l15.6 9" />
+          <path d="M19.8 7.5 4.2 16.5" />
+          <path d="M12 6.4l-2-1.2M12 6.4l2-1.2" />
+          <path d="M12 17.6l-2 1.2M12 17.6l2 1.2" />
+          <path d="M4.9 9.1l.1-2.3 2.3.1M19.1 14.9l-.1 2.3-2.3-.1M4.9 14.9l2.3.1-.1 2.3M19.1 9.1l-2.3-.1.1-2.3" />
+        </>
+      );
+    case "share":
+      return (
+        <>
+          <circle cx="6" cy="12" r="2.4" />
+          <circle cx="17" cy="6" r="2.4" />
+          <circle cx="17" cy="18" r="2.4" />
+          <path d="M8.2 10.9l6.6-3.7" />
+          <path d="M8.2 13.1l6.6 3.7" />
+        </>
+      );
+    case "sprout":
+      return (
+        <>
+          <path d="M12 21v-8" />
+          <path
+            d="M12 13c0-3.2 2-5.4 5.2-5.4 0 3.2-2 5.4-5.2 5.4z"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+          <path
+            d="M12 15.5c-3 0-4.8-2-4.8-5 3 0 4.8 2 4.8 5z"
+            fill="currentColor"
+            fillOpacity="0.16"
+          />
+        </>
+      );
+    case "palette":
+      return (
+        <>
+          <path
+            d="M12 3.5c-4.9 0-9 3.6-9 8 0 3.6 2.9 5.5 5.4 5.5 1.4 0 2-1 2-2 0-1.4-1.4-1.6-1.4-3 0-1 .8-1.6 1.9-1.6H17a4.5 4.5 0 0 0 4-4.4c0-4-4-7.5-9-7.5z"
+            fill="currentColor"
+            fillOpacity="0.14"
+          />
+          <circle cx="8" cy="11" r="1" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="8.4" r="1" fill="currentColor" stroke="none" />
+          <circle cx="16" cy="11" r="1" fill="currentColor" stroke="none" />
+        </>
+      );
+
+    // ————————————————————— continents —————————————————————
+    case "continent-americas":
+      return (
+        <>
+          <GlobeFrame />
+          <path
+            d="M11 5c1.8 0 2.6 1.5 2.1 3-.3.9-1.1 1.2-1.1 2.1 0 .9.8 1.2.8 2.1 0 1.4-1.4 1.8-1.4 3.4 0 1.5.9 2.6.4 4.1-.3.9-.9 1.6-1.7 1.4-.9-.2-1-1.5-.8-2.7.2-1.4.9-2.2.7-3.6-.2-1.1-1.1-1.4-1.1-2.5 0-1 .7-1.5.7-2.4 0-1.3-1.2-2-.8-3.4.3-1 1.1-1.5 2-1.5z"
+            fill="currentColor"
+            fillOpacity="0.26"
+          />
+        </>
+      );
+    case "continent-europe":
+      return (
+        <>
+          <GlobeFrame />
+          <path
+            d="M9.6 7.2c1.4-1.1 3.4-1 4.8-.2.9.5 1.7.3 1.9 1.4.2 1-.8 1.6-.8 2.6 0 .9.7 1.7-.2 2.2-.9.5-1.9-.3-2.9 0-1 .3-1.4 1.5-2.5 1.2-1-.3-.9-1.6-1.6-2.3-.7-.7-1.9-.6-2-1.7-.1-1 .9-1.4 1.3-2z"
+            fill="currentColor"
+            fillOpacity="0.26"
+          />
+        </>
+      );
+    case "continent-africa":
+      return (
+        <>
+          <GlobeFrame />
+          <path
+            d="M12 5c2.6 0 4.4 1.3 4.4 2.9 0 1.1-.9 1.6-.9 2.7 0 1.4-.9 2.4-1.4 3.8-.5 1.4-.5 3.3-2.1 3.3-1.6 0-1.6-1.9-2.1-3.3-.5-1.4-1.4-2.4-1.4-3.8 0-1.1-.9-1.6-.9-2.7C7.6 6.3 9.4 5 12 5z"
+            fill="currentColor"
+            fillOpacity="0.26"
+          />
+        </>
+      );
+    case "continent-asia":
+      return (
+        <>
+          <GlobeFrame />
+          <path
+            d="M7 7c1.8-1.3 4.4-1.2 6.7-.9 1.8.2 3.9.1 4.6 1.3.55 1-.65 1.9-.85 3-.2 1 .75 1.9-.05 2.6-.9.8-2.2.2-3.3.6-1.2.4-1.5 1.9-2.8 1.7-1-.15-1-1.6-1.7-2.4-.85-.95-2.4-.75-3-1.8-.55-.95.35-2-.15-3-.4-.85-1.35-1.35-.75-2.4z"
+            fill="currentColor"
+            fillOpacity="0.26"
+          />
+        </>
+      );
+    case "continent-oceania":
+      return (
+        <>
+          <GlobeFrame line={0.24} />
+          <path
+            d="M9 12.5c1-1.5 3.5-1.9 5.2-1 1.3.85 1.7 2.8.6 3.9-1.15 1.05-3.5 1.05-5 .4-1-.45-1.5-2.1-.8-3.3z"
+            fill="currentColor"
+            fillOpacity="0.26"
+          />
+          <circle cx="17.4" cy="8.3" r="1" fill="currentColor" stroke="none" />
+          <circle cx="6.5" cy="16.6" r="0.85" fill="currentColor" stroke="none" />
+          <circle cx="16.8" cy="16.1" r="0.7" fill="currentColor" stroke="none" />
+        </>
+      );
+
     default:
       return null;
   }

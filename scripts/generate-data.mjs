@@ -85,11 +85,24 @@ function toCountry(raw) {
   return country;
 }
 
+/** Ícone do sistema (src/shared/components/Icon.tsx) por continente. */
+const CONTINENT_ICONS = {
+  america: "continent-americas",
+  europe: "continent-europe",
+  africa: "continent-africa",
+  asia: "continent-asia",
+  oceania: "continent-oceania",
+};
+
 function toContinent(raw) {
+  const icon = CONTINENT_ICONS[raw.id];
+  if (!icon) {
+    throw new Error(`Continent "${raw.id}" has no icon mapping`);
+  }
   return {
     id: raw.id,
     names: { "pt-BR": raw.name.ptBR, "en-US": raw.name.en },
-    emoji: raw.emoji,
+    icon,
     order: raw.order,
     countryIds: raw.countryIds,
   };

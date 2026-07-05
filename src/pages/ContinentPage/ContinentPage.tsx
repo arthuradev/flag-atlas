@@ -46,7 +46,7 @@ export function ContinentPage() {
   };
 
   return (
-    <PageShell title={`${continent.emoji} ${continent.names[locale]}`} backTo="/continents">
+    <PageShell title={continent.names[locale]} backTo="/continents">
       <div className="flex flex-col gap-4 pb-4">
         <div className="flex flex-col gap-2">
           <span className="text-sm font-bold text-text-muted">

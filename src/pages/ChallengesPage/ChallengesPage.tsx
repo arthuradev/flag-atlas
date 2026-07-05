@@ -6,10 +6,11 @@ import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
+import { Icon, type IconName } from "@/shared/components/Icon";
 import { PageShell } from "@/shared/components/PageShell";
 
 type ChallengeCard = {
-  emoji: string;
+  icon: IconName;
   titleKey: string;
   descriptionKey: string;
   /** Chip com o tipo de pergunta. */
@@ -28,7 +29,7 @@ export function ChallengesPage() {
 
   const challenges: ChallengeCard[] = [
     {
-      emoji: "⌨️",
+      icon: "keyboard",
       titleKey: "challenges.typingTitle",
       descriptionKey: "challenges.typingDescription",
       questionTypeKey: "challenges.questionTypeTyping",
@@ -36,7 +37,7 @@ export function ChallengesPage() {
       config: { mode: "continue", questionType: "typing", size: defaultSessionSize },
     },
     {
-      emoji: "🎭",
+      icon: "layers",
       titleKey: "challenges.similarTitle",
       descriptionKey: "challenges.similarDescription",
       questionTypeKey: "challenges.questionTypeChoice",
@@ -44,7 +45,7 @@ export function ChallengesPage() {
       config: { mode: "similar", questionType: "choice", size: defaultSessionSize },
     },
     {
-      emoji: "🔁",
+      icon: "refresh",
       titleKey: "challenges.reviewTitle",
       descriptionKey: "challenges.reviewDescription",
       questionTypeKey: "challenges.questionTypeChoice",
@@ -52,7 +53,7 @@ export function ChallengesPage() {
       config: { mode: "review", questionType: "choice", size: defaultSessionSize },
     },
     {
-      emoji: "🛡️",
+      icon: "shield",
       titleKey: "challenges.survivalTitle",
       descriptionKey: "challenges.survivalDescription",
       questionTypeKey: "challenges.questionTypeChoice",
@@ -60,7 +61,7 @@ export function ChallengesPage() {
       config: { mode: "survival", questionType: "choice", size: defaultSessionSize },
     },
     {
-      emoji: "⚡",
+      icon: "zap",
       titleKey: "challenges.quickTitle",
       descriptionKey: "challenges.quickDescription",
       questionTypeKey: "challenges.questionTypeChoice",
@@ -68,7 +69,7 @@ export function ChallengesPage() {
       config: { mode: "continue", questionType: "choice", size: 5 },
     },
     {
-      emoji: "💯",
+      icon: "seal-check",
       titleKey: "challenges.perfectTitle",
       descriptionKey: "challenges.perfectDescription",
       questionTypeKey: "challenges.questionTypeChoice",
@@ -92,8 +93,8 @@ export function ChallengesPage() {
             className="flex flex-col gap-3"
           >
             <div className="flex items-center gap-3">
-              <span className="text-3xl" aria-hidden="true">
-                {challenge.emoji}
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-pine-soft text-primary">
+                <Icon name={challenge.icon} size={26} strokeWidth={1.9} />
               </span>
               <div className="min-w-0">
                 <h2 className="text-lg font-extrabold">{t(challenge.titleKey)}</h2>
@@ -110,8 +111,9 @@ export function ChallengesPage() {
                   : t(challenge.duration.key)}
               </span>
               {challenge.config.mode === "survival" && bestSurvivalScore > 0 && (
-                <span className="rounded-full border border-border px-2.5 py-1 text-warning">
-                  🏆 {t("challenges.bestScore", { score: bestSurvivalScore })}
+                <span className="inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-warning">
+                  <Icon name="trophy" size={14} />
+                  {t("challenges.bestScore", { score: bestSurvivalScore })}
                 </span>
               )}
             </div>

@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
+import { Icon } from "@/shared/components/Icon";
 
 const STEPS = [
-  { emoji: "🌍", titleKey: "onboarding.welcomeTitle", bodyKey: "onboarding.welcomeBody" },
-  { emoji: "🗺️", titleKey: "onboarding.worldTitle", bodyKey: "onboarding.worldBody" },
-  { emoji: "🌱", titleKey: "onboarding.paceTitle", bodyKey: "onboarding.paceBody" },
+  { icon: "globe", titleKey: "onboarding.welcomeTitle", bodyKey: "onboarding.welcomeBody" },
+  { icon: "map", titleKey: "onboarding.worldTitle", bodyKey: "onboarding.worldBody" },
+  { icon: "sprout", titleKey: "onboarding.paceTitle", bodyKey: "onboarding.paceBody" },
 ] as const;
 
 export function OnboardingPage() {
@@ -40,8 +41,8 @@ export function OnboardingPage() {
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="flex flex-col items-center gap-4"
         >
-          <span className="text-6xl" aria-hidden="true">
-            {step.emoji}
+          <span className="flex h-20 w-20 items-center justify-center rounded-3xl bg-pine-soft text-primary ring-1 ring-primary/15">
+            <Icon name={step.icon} size={44} strokeWidth={1.8} />
           </span>
           <h1 className="text-2xl font-extrabold">{t(step.titleKey)}</h1>
           <p className="text-lg text-text-muted">{t(step.bodyKey)}</p>

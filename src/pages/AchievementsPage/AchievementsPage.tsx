@@ -6,6 +6,7 @@ import {
 } from "@/entities/achievement/achievement.selectors";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { Card } from "@/shared/components/Card";
+import { Icon } from "@/shared/components/Icon";
 import { PageShell } from "@/shared/components/PageShell";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 
@@ -30,8 +31,14 @@ export function AchievementsPage() {
                 className={`flex h-full flex-col gap-2 p-4 ${view.unlocked ? "" : "opacity-70"}`}
               >
                 <div className="flex items-start gap-3">
-                  <span className="text-3xl" aria-hidden="true">
-                    {view.unlocked ? view.emoji : "🔒"}
+                  <span
+                    className={`flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl ${
+                      view.unlocked
+                        ? "bg-ocre-soft text-gold ring-1 ring-gold/25"
+                        : "bg-surface-2 text-faint"
+                    }`}
+                  >
+                    <Icon name={view.unlocked ? view.icon : "lock"} size={28} strokeWidth={1.9} />
                   </span>
                   <div className="min-w-0">
                     <h2 className="font-extrabold">{t(`achievements.items.${view.id}.title`)}</h2>
@@ -41,8 +48,8 @@ export function AchievementsPage() {
                   </div>
                 </div>
                 {view.unlocked ? (
-                  <p className="text-sm font-bold text-success">
-                    <span aria-hidden="true">✓ </span>
+                  <p className="inline-flex items-center gap-1.5 text-sm font-bold text-success">
+                    <Icon name="check-circle" size={16} />
                     {t("achievements.unlocked")}
                   </p>
                 ) : view.progress && view.progress.current > 0 ? (

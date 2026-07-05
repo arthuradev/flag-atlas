@@ -31,13 +31,13 @@ describe("buildShareText", () => {
     });
     expect(text).toBe(
       [
-        "Flag Atlas 🌍",
+        "Flag Atlas",
         "Sessão concluída!",
         "",
-        "✅ 8/10 acertos",
-        "🔥 Melhor sequência: 5",
-        "⭐ +120 XP",
-        "🌎 Países vistos: 37/195",
+        "Acertos: 8/10",
+        "Melhor sequência: 5",
+        "XP: +120",
+        "Países vistos: 37/195",
         "",
         `Jogue também: ${SHARE_URL}`,
       ].join("\n"),
@@ -59,13 +59,13 @@ describe("buildShareText", () => {
     });
     expect(text).toBe(
       [
-        "Flag Atlas 🌍",
+        "Flag Atlas",
         "Modo Sobrevivência",
         "",
-        "🏆 Pontuação: 42",
-        "✅ Acertos: 39",
-        "❌ Erros: 3",
-        "🔥 Melhor sequência: 12",
+        "Pontuação: 42",
+        "Acertos: 39",
+        "Erros: 3",
+        "Melhor sequência: 12",
         "",
         `Jogue também: ${SHARE_URL}`,
       ].join("\n"),
@@ -80,7 +80,7 @@ describe("buildShareText", () => {
       t: i18n.getFixedT("en-US"),
     });
     expect(text).toContain("Session complete!");
-    expect(text).toContain("✅ 8/10 correct");
+    expect(text).toContain("Correct: 8/10");
     expect(text).toContain(`Play too: ${SHARE_URL}`);
   });
 });

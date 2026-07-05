@@ -1,5 +1,5 @@
 /**
- * ⚠️ FERRAMENTA DE TESTE TEMPORÁRIA (Versão 4). Um pequeno console de debug
+ * ATENÇÃO: FERRAMENTA DE TESTE TEMPORÁRIA (Versão 4). Um pequeno console de debug
  * para o desenvolvedor conceder moedas/XP e liberar cosméticos ao testar o
  * próprio jogo. NÃO é parte do produto e deve ser removido depois: basta
  * apagar a pasta `src/features/debug/` e a linha `<DebugConsole />` em App.tsx.

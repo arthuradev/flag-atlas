@@ -6,6 +6,8 @@
  * compram são ganhas jogando, não têm valor real e nunca envolvem dinheiro.
  */
 
+import type { IconName } from "@/shared/components/Icon";
+
 export const COSMETIC_TYPES = [
   "theme",
   "soundPack",
@@ -30,8 +32,8 @@ export type CosmeticItem = {
   /** Preço em Moedas Atlas. Itens gratuitos têm price 0 e são sempre possuídos. */
   price: number;
   rarity?: CosmeticRarity;
-  /** Token curto (emoji) usado no preview simples da loja. */
-  preview?: string;
+  /** Ícone do sistema exibido no preview da loja. */
+  icon: IconName;
   /** Item padrão equipado por padrão no seu tipo; nunca vendável nem bloqueável. */
   isDefault?: boolean;
 };
