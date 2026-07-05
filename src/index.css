@@ -40,6 +40,14 @@
   --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
   --fa-shadow-flag: 0 16px 34px -18px rgba(22, 35, 29, 0.55);
 
+  /* Desktop sidebar rail — a deep, atmospheric dark surface shared by every
+     theme so the navigation reads as part of the game (never a bright SaaS
+     panel). Defined once here; all [data-theme] blocks inherit it. */
+  --fa-sidebar: #0b1512;
+  --fa-sidebar-raised: #13221c;
+  --fa-sidebar-fg: #e9f1ea;
+  --fa-sidebar-fg-muted: #8fa89a;
+
   color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -324,6 +332,10 @@
   --color-silver: var(--fa-silver);
   --color-gold: var(--fa-gold);
   --color-platinum: var(--fa-platinum);
+  --color-sidebar: var(--fa-sidebar);
+  --color-sidebar-raised: var(--fa-sidebar-raised);
+  --color-sidebar-fg: var(--fa-sidebar-fg);
+  --color-sidebar-fg-muted: var(--fa-sidebar-fg-muted);
 
   --font-sans: "Nunito Variable", "Nunito", ui-rounded, system-ui, "Segoe UI", sans-serif;
 

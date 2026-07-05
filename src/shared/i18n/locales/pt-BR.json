@@ -3,6 +3,11 @@
     "name": "Flag Atlas",
     "tagline": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos."
   },
+  "profile": {
+    "player": "Explorador",
+    "openMenu": "Abrir menu do perfil",
+    "menuLabel": "Menu do perfil"
+  },
   "common": {
     "back": "Voltar",
     "backToHome": "Voltar ao início",

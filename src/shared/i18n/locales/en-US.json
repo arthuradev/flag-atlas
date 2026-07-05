@@ -3,6 +3,11 @@
     "name": "Flag Atlas",
     "tagline": "Learn the flags of the world in quick, fun training sessions."
   },
+  "profile": {
+    "player": "Explorer",
+    "openMenu": "Open profile menu",
+    "menuLabel": "Profile menu"
+  },
   "common": {
     "back": "Back",
     "backToHome": "Back to home",

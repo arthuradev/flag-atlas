@@ -1,7 +1,9 @@
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { type FocusEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { XP_PER_LEVEL, xpIntoCurrentLevel } from "@/features/progress/logic/xp";
+import { useProgressStore } from "@/features/progress/store/progressStore";
+import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { Icon, type IconName } from "@/shared/components/Icon";
 
 type NavItem = {
@@ -26,6 +28,19 @@ const PRIMARY_NAV_ITEMS: NavItem[] = [
   { to: "/shop", icon: "shop", labelKey: "home.shop", ariaLabel: "abrir personalizacao" },
 ];
 
+/** Atalhos do menu de perfil — só rotas que já existem no app. */
+const PROFILE_MENU_ITEMS: NavItem[] = [
+  { to: "/collection", icon: "collection", labelKey: "home.collection", ariaLabel: "abrir album" },
+  {
+    to: "/achievements",
+    icon: "trophy",
+    labelKey: "home.achievements",
+    ariaLabel: "abrir premios",
+  },
+  { to: "/stats", icon: "chart", labelKey: "home.stats", ariaLabel: "abrir numeros" },
+  { to: "/settings", icon: "settings", labelKey: "home.settings", ariaLabel: "abrir ajustes" },
+];
+
 const MOBILE_NAV_ITEMS: NavItem[] = [
   { to: "/home", icon: "home", labelKey: "app.name", ariaLabel: "abrir inicio" },
   { to: "/continents", icon: "compass", labelKey: "home.continents", ariaLabel: "abrir mapa" },
@@ -34,15 +49,16 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
 ];
 
 const SIDEBAR_COLLAPSED_WIDTH = 80;
-const SIDEBAR_EXPANDED_WIDTH = 288;
+const SIDEBAR_EXPANDED_WIDTH = 280;
+const COLLAPSE_DELAY_MS = 220;
 
 function navItemClass(isActive: boolean, isCollapsed: boolean): string {
-  return `flex min-h-11 items-center rounded-btn font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink ${
+  return `flex min-h-11 items-center rounded-btn font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar ${
     isCollapsed ? "justify-center px-0" : "gap-3 px-3"
   } ${
     isActive
       ? "bg-primary text-primary-foreground shadow-sm"
-      : "text-background/70 hover:bg-white/10 hover:text-background"
+      : "text-sidebar-fg-muted hover:bg-white/10 hover:text-sidebar-fg"
   }`;
 }
 
@@ -52,39 +68,76 @@ function mobileNavItemClass(isActive: boolean): string {
   }`;
 }
 
-type SidebarLabelProps = {
-  children: string;
-  isCollapsed: boolean;
-};
-
-function SidebarLabel({ children, isCollapsed }: SidebarLabelProps) {
-  return (
-    <AnimatePresence initial={false}>
-      {!isCollapsed && (
-        <motion.span
-          key="label"
-          initial={{ opacity: 0, x: -8, width: 0 }}
-          animate={{ opacity: 1, x: 0, width: "auto" }}
-          exit={{ opacity: 0, x: -8, width: 0 }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
-          className="overflow-hidden whitespace-nowrap"
-        >
-          <span className="block truncate">{children}</span>
-        </motion.span>
-      )}
-    </AnimatePresence>
-  );
+/** Rótulo textual do item, mostrado só com a sidebar expandida. */
+function SidebarLabel({ children, isCollapsed }: { children: string; isCollapsed: boolean }) {
+  if (isCollapsed) {
+    return null;
+  }
+  return <span className="min-w-0 truncate whitespace-nowrap">{children}</span>;
 }
 
 export function AppShell() {
   const { t } = useTranslation();
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const sidebarToggleLabel = isSidebarCollapsed
-    ? "Expandir barra lateral"
-    : "Recolher barra lateral";
+  const level = useProgressStore((state) => state.progress.level);
+  const totalXp = useProgressStore((state) => state.progress.totalXp);
+  const reduceMotion = useSettingsStore((state) => state.reduceMotion);
+  const xpPct = Math.round((xpIntoCurrentLevel(totalXp) / XP_PER_LEVEL) * 100);
+
+  // Sidebar recolhida por padrão no desktop; expande no hover/foco e recolhe
+  // pouco depois de sair. Sem seta explícita — a interação é o próprio trilho.
+  // A largura é CSS puro (não framer), então a expansão funciona mesmo com
+  // "reduzir animações" (aí a transição some, mas o trilho ainda abre).
+  const [isExpanded, setExpanded] = useState(false);
+  const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
+  const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isCollapsed = !isExpanded;
+
+  const cancelCollapse = () => {
+    if (collapseTimer.current) {
+      clearTimeout(collapseTimer.current);
+      collapseTimer.current = null;
+    }
+  };
+
+  const expandSidebar = () => {
+    cancelCollapse();
+    setExpanded(true);
+  };
+
+  const collapseSidebarSoon = () => {
+    cancelCollapse();
+    collapseTimer.current = setTimeout(() => {
+      setExpanded(false);
+      setProfileMenuOpen(false);
+    }, COLLAPSE_DELAY_MS);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (collapseTimer.current) {
+        clearTimeout(collapseTimer.current);
+      }
+    };
+  }, []);
+
+  const handleSidebarBlur = (event: FocusEvent<HTMLElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      collapseSidebarSoon();
+    }
+  };
+
+  const handleSidebarKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape" && isProfileMenuOpen) {
+      setProfileMenuOpen(false);
+    }
+  };
+
+  const transitionClass = reduceMotion
+    ? ""
+    : "transition-[width,padding,box-shadow] duration-300 ease-out";
 
   return (
-    <div className="min-h-dvh lg:flex">
+    <div className="min-h-dvh">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-btn focus:bg-surface focus:px-4 focus:py-3 focus:font-extrabold focus:text-text focus:shadow-card"
@@ -92,63 +145,40 @@ export function AppShell() {
         {t("common.continue")}
       </a>
 
-      <motion.aside
-        initial={false}
-        animate={{
-          width: isSidebarCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH,
-          padding: isSidebarCollapsed ? 12 : 20,
-        }}
-        transition={{ type: "spring", stiffness: 360, damping: 36, mass: 0.7 }}
-        className="hidden shrink-0 overflow-hidden bg-ink text-background shadow-card lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col"
+      <aside
+        onMouseEnter={expandSidebar}
+        onMouseLeave={collapseSidebarSoon}
+        onFocusCapture={expandSidebar}
+        onBlur={handleSidebarBlur}
+        onKeyDown={handleSidebarKeyDown}
+        aria-label={t("app.name")}
+        style={{ width: isExpanded ? SIDEBAR_EXPANDED_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
+        className={`z-40 hidden shrink-0 flex-col overflow-hidden border-r border-white/10 bg-sidebar text-sidebar-fg lg:fixed lg:inset-y-0 lg:left-0 lg:flex ${transitionClass} ${
+          isExpanded ? "p-[18px] shadow-[18px_0_48px_-24px_rgba(0,0,0,0.75)]" : "p-3"
+        }`}
       >
-        <div
-          className={`mb-7 flex items-center ${isSidebarCollapsed ? "flex-col gap-3" : "gap-3"}`}
-        >
+        <div className={`mb-6 flex items-center ${isCollapsed ? "justify-center" : "gap-3"}`}>
           <Link
             to="/home"
             aria-label={t("app.name")}
-            className={`flex min-w-0 items-center rounded-btn text-background transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              isSidebarCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1"
+            className={`flex min-w-0 items-center rounded-btn text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              isCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1.5"
             }`}
           >
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
-              <Icon name="compass" size={25} strokeWidth={2.2} />
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
+              <Icon name="compass" size={24} strokeWidth={2.2} />
             </span>
-            <AnimatePresence initial={false}>
-              {!isSidebarCollapsed && (
-                <motion.span
-                  key="brand-copy"
-                  initial={{ opacity: 0, x: -10, width: 0 }}
-                  animate={{ opacity: 1, x: 0, width: "auto" }}
-                  exit={{ opacity: 0, x: -10, width: 0 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="min-w-0 overflow-hidden whitespace-nowrap"
-                >
-                  <span className="block text-lg font-black leading-tight">{t("app.name")}</span>
-                  <span className="block text-xs font-extrabold uppercase tracking-[0.16em] text-background/50">
-                    Terrain
-                  </span>
-                </motion.span>
-              )}
-            </AnimatePresence>
+            {!isCollapsed && (
+              <span className="min-w-0 overflow-hidden whitespace-nowrap">
+                <span className="block truncate text-lg font-black leading-tight">
+                  {t("app.name")}
+                </span>
+                <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-sidebar-fg-muted">
+                  Terrain
+                </span>
+              </span>
+            )}
           </Link>
-
-          <button
-            type="button"
-            aria-expanded={!isSidebarCollapsed}
-            aria-label={sidebarToggleLabel}
-            title={sidebarToggleLabel}
-            onClick={() => setSidebarCollapsed((value) => !value)}
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-btn border border-white/10 text-background/70 transition hover:bg-white/10 hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
-          >
-            <motion.span
-              animate={{ rotate: isSidebarCollapsed ? 180 : 0 }}
-              transition={{ type: "spring", stiffness: 420, damping: 28 }}
-              className="inline-flex"
-            >
-              <Icon name="chevron-left" size={20} />
-            </motion.span>
-          </button>
         </div>
 
         <nav className="flex flex-1 flex-col gap-1.5" aria-label={t("app.name")}>
@@ -156,12 +186,10 @@ export function AppShell() {
             to="/training"
             aria-label="iniciar treino"
             title={t("home.continueTraining")}
-            className={({ isActive }) => navItemClass(isActive, isSidebarCollapsed)}
+            className={({ isActive }) => navItemClass(isActive, isCollapsed)}
           >
             <Icon name="play" size={20} />
-            <SidebarLabel isCollapsed={isSidebarCollapsed}>
-              {t("home.continueTraining")}
-            </SidebarLabel>
+            <SidebarLabel isCollapsed={isCollapsed}>{t("home.continueTraining")}</SidebarLabel>
           </NavLink>
           <div className="my-3 h-px bg-white/10" />
           {PRIMARY_NAV_ITEMS.map((item) => (
@@ -170,26 +198,91 @@ export function AppShell() {
               to={item.to}
               aria-label={item.ariaLabel}
               title={t(item.labelKey)}
-              className={({ isActive }) => navItemClass(isActive, isSidebarCollapsed)}
+              className={({ isActive }) => navItemClass(isActive, isCollapsed)}
             >
               <Icon name={item.icon} size={20} />
-              <SidebarLabel isCollapsed={isSidebarCollapsed}>{t(item.labelKey)}</SidebarLabel>
+              <SidebarLabel isCollapsed={isCollapsed}>{t(item.labelKey)}</SidebarLabel>
             </NavLink>
           ))}
         </nav>
 
-        <NavLink
-          to="/settings"
-          aria-label="abrir ajustes"
-          title={t("home.settings")}
-          className={({ isActive }) => navItemClass(isActive, isSidebarCollapsed)}
-        >
-          <Icon name="settings" size={20} />
-          <SidebarLabel isCollapsed={isSidebarCollapsed}>{t("home.settings")}</SidebarLabel>
-        </NavLink>
-      </motion.aside>
+        <div className="relative mt-2 border-t border-white/10 pt-2">
+          {isProfileMenuOpen && (
+            <div
+              role="menu"
+              aria-label={t("profile.menuLabel")}
+              className="absolute inset-x-0 bottom-full mb-2 flex flex-col gap-0.5 rounded-btn border border-white/10 bg-sidebar-raised p-1.5 shadow-card"
+            >
+              {PROFILE_MENU_ITEMS.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  role="menuitem"
+                  onClick={() => setProfileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-chip px-3 py-2 text-sm font-bold text-sidebar-fg-muted transition hover:bg-white/10 hover:text-sidebar-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <Icon name={item.icon} size={18} />
+                  <span className="truncate">{t(item.labelKey)}</span>
+                </NavLink>
+              ))}
+            </div>
+          )}
 
-      <div className="flex min-h-dvh min-w-0 flex-1 flex-col">
+          <div className={`flex items-center gap-2 ${isCollapsed ? "flex-col" : ""}`}>
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={isProfileMenuOpen}
+              aria-label={t("profile.openMenu")}
+              onClick={() => {
+                setExpanded(true);
+                setProfileMenuOpen((open) => !open);
+              }}
+              className={`flex min-w-0 items-center rounded-btn text-left transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                isCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1.5"
+              }`}
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-primary-foreground shadow-sm ring-2 ring-white/10">
+                {level}
+              </span>
+              {!isCollapsed && (
+                <span className="min-w-0 flex-1 overflow-hidden">
+                  <span className="block truncate text-sm font-extrabold text-sidebar-fg">
+                    {t("profile.player")}
+                  </span>
+                  <span className="block truncate text-xs font-bold text-sidebar-fg-muted">
+                    {t("home.level", { level })}
+                  </span>
+                  <span className="mt-1 block h-1 w-full overflow-hidden rounded-full bg-white/10">
+                    <span
+                      className="block h-full rounded-full bg-primary"
+                      style={{ width: `${xpPct}%` }}
+                    />
+                  </span>
+                </span>
+              )}
+            </button>
+
+            <NavLink
+              to="/settings"
+              aria-label={t("home.settings")}
+              title={t("home.settings")}
+              onClick={() => setProfileMenuOpen(false)}
+              className={({ isActive }) =>
+                `inline-flex size-10 shrink-0 items-center justify-center rounded-btn transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-sidebar-fg-muted hover:bg-white/10 hover:text-sidebar-fg"
+                }`
+              }
+            >
+              <Icon name="settings" size={20} />
+            </NavLink>
+          </div>
+        </div>
+      </aside>
+
+      <div className="flex min-h-dvh min-w-0 flex-col lg:pl-20">
         <header className="sticky top-0 z-30 border-b border-line bg-background/88 px-4 py-3 backdrop-blur lg:hidden">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
             <Link
@@ -211,7 +304,10 @@ export function AppShell() {
           </div>
         </header>
 
-        <main id="main-content" className="min-w-0 flex-1 px-4 pb-28 pt-5 sm:px-6 lg:px-8 lg:py-7">
+        <main
+          id="main-content"
+          className="min-w-0 flex-1 px-4 pb-28 pt-5 sm:px-6 lg:flex lg:flex-col lg:px-10 lg:pb-16 lg:pt-8 lg:[justify-content:safe_center]"
+        >
           <Outlet />
         </main>
       </div>

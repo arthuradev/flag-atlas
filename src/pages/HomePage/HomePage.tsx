@@ -51,7 +51,7 @@ export function HomePage() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-6 py-4 lg:justify-start"
+      className="mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-6 py-4 lg:min-h-0"
     >
       <header className="text-center lg:text-left">
         <div className="mx-auto flex size-16 items-center justify-center rounded-xl2 bg-ink text-platinum shadow-card lg:mx-0">
