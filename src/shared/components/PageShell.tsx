@@ -13,7 +13,7 @@ type PageShellProps = {
 };
 
 const WIDTH_CLASSES: Record<PageShellWidth, string> = {
-  default: "max-w-3xl",
+  default: "max-w-4xl",
   wide: "max-w-6xl",
 };
 
@@ -21,7 +21,7 @@ export function PageShell({ title, backTo, width = "default", children }: PageSh
   const { t } = useTranslation();
 
   return (
-    <div className={`mx-auto flex min-h-full w-full ${WIDTH_CLASSES[width]} flex-col`}>
+    <div className={`mx-auto flex min-h-full w-full flex-col ${WIDTH_CLASSES[width]} lg:min-h-0`}>
       {(title || backTo) && (
         <header className="mb-5 flex min-h-14 items-center gap-3">
           {backTo && (
