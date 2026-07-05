@@ -1,7 +1,7 @@
-import { type FocusEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { XP_PER_LEVEL, xpIntoCurrentLevel } from "@/features/progress/logic/xp";
+import { getLevelProgress } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { Icon, type IconName } from "@/shared/components/Icon";
@@ -50,7 +50,6 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
 
 const SIDEBAR_COLLAPSED_WIDTH = 80;
 const SIDEBAR_EXPANDED_WIDTH = 280;
-const COLLAPSE_DELAY_MS = 220;
 
 function navItemClass(isActive: boolean, isCollapsed: boolean): string {
   return `flex min-h-11 items-center rounded-btn font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar ${
@@ -81,54 +80,44 @@ export function AppShell() {
   const level = useProgressStore((state) => state.progress.level);
   const totalXp = useProgressStore((state) => state.progress.totalXp);
   const reduceMotion = useSettingsStore((state) => state.reduceMotion);
-  const xpPct = Math.round((xpIntoCurrentLevel(totalXp) / XP_PER_LEVEL) * 100);
+  const levelProgress = getLevelProgress(totalXp);
+  const xpPct = Math.round(levelProgress.progressRatio * 100);
 
-  // Sidebar recolhida por padrão no desktop; expande no hover/foco e recolhe
-  // pouco depois de sair. Sem seta explícita — a interação é o próprio trilho.
+  // Sidebar recolhida por padrão no desktop; abrir e fechar são ações explícitas.
   // A largura é CSS puro (não framer), então a expansão funciona mesmo com
   // "reduzir animações" (aí a transição some, mas o trilho ainda abre).
   const [isExpanded, setExpanded] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
-  const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isCollapsed = !isExpanded;
 
-  const cancelCollapse = () => {
-    if (collapseTimer.current) {
-      clearTimeout(collapseTimer.current);
-      collapseTimer.current = null;
-    }
-  };
-
   const expandSidebar = () => {
-    cancelCollapse();
     setExpanded(true);
   };
 
-  const collapseSidebarSoon = () => {
-    cancelCollapse();
-    collapseTimer.current = setTimeout(() => {
-      setExpanded(false);
-      setProfileMenuOpen(false);
-    }, COLLAPSE_DELAY_MS);
+  const collapseSidebar = () => {
+    setExpanded(false);
+    setProfileMenuOpen(false);
   };
 
   useEffect(() => {
-    return () => {
-      if (collapseTimer.current) {
-        clearTimeout(collapseTimer.current);
+    if (!isExpanded) {
+      return;
+    }
+    const handleDocumentKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setExpanded(false);
+        setProfileMenuOpen(false);
       }
     };
-  }, []);
-
-  const handleSidebarBlur = (event: FocusEvent<HTMLElement>) => {
-    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      collapseSidebarSoon();
-    }
-  };
+    document.addEventListener("keydown", handleDocumentKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleDocumentKeyDown);
+    };
+  }, [isExpanded]);
 
   const handleSidebarKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Escape" && isProfileMenuOpen) {
-      setProfileMenuOpen(false);
+    if (event.key === "Escape" && isExpanded) {
+      collapseSidebar();
     }
   };
 
@@ -146,10 +135,6 @@ export function AppShell() {
       </a>
 
       <aside
-        onMouseEnter={expandSidebar}
-        onMouseLeave={collapseSidebarSoon}
-        onFocusCapture={expandSidebar}
-        onBlur={handleSidebarBlur}
         onKeyDown={handleSidebarKeyDown}
         aria-label={t("app.name")}
         style={{ width: isExpanded ? SIDEBAR_EXPANDED_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
@@ -157,41 +142,54 @@ export function AppShell() {
           isExpanded ? "p-[18px] shadow-[18px_0_48px_-24px_rgba(0,0,0,0.75)]" : "p-3"
         }`}
       >
-        <div className={`mb-6 flex items-center ${isCollapsed ? "justify-center" : "gap-3"}`}>
-          <Link
-            to="/home"
-            aria-label={t("app.name")}
-            className={`flex min-w-0 items-center rounded-btn text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              isCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1.5"
-            }`}
-          >
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
-              <Icon name="compass" size={24} strokeWidth={2.2} />
-            </span>
-            {!isCollapsed && (
-              <span className="min-w-0 overflow-hidden whitespace-nowrap">
-                <span className="block truncate text-lg font-black leading-tight">
-                  {t("app.name")}
-                </span>
-                <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-sidebar-fg-muted">
-                  Terrain
-                </span>
+        <div className={`mb-6 flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
+          {isCollapsed ? (
+            <button
+              type="button"
+              aria-label={t("app.openSidebar")}
+              aria-expanded={isExpanded}
+              title={t("app.openSidebar")}
+              onClick={expandSidebar}
+              className="flex size-12 items-center justify-center rounded-btn text-sidebar-fg transition hover:bg-white/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
+                <Icon name="compass" size={24} strokeWidth={2.2} />
               </span>
-            )}
-          </Link>
+            </button>
+          ) : (
+            <>
+              <Link
+                to="/home"
+                aria-label={t("app.name")}
+                className="flex min-w-0 flex-1 items-center gap-3 rounded-btn p-1.5 text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
+                  <Icon name="compass" size={24} strokeWidth={2.2} />
+                </span>
+                <span className="min-w-0 overflow-hidden whitespace-nowrap">
+                  <span className="block truncate text-lg font-black leading-tight">
+                    {t("app.name")}
+                  </span>
+                  <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-sidebar-fg-muted">
+                    Terrain
+                  </span>
+                </span>
+              </Link>
+              <button
+                type="button"
+                aria-label={t("app.closeSidebar")}
+                aria-expanded={isExpanded}
+                title={t("app.closeSidebar")}
+                onClick={collapseSidebar}
+                className="inline-flex size-10 shrink-0 items-center justify-center rounded-btn text-sidebar-fg-muted transition hover:bg-white/10 hover:text-sidebar-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Icon name="x" size={20} strokeWidth={2.4} />
+              </button>
+            </>
+          )}
         </div>
 
         <nav className="flex flex-1 flex-col gap-1.5" aria-label={t("app.name")}>
-          <NavLink
-            to="/training"
-            aria-label="iniciar treino"
-            title={t("home.continueTraining")}
-            className={({ isActive }) => navItemClass(isActive, isCollapsed)}
-          >
-            <Icon name="play" size={20} />
-            <SidebarLabel isCollapsed={isCollapsed}>{t("home.continueTraining")}</SidebarLabel>
-          </NavLink>
-          <div className="my-3 h-px bg-white/10" />
           {PRIMARY_NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -235,7 +233,11 @@ export function AppShell() {
               aria-expanded={isProfileMenuOpen}
               aria-label={t("profile.openMenu")}
               onClick={() => {
-                setExpanded(true);
+                if (isCollapsed) {
+                  setExpanded(true);
+                  setProfileMenuOpen(true);
+                  return;
+                }
                 setProfileMenuOpen((open) => !open);
               }}
               className={`flex min-w-0 items-center rounded-btn text-left transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${

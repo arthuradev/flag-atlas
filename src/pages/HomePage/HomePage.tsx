@@ -1,8 +1,8 @@
-import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import {
   countLearnedCountries,
+  countSeenCountries,
   listCountriesNeedingReview,
 } from "@/entities/progress/progress.selectors";
 import { CoinBalance } from "@/features/cosmetics/components/CoinBalance";
@@ -15,6 +15,7 @@ import { useSessionStore } from "@/features/training/store/sessionStore";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Icon, type IconName } from "@/shared/components/Icon";
+import { PageTransition } from "@/shared/components/PageTransition";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import { COUNTRIES } from "@/shared/data/countries";
 
@@ -27,6 +28,27 @@ const SHORTCUTS = [
   { to: "/settings", icon: "settings", labelKey: "home.settings" },
 ] satisfies readonly { icon: IconName; labelKey: string; to: string }[];
 
+function FirstStepsCard() {
+  const { t } = useTranslation();
+  const steps = ["home.firstSteps.train", "home.firstSteps.xp", "home.firstSteps.badge"] as const;
+
+  return (
+    <Card className="flex flex-col gap-3 p-4">
+      <h2 className="text-sm font-extrabold text-text-muted">{t("home.firstSteps.title")}</h2>
+      <ul className="flex flex-col gap-2">
+        {steps.map((step) => (
+          <li key={step} className="flex items-center gap-2 text-sm font-semibold">
+            <span className="flex size-6 items-center justify-center rounded-full bg-pine-soft text-primary">
+              <Icon name="check" size={15} strokeWidth={2.6} />
+            </span>
+            {t(step)}
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
+
 export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -34,8 +56,10 @@ export function HomePage() {
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
   const startSession = useSessionStore((state) => state.startSession);
   const learned = countLearnedCountries(progress);
+  const seen = countSeenCountries(progress);
   const total = COUNTRIES.length;
   const reviewCount = listCountriesNeedingReview(progress).length;
+  const isFirstRun = progress.completedSessions === 0 && progress.totalXp === 0 && seen === 0;
 
   const handleContinueTraining = () => {
     navigate("/training");
@@ -47,12 +71,7 @@ export function HomePage() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-6 py-4 lg:min-h-0"
-    >
+    <PageTransition className="mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-6 py-4 lg:min-h-0">
       <header className="text-center lg:text-left">
         <div className="mx-auto flex size-16 items-center justify-center rounded-xl2 bg-ink text-platinum shadow-card lg:mx-0">
           <Icon name="globe" size={34} strokeWidth={2.1} />
@@ -90,18 +109,25 @@ export function HomePage() {
 
       <DailyStreakLine streak={progress.dailyStreak} />
 
-      <DailyMissionsCard />
+      {isFirstRun ? <FirstStepsCard /> : <DailyMissionsCard />}
 
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Button size="lg" fullWidth onClick={handleContinueTraining}>
-          <Icon name="play" size={20} fill="currentColor" strokeWidth={1.8} />
-          {t("home.continueTraining")}
-        </Button>
-        {reviewCount > 0 && (
-          <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
-            <Icon name="refresh" size={20} />
-            {t("review.cta")}
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Button size="lg" fullWidth onClick={handleContinueTraining}>
+            <Icon name="play" size={20} fill="currentColor" strokeWidth={1.8} />
+            {t(isFirstRun ? "home.startFirstTraining" : "home.continueTraining")}
           </Button>
+          {!isFirstRun && reviewCount > 0 && (
+            <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
+              <Icon name="refresh" size={20} />
+              {t("review.cta")}
+            </Button>
+          )}
+        </div>
+        {isFirstRun && (
+          <p className="text-center text-sm font-semibold text-text-muted sm:text-left">
+            {t("home.firstTrainingHint", { count: defaultSessionSize })}
+          </p>
         )}
       </div>
 
@@ -125,6 +151,6 @@ export function HomePage() {
           </Link>
         ))}
       </nav>
-    </motion.div>
+    </PageTransition>
   );
 }

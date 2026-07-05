@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "Flag Atlas",
-    "tagline": "Learn the flags of the world in quick, fun training sessions."
+    "tagline": "Learn the flags of the world in quick, fun training sessions.",
+    "openSidebar": "Open sidebar",
+    "closeSidebar": "Close sidebar"
   },
   "profile": {
     "player": "Explorer",
@@ -32,6 +34,8 @@
   "home": {
     "learnedCount": "{{learned}}/{{total}} countries learned",
     "continueTraining": "Continue training",
+    "startFirstTraining": "Start first training",
+    "firstTrainingHint": "Start with a short {{count}}-question session.",
     "continents": "Continents",
     "collection": "Collection",
     "settings": "Settings",
@@ -41,7 +45,13 @@
     "shop": "Shop",
     "level": "Level {{level}}",
     "totalXp": "{{xp}} XP",
-    "levelProgress": "Level progress"
+    "levelProgress": "Level progress",
+    "firstSteps": {
+      "title": "First steps",
+      "train": "Play your first training session",
+      "xp": "Earn your first XP",
+      "badge": "Unlock your first badge"
+    }
   },
   "streak": {
     "days": "{{count}} days exploring the world",
@@ -212,9 +222,18 @@
     "wrong_one": "{{count}} miss",
     "bestStreak": "Best streak: {{count}}",
     "xpEarned": "+{{xp}} XP",
+    "answerXp": "+{{xp}} XP answers",
+    "bonusMissionXp": "+{{xp}} XP bonuses and missions",
+    "xpBreakdown": "{{answersXp}} answers · {{bonusXp}} bonuses/missions",
     "coinsEarned": "+{{count}} Atlas Coins",
     "accuracy": "Accuracy: {{percent}}%",
     "promoted": "Badges unlocked",
+    "badgesSummary": "{{count}} new badges unlocked",
+    "badgesShowing": "Showing {{shown}} of {{total}}",
+    "showAllBadges": "Show all",
+    "showFewerBadges": "Show fewer",
+    "rewards": "Rewards",
+    "details": "Details",
     "toReview": "To review",
     "reviewCompleted": "Review complete",
     "playAgain": "Play one more",

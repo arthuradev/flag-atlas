@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Icon } from "./Icon";
+import { PageTransition } from "./PageTransition";
 
 type PageShellWidth = "default" | "wide";
 
@@ -21,7 +22,9 @@ export function PageShell({ title, backTo, width = "default", children }: PageSh
   const { t } = useTranslation();
 
   return (
-    <div className={`mx-auto flex min-h-full w-full flex-col ${WIDTH_CLASSES[width]} lg:min-h-0`}>
+    <PageTransition
+      className={`mx-auto flex min-h-full w-full flex-col ${WIDTH_CLASSES[width]} lg:min-h-0`}
+    >
       {(title || backTo) && (
         <header className="mb-5 flex min-h-14 items-center gap-3">
           {backTo && (
@@ -37,6 +40,6 @@ export function PageShell({ title, backTo, width = "default", children }: PageSh
         </header>
       )}
       <main className="flex flex-1 flex-col">{children}</main>
-    </div>
+    </PageTransition>
   );
 }

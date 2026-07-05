@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "Flag Atlas",
-    "tagline": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos."
+    "tagline": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
+    "openSidebar": "Abrir barra lateral",
+    "closeSidebar": "Fechar barra lateral"
   },
   "profile": {
     "player": "Explorador",
@@ -32,6 +34,8 @@
   "home": {
     "learnedCount": "{{learned}}/{{total}} países aprendidos",
     "continueTraining": "Continuar treino",
+    "startFirstTraining": "Começar primeiro treino",
+    "firstTrainingHint": "Comece com uma sessão curta de {{count}} perguntas.",
     "continents": "Continentes",
     "collection": "Coleção",
     "settings": "Configurações",
@@ -41,7 +45,13 @@
     "shop": "Loja",
     "level": "Nível {{level}}",
     "totalXp": "{{xp}} XP",
-    "levelProgress": "Progresso do nível"
+    "levelProgress": "Progresso do nível",
+    "firstSteps": {
+      "title": "Primeiros passos",
+      "train": "Faça seu primeiro treino",
+      "xp": "Ganhe seus primeiros XP",
+      "badge": "Desbloqueie sua primeira insígnia"
+    }
   },
   "streak": {
     "days": "{{count}} dias explorando o mundo",
@@ -212,9 +222,18 @@
     "wrong_one": "{{count}} erro",
     "bestStreak": "Melhor sequência: {{count}}",
     "xpEarned": "+{{xp}} XP",
+    "answerXp": "+{{xp}} XP respostas",
+    "bonusMissionXp": "+{{xp}} XP bônus e missões",
+    "xpBreakdown": "{{answersXp}} respostas · {{bonusXp}} bônus/missões",
     "coinsEarned": "+{{count}} Moedas Atlas",
     "accuracy": "Precisão: {{percent}}%",
     "promoted": "Insígnias desbloqueadas",
+    "badgesSummary": "{{count}} novas insígnias desbloqueadas",
+    "badgesShowing": "Mostrando {{shown}} de {{total}}",
+    "showAllBadges": "Ver todas",
+    "showFewerBadges": "Mostrar menos",
+    "rewards": "Recompensas",
+    "details": "Detalhes",
     "toReview": "Para revisar",
     "reviewCompleted": "Revisão concluída",
     "playAgain": "Jogar mais uma",

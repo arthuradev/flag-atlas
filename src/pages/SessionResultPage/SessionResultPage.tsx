@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import { countSeenCountries } from "@/entities/progress/progress.selectors";
+import type { SessionSummary } from "@/entities/session/session.types";
 import { Mascot } from "@/features/cosmetics/components/Mascot";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
@@ -19,6 +20,7 @@ import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
 import { Icon } from "@/shared/components/Icon";
+import { PageTransition } from "@/shared/components/PageTransition";
 import { COUNTRIES } from "@/shared/data/countries";
 
 function CountryRow({ countryId, detail }: { countryId: string; detail?: ReactNode }) {
@@ -37,6 +39,71 @@ function CountryRow({ countryId, detail }: { countryId: string; detail?: ReactNo
       <span className="font-bold">{getCountryName(country, locale)}</span>
       {detail && <span className="ml-auto text-sm text-text-muted">{detail}</span>}
     </li>
+  );
+}
+
+const PROMOTION_PREVIEW_LIMIT = 4;
+
+function PromotionsCard({ promotions }: { promotions: SessionSummary["promotions"] }) {
+  const { t } = useTranslation();
+  const [isExpanded, setExpanded] = useState(false);
+  const hasManyPromotions = promotions.length > PROMOTION_PREVIEW_LIMIT;
+  const visiblePromotions = isExpanded ? promotions : promotions.slice(0, PROMOTION_PREVIEW_LIMIT);
+
+  if (promotions.length === 0) {
+    return null;
+  }
+
+  return (
+    <Card>
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <div>
+          <h2 className="font-extrabold">{t("result.promoted")}</h2>
+          {hasManyPromotions && (
+            <p className="text-sm font-semibold text-text-muted">
+              {t("result.badgesSummary", { count: promotions.length })}
+            </p>
+          )}
+        </div>
+        {hasManyPromotions && (
+          <span className="shrink-0 rounded-full bg-pine-soft px-2.5 py-1 text-xs font-extrabold text-primary">
+            {t("result.badgesShowing", {
+              shown: visiblePromotions.length,
+              total: promotions.length,
+            })}
+          </span>
+        )}
+      </div>
+      <ul>
+        {visiblePromotions.map((promotion) => (
+          <CountryRow
+            key={`${promotion.countryId}-${promotion.to}`}
+            countryId={promotion.countryId}
+            detail={
+              <span className="flex flex-wrap items-center justify-end gap-1.5">
+                <MasteryBadge masteryLevel={promotion.from} size="sm" showLabel={false} />
+                <Icon name="arrow-right" size={14} className="text-text-muted" />
+                <MasteryBadge masteryLevel={promotion.to} size="sm" showTier />
+                {promotion.pointsAfter !== undefined && (
+                  <span>
+                    {promotion.pointsAfter}/{MAX_MASTERY_POINTS}
+                  </span>
+                )}
+              </span>
+            }
+          />
+        ))}
+      </ul>
+      {hasManyPromotions && (
+        <button
+          type="button"
+          onClick={() => setExpanded((current) => !current)}
+          className="mt-3 inline-flex min-h-10 items-center justify-center rounded-btn px-3 text-sm font-extrabold text-primary transition hover:bg-pine-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {t(isExpanded ? "result.showFewerBadges" : "result.showAllBadges")}
+        </button>
+      )}
+    </Card>
   );
 }
 
@@ -65,6 +132,7 @@ export function SessionResultPage() {
 
   const leveledUp = summary.levelAfter > summary.levelBefore;
   const isSurvival = summary.survival !== undefined;
+  const bonusAndMissionXp = summary.answerBonusXpEarned + summary.missionXpEarned;
 
   const handlePlayAgain = () => {
     // Navegar antes de iniciar: iniciar a sessão limpa o summary, o que
@@ -84,12 +152,7 @@ export function SessionResultPage() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-5 px-4 py-8"
-    >
+    <PageTransition className="mx-auto flex min-h-full w-full max-w-6xl flex-col justify-center gap-5 py-4 lg:min-h-0">
       <header className="relative text-center">
         <VisualEffectBurst playKey={effectKey} className="-top-8 h-40" />
         <motion.div
@@ -134,124 +197,119 @@ export function SessionResultPage() {
         )}
       </header>
 
-      <Card className="grid grid-cols-2 gap-3 text-lg font-bold">
-        <span className="inline-flex items-center gap-1.5">
-          <Icon name="check-circle" size={20} className="text-success" />
-          {t("result.correct", { count: summary.correctCount })}
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <Icon name="x-circle" size={20} className="text-danger" />
-          {t("result.wrong", { count: summary.wrongCount })}
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <Icon name="flame" size={20} className="text-danger" />
-          {t("result.bestStreak", { count: summary.bestStreak })}
-        </span>
-        <span className="inline-flex items-center gap-1.5 text-warning">
-          <Icon name="star" size={20} />
-          {t("result.xpEarned", { xp: summary.xpEarned })}
-        </span>
-        {summary.coinsEarned > 0 && (
-          <span
-            className="col-span-2 inline-flex items-center gap-1.5 text-warning"
-            data-testid="result-coins"
-          >
-            <Icon name="coin" size={18} />
-            {t("result.coinsEarned", { count: summary.coinsEarned })}
-          </span>
-        )}
-        <span className="col-span-2 text-sm font-semibold text-text-muted">
-          {t("result.accuracy", { percent: summary.accuracy })}
-        </span>
-      </Card>
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.85fr)] lg:items-start">
+        <section className="flex flex-col gap-4">
+          <Card className="grid grid-cols-2 gap-3 text-sm font-bold sm:grid-cols-3">
+            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+              <Icon name="check-circle" size={20} className="text-success" />
+              {t("result.correct", { count: summary.correctCount })}
+            </span>
+            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+              <Icon name="x-circle" size={20} className="text-danger" />
+              {t("result.wrong", { count: summary.wrongCount })}
+            </span>
+            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+              <Icon name="percent" size={20} className="text-primary" />
+              {t("result.accuracy", { percent: summary.accuracy })}
+            </span>
+            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+              <Icon name="flame" size={20} className="text-danger" />
+              {t("result.bestStreak", { count: summary.bestStreak })}
+            </span>
+            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3 text-warning">
+              <Icon name="star" size={20} />
+              {t("result.xpEarned", { xp: summary.xpEarned })}
+            </span>
+            {summary.coinsEarned > 0 && (
+              <span
+                className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3 text-warning"
+                data-testid="result-coins"
+              >
+                <Icon name="coin" size={18} />
+                {t("result.coinsEarned", { count: summary.coinsEarned })}
+              </span>
+            )}
+            {bonusAndMissionXp > 0 && (
+              <p className="col-span-full text-sm font-semibold text-text-muted">
+                {t("result.xpBreakdown", {
+                  answersXp: summary.baseAnswerXpEarned,
+                  bonusXp: bonusAndMissionXp,
+                })}
+              </p>
+            )}
+          </Card>
 
-      {summary.unlockedAchievementIds.length > 0 && (
-        <Card data-testid="result-achievements">
-          <h2 className="mb-2 inline-flex items-center gap-2 font-extrabold">
-            <Icon name="trophy" size={20} className="text-gold" />
-            {t("achievements.unlockedTitle")}
-          </h2>
-          <ul className="flex flex-col gap-1.5">
-            {summary.unlockedAchievementIds.map((achievementId) => (
-              <li key={achievementId} className="flex items-center gap-2">
-                <span className="font-bold">{t(`achievements.items.${achievementId}.title`)}</span>
-                <span className="text-sm text-text-muted">
-                  {t(`achievements.items.${achievementId}.description`)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      )}
+          <Card className="flex flex-col gap-3">
+            <Button size="lg" fullWidth onClick={handlePlayAgain}>
+              <Icon name="play" size={19} fill="currentColor" strokeWidth={1.8} />
+              {t("result.playAgain")}
+            </Button>
+            {summary.toReviewCountryIds.length > 0 && (
+              <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
+                <Icon name="refresh" size={19} />
+                {t("review.cta")}
+              </Button>
+            )}
+            <Button variant="secondary" size="lg" fullWidth onClick={handleBackHome}>
+              <Icon name="home" size={19} />
+              {t("common.backToHome")}
+            </Button>
+            <ShareResultButton
+              text={buildShareText({
+                summary,
+                seenCount: countSeenCountries(progress),
+                totalCountries: COUNTRIES.length,
+                t,
+              })}
+            />
+            <Link
+              to="/shop"
+              className="inline-flex items-center justify-center gap-1.5 text-center text-sm font-bold text-text-muted underline-offset-2 transition hover:text-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Icon name="shop" size={16} />
+              {t("shop.visitShort")}
+            </Link>
+          </Card>
+        </section>
 
-      <DailyMissionsCard />
+        <aside className="flex flex-col gap-4">
+          {summary.unlockedAchievementIds.length > 0 && (
+            <Card data-testid="result-achievements">
+              <h2 className="mb-2 inline-flex items-center gap-2 font-extrabold">
+                <Icon name="trophy" size={20} className="text-gold" />
+                {t("achievements.unlockedTitle")}
+              </h2>
+              <ul className="flex flex-col gap-1.5">
+                {summary.unlockedAchievementIds.map((achievementId) => (
+                  <li key={achievementId} className="flex flex-col gap-0.5">
+                    <span className="font-bold">
+                      {t(`achievements.items.${achievementId}.title`)}
+                    </span>
+                    <span className="text-sm text-text-muted">
+                      {t(`achievements.items.${achievementId}.description`)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
 
-      {summary.promotions.length > 0 && (
-        <Card>
-          <h2 className="mb-2 font-extrabold">{t("result.promoted")}</h2>
-          <ul>
-            {summary.promotions.map((promotion) => (
-              <CountryRow
-                key={`${promotion.countryId}-${promotion.to}`}
-                countryId={promotion.countryId}
-                detail={
-                  <span className="flex flex-wrap items-center justify-end gap-1.5">
-                    <MasteryBadge masteryLevel={promotion.from} size="sm" showLabel={false} />
-                    <Icon name="arrow-right" size={14} className="text-text-muted" />
-                    <MasteryBadge masteryLevel={promotion.to} size="sm" showTier />
-                    {promotion.pointsAfter !== undefined && (
-                      <span>
-                        {promotion.pointsAfter}/{MAX_MASTERY_POINTS}
-                      </span>
-                    )}
-                  </span>
-                }
-              />
-            ))}
-          </ul>
-        </Card>
-      )}
+          <DailyMissionsCard />
 
-      {summary.toReviewCountryIds.length > 0 && (
-        <Card>
-          <h2 className="mb-2 font-extrabold">{t("result.toReview")}</h2>
-          <ul>
-            {summary.toReviewCountryIds.map((countryId) => (
-              <CountryRow key={countryId} countryId={countryId} />
-            ))}
-          </ul>
-        </Card>
-      )}
+          <PromotionsCard promotions={summary.promotions} />
 
-      <div className="flex flex-col gap-3">
-        <Button size="lg" fullWidth onClick={handlePlayAgain}>
-          {t("result.playAgain")}
-        </Button>
-        {summary.toReviewCountryIds.length > 0 && (
-          <Button variant="secondary" size="lg" fullWidth onClick={handleReview}>
-            <Icon name="refresh" size={19} />
-            {t("review.cta")}
-          </Button>
-        )}
-        <ShareResultButton
-          text={buildShareText({
-            summary,
-            seenCount: countSeenCountries(progress),
-            totalCountries: COUNTRIES.length,
-            t,
-          })}
-        />
-        <Button variant="secondary" size="lg" fullWidth onClick={handleBackHome}>
-          {t("common.backToHome")}
-        </Button>
-        <Link
-          to="/shop"
-          className="inline-flex items-center justify-center gap-1.5 text-center text-sm font-bold text-text-muted underline-offset-2 transition hover:text-text hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Icon name="shop" size={16} />
-          {t("shop.visitShort")}
-        </Link>
+          {summary.toReviewCountryIds.length > 0 && (
+            <Card>
+              <h2 className="mb-2 font-extrabold">{t("result.toReview")}</h2>
+              <ul>
+                {summary.toReviewCountryIds.map((countryId) => (
+                  <CountryRow key={countryId} countryId={countryId} />
+                ))}
+              </ul>
+            </Card>
+          )}
+        </aside>
       </div>
-    </motion.div>
+    </PageTransition>
   );
 }
