@@ -37,6 +37,7 @@ export type AnswerFeedback = {
   correctCountryId: string;
   selectedCountryId?: string;
   typedAnswer?: string;
+  isSkipped?: boolean;
   xpGained: number;
   masteryBefore: MasteryLevel;
   masteryAfter: MasteryLevel;
@@ -49,6 +50,7 @@ type AnswerInput = {
   isCorrect: boolean;
   selectedCountryId?: string;
   typedAnswer?: string;
+  isSkipped?: boolean;
   normalizedTypedAnswer?: string;
   acceptedAnswerUsed?: string;
   confusedWithCountryId?: string;
@@ -69,7 +71,9 @@ type SessionState = {
   startSession: (config: SessionConfig) => void;
   answerCurrentQuestion: (selectedCountryId: string) => void;
   answerCurrentQuestionTyped: (typedAnswer: string) => void;
+  skipCurrentQuestion: () => void;
   advance: () => void;
+  dismissSummary: () => void;
   clearSession: () => void;
 };
 
@@ -175,6 +179,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
       ...(input.selectedCountryId !== undefined && {
         selectedCountryId: input.selectedCountryId,
       }),
+      ...(input.isSkipped === true && { isSkipped: true }),
       ...(input.typedAnswer !== undefined && { typedAnswer: input.typedAnswer }),
       ...(input.normalizedTypedAnswer !== undefined && {
         normalizedTypedAnswer: input.normalizedTypedAnswer,
@@ -198,6 +203,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         ...(input.selectedCountryId !== undefined && {
           selectedCountryId: input.selectedCountryId,
         }),
+        ...(input.isSkipped === true && { isSkipped: true }),
         ...(input.typedAnswer !== undefined && { typedAnswer: input.typedAnswer }),
       },
       sessionXp: sessionXp + xpGained,
@@ -288,6 +294,15 @@ export const useSessionStore = create<SessionState>((set, get) => {
         normalizedTypedAnswer: normalized,
         ...(matched !== null && { acceptedAnswerUsed: matched }),
       });
+    },
+
+    skipCurrentQuestion: () => {
+      const { session } = get();
+      const question = session?.questions[session?.currentIndex ?? 0];
+      if (!question) {
+        return;
+      }
+      submitAnswer({ isCorrect: false, isSkipped: true });
     },
 
     advance: () => {
@@ -402,6 +417,10 @@ export const useSessionStore = create<SessionState>((set, get) => {
           ...(completion.survival !== undefined && { survival: completion.survival }),
         },
       });
+    },
+
+    dismissSummary: () => {
+      set({ summary: null });
     },
 
     clearSession: () => {

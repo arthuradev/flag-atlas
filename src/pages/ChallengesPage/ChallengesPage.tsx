@@ -79,8 +79,8 @@ export function ChallengesPage() {
   ];
 
   const handleStart = (config: SessionConfig) => {
-    navigate("/training");
     startSession(config);
+    navigate("/training");
   };
 
   return (

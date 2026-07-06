@@ -62,12 +62,13 @@ export function HomePage() {
   const isFirstRun = progress.completedSessions === 0 && progress.totalXp === 0 && seen === 0;
 
   const handleContinueTraining = () => {
+    startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize });
     navigate("/training");
   };
 
   const handleReview = () => {
-    navigate("/training");
     startSession({ mode: "review", questionType: "choice", size: defaultSessionSize });
+    navigate("/training");
   };
 
   return (

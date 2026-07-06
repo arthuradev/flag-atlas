@@ -36,13 +36,13 @@ export function ContinentPage() {
   const total = continent.countryIds.length;
 
   const handleTrain = () => {
-    navigate("/training");
     startSession({
       mode: "continent",
       questionType: "choice",
       continentId: continent.id,
       size: defaultSessionSize,
     });
+    navigate("/training");
   };
 
   return (

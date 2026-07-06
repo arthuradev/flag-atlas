@@ -33,6 +33,8 @@ export type SessionAnswer = {
   nextReviewAt?: string;
   /** Alternativa escolhida (apenas múltipla escolha). */
   selectedCountryId?: string;
+  /** Resposta explicitamente pulada pelo jogador. */
+  isSkipped?: boolean;
   /** Texto digitado pelo usuário (apenas modo digitação). */
   typedAnswer?: string;
   normalizedTypedAnswer?: string;

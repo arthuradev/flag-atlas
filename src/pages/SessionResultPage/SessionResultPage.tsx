@@ -113,6 +113,7 @@ export function SessionResultPage() {
   const storeSummary = useSessionStore((state) => state.summary);
   const startSession = useSessionStore((state) => state.startSession);
   const clearSession = useSessionStore((state) => state.clearSession);
+  const dismissSummary = useSessionStore((state) => state.dismissSummary);
   const progress = useProgressStore((state) => state.progress);
   // Congelado no mount: iniciar "mais uma" limpa o summary do store e esta
   // página não deve redirecionar para a Home durante a transição de rota.
@@ -125,6 +126,12 @@ export function SessionResultPage() {
       playSound("complete");
     }
   }, [summary]);
+
+  useEffect(() => {
+    if (summary) {
+      dismissSummary();
+    }
+  }, [summary, dismissSummary]);
 
   if (!summary) {
     return <Navigate to="/home" replace />;

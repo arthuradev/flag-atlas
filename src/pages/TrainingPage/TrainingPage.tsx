@@ -23,8 +23,6 @@ import { Icon } from "@/shared/components/Icon";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import type { Locale } from "@/shared/i18n/locale";
 
-const ADVANCE_DELAY_CORRECT_MS = 1200;
-const ADVANCE_DELAY_WRONG_MS = 2000;
 const SURVIVAL_LIFE_SLOTS = Array.from(
   { length: SURVIVAL_STARTING_LIVES },
   (_, index) => `survival-life-${index + 1}`,
@@ -134,6 +132,7 @@ type TrainingFeedbackBarProps = {
   selectedCountry: Country | undefined;
   locale: Locale;
   onContinue: () => void;
+  onSkip: () => void;
 };
 
 function FeedbackDetail({ children }: { children: ReactNode }) {
@@ -147,8 +146,10 @@ function TrainingFeedbackBar({
   selectedCountry,
   locale,
   onContinue,
+  onSkip,
 }: TrainingFeedbackBarProps) {
   const { t } = useTranslation();
+  const countryName = getCountryName(country, locale);
 
   return (
     <footer
@@ -173,7 +174,11 @@ function TrainingFeedbackBar({
                   className={feedback.isCorrect ? "text-success" : "text-danger"}
                 />
                 <p className="text-lg font-extrabold">
-                  {feedback.isCorrect ? t("training.correctTitle") : t("training.wrongTitle")}
+                  {feedback.isSkipped
+                    ? t("training.skippedTitle")
+                    : feedback.isCorrect
+                      ? t("training.correctTitle")
+                      : t("training.wrongTitle")}
                 </p>
                 {feedback.xpGained > 0 && (
                   <span className="rounded-full bg-warning/10 px-2.5 py-1 text-sm font-extrabold text-warning">
@@ -183,17 +188,27 @@ function TrainingFeedbackBar({
               </div>
 
               <div className="mt-1 flex flex-col gap-1">
-                {feedback.isCorrect && isTyping && (
-                  <p className="font-bold">{getCountryName(country, locale)}</p>
+                {feedback.isCorrect && !feedback.promoted && (
+                  <FeedbackDetail>
+                    {t("training.correctAnswer", { country: countryName })}
+                  </FeedbackDetail>
+                )}
+                {feedback.isCorrect && isTyping && feedback.promoted && (
+                  <p className="font-bold">{countryName}</p>
                 )}
                 {!feedback.isCorrect && (
                   <>
                     <FeedbackDetail>
-                      {t("training.correctAnswerWas", {
-                        country: getCountryName(country, locale),
-                      })}
+                      {t(
+                        feedback.isSkipped
+                          ? "training.skippedCorrectAnswer"
+                          : "training.correctAnswerWas",
+                        {
+                          country: countryName,
+                        },
+                      )}
                     </FeedbackDetail>
-                    {selectedCountry && (
+                    {selectedCountry && !feedback.isSkipped && (
                       <FeedbackDetail>
                         {t("training.youChose", {
                           country: getCountryName(selectedCountry, locale),
@@ -206,7 +221,9 @@ function TrainingFeedbackBar({
                       </FeedbackDetail>
                     )}
                     <p className="text-sm font-semibold text-text-muted">
-                      {t("training.markedForReview")}
+                      {t(
+                        feedback.isSkipped ? "training.skippedReview" : "training.markedForReview",
+                      )}
                     </p>
                   </>
                 )}
@@ -218,7 +235,7 @@ function TrainingFeedbackBar({
                           ? "training.platinumUnlocked"
                           : "training.masteryUp",
                         {
-                          country: getCountryName(country, locale),
+                          country: countryName,
                           from: t(`mastery.${feedback.masteryBefore}`),
                           to: t(`mastery.${feedback.masteryAfter}`),
                         },
@@ -235,8 +252,10 @@ function TrainingFeedbackBar({
             </Button>
           </motion.div>
         ) : (
-          <div className="flex min-h-16 items-center justify-center rounded-card border border-dashed border-line bg-surface/70 px-4 text-center text-sm font-bold text-text-muted sm:min-h-20">
-            {t("training.answerPrompt")}
+          <div className="flex min-h-16 items-center justify-center rounded-card border border-dashed border-line bg-surface/70 px-4 sm:min-h-20">
+            <Button variant="secondary" size="md" onClick={onSkip}>
+              {t("training.skip")}
+            </Button>
           </div>
         )}
       </div>
@@ -317,6 +336,7 @@ export function TrainingPage() {
   const startSession = useSessionStore((state) => state.startSession);
   const answerCurrentQuestion = useSessionStore((state) => state.answerCurrentQuestion);
   const answerCurrentQuestionTyped = useSessionStore((state) => state.answerCurrentQuestionTyped);
+  const skipCurrentQuestion = useSessionStore((state) => state.skipCurrentQuestion);
   const advance = useSessionStore((state) => state.advance);
   const clearSession = useSessionStore((state) => state.clearSession);
 
@@ -331,17 +351,6 @@ export function TrainingPage() {
       startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize });
     }
   }, [session, summary, startSession, defaultSessionSize]);
-
-  useEffect(() => {
-    if (!feedback || isExitDialogOpen) {
-      return;
-    }
-    const timer = setTimeout(
-      advance,
-      feedback.isCorrect ? ADVANCE_DELAY_CORRECT_MS : ADVANCE_DELAY_WRONG_MS,
-    );
-    return () => clearTimeout(timer);
-  }, [feedback, advance, isExitDialogOpen]);
 
   useEffect(() => {
     if (feedback) {
@@ -519,6 +528,7 @@ export function TrainingPage() {
         selectedCountry={selectedCountry}
         locale={locale}
         onContinue={advance}
+        onSkip={skipCurrentQuestion}
       />
 
       <TrainingExitDialog

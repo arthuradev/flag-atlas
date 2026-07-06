@@ -225,6 +225,59 @@ describe("sessionStore normal flow with v3 summary", () => {
     expect(summary?.missionXpEarned).toBeGreaterThanOrEqual(10);
     expect(useProgressStore.getState().progress.totalXp).toBe(summary?.xpEarned);
   });
+
+  it("skips the current question as a wrong answer without selecting a wrong option", () => {
+    const question = useSessionStore.getState().session?.questions[0];
+    if (!question) {
+      throw new Error("expected a question");
+    }
+
+    useSessionStore.getState().skipCurrentQuestion();
+
+    const { feedback, session, currentStreak } = useSessionStore.getState();
+    expect(feedback?.isCorrect).toBe(false);
+    expect(feedback?.isSkipped).toBe(true);
+    expect(feedback?.selectedCountryId).toBeUndefined();
+    expect(feedback?.xpGained).toBe(0);
+    expect(currentStreak).toBe(0);
+    expect(session?.answers[0]?.isSkipped).toBe(true);
+    expect(session?.answers[0]?.isCorrect).toBe(false);
+    expect(session?.answers[0]?.selectedCountryId).toBeUndefined();
+
+    const progress = useProgressStore.getState().progress.countries[question.countryId];
+    expect(progress?.needsReview).toBe(true);
+    expect(progress?.wrongCount).toBe(1);
+    expect(progress?.currentCorrectStreak).toBe(0);
+    expect(progress?.confusions).toBeUndefined();
+  });
+
+  it("dismisses an old summary without clearing an active session", () => {
+    expect(useSessionStore.getState().session).not.toBeNull();
+
+    useSessionStore.getState().dismissSummary();
+
+    expect(useSessionStore.getState().summary).toBeNull();
+    expect(useSessionStore.getState().session).not.toBeNull();
+  });
+
+  it("clears a completed summary on demand", () => {
+    for (let i = 0; i < 5; i++) {
+      const state = useSessionStore.getState();
+      const question = state.session?.questions[state.session.currentIndex];
+      if (!question) {
+        throw new Error("expected a question");
+      }
+      state.answerCurrentQuestion(question.countryId);
+      useSessionStore.getState().advance();
+    }
+
+    expect(useSessionStore.getState().summary).not.toBeNull();
+
+    useSessionStore.getState().dismissSummary();
+
+    expect(useSessionStore.getState().summary).toBeNull();
+    expect(useSessionStore.getState().session).toBeNull();
+  });
 });
 
 describe("sessionStore choice mode confusion tracking", () => {
