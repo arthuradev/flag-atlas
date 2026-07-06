@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden;}
+  body{margin:0;background:#3a463d;}
+  h1,h2,h3{font-family:"Nunito",sans-serif;color:#16231d;text-wrap:balance;}
+  p,li{font-family:"Nunito",sans-serif;color:#3d4d44;line-height:1.6;}
+  code{font-family:"JetBrains Mono",monospace;font-size:.86em;background:#eef1ea;color:#16231d;padding:1px 6px;border-radius:5px;}
+  pre{font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.62;background:#16231d;color:#dfe6dd;padding:18px 20px;border-radius:12px;overflow-x:auto;white-space:pre;}
+  pre .c{color:#8fb6a0;}
+  pre .k{color:#e0ad4c;}
+  pre .s{color:#7fd7ff;}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="letter" margin="0.72in" hint-size="820px,1060px">
+
+  <!-- COVER -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
+    <span style="width:52px;height:52px;border-radius:14px;background:#16231d;display:flex;align-items:center;justify-content:center;flex:0 0 auto;"><svg viewBox="0 0 24 24" fill="none" stroke="#34c07d" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg></span>
+    <div><div style="font-size:12px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#1f7a4d;">Flag Atlas</div><div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8a917f;">Design System · Handoff técnico</div></div>
+  </div>
+  <h1 style="font-size:34px;font-weight:900;margin:6px 0 4px;letter-spacing:-.02em;">Direção Terrain — implementação React + Tailwind</h1>
+  <p style="font-size:15px;margin:0 0 8px;">Guia de implementação do design system “Modern cartographic learning game”. Base <b>Terrain</b> (sálvia + verde-terreno) com detalhes de atlas de <b>Meridian</b> (textura de curvas de nível e ocre/dourado). Tudo offline: ícones Lucide (via <code>lucide-react</code>, tree-shaken), bandeiras vetoriais e Nunito auto-hospedada — sem CDN obrigatório.</p>
+  <div style="height:3px;background:linear-gradient(90deg,#1f7a4d,#cf9a3a);border-radius:2px;margin:14px 0 24px;"></div>
+
+  <h2 style="font-size:20px;font-weight:900;margin:0 0 6px;">1 · Fundamentos da direção</h2>
+  <p style="margin:0 0 14px;">Superfícies planas e limpas (Terrain) com uma camada cartográfica sutil: fundos de curva de nível em <code>radial-gradient</code> repetido, ocre reservado para XP / ofensiva / recompensas, e a bandeira sempre como protagonista (moldura branca + sombra macia no mobile, full-bleed no desktop). Evite: gradiente roxo/azul, glassmorphism, emojis como ícones de UI, e o layout mobile centralizado no desktop — o desktop usa sidebar fixa + grid de dashboard.</p>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">2 · Design tokens (CSS custom properties)</h2>
+  <p style="margin:0 0 12px;">Defina os tokens em <code>:root</code> e sobrescreva por tema com <code>[data-theme]</code>. Todos os componentes referenciam variáveis — nunca hex literais.</p>
+  <pre><span class="c">/* src/styles/tokens.css */</span>
+<span class="k">:root</span>, <span class="k">[data-theme="light"]</span> {
+  <span class="c">/* superfícies */</span>
+  --bg: <span class="s">#EEF1EA</span>;        --surface: <span class="s">#FFFFFF</span>;    --surface-2: <span class="s">#F6F8F3</span>;
+  --line: <span class="s">#DFE6DD</span>;      --line-strong: <span class="s">#CFDCCB</span>;
+  <span class="c">/* texto */</span>
+  --ink: <span class="s">#16231D</span>;       --ink-2: <span class="s">#3D4D44</span>;      --muted: <span class="s">#5C6B62</span>;   --faint: <span class="s">#8A917F</span>;
+  <span class="c">/* marca */</span>
+  --pine: <span class="s">#1F7A4D</span>;      --pine-hover: <span class="s">#1A6A42</span>;   --pine-soft: <span class="s">#E4F3EA</span>;
+  --ocre: <span class="s">#CF9A3A</span>;      --ocre-ink: <span class="s">#A1761D</span>;      --ocre-soft: <span class="s">#FAF1DC</span>;
+  <span class="c">/* feedback */</span>
+  --ok: <span class="s">#2F9E63</span>;   --ok-soft: <span class="s">#E4F3EA</span>;
+  --warn: <span class="s">#C9911F</span>;
+  --bad: <span class="s">#C04A2E</span>;  --bad-soft: <span class="s">#F8E6E0</span>;
+  <span class="c">/* insígnias de domínio */</span>
+  --bronze: <span class="s">#C88A52</span>;  --silver: <span class="s">#98A3AA</span>;  --gold: <span class="s">#C1901F</span>;  --platinum: <span class="s">#34C07D</span>;
+}
+
+<span class="k">[data-theme="dark"]</span> {
+  --bg: <span class="s">#0F1713</span>;   --surface: <span class="s">#16211B</span>;   --surface-2: <span class="s">#1B2822</span>;
+  --line: <span class="s">#26332B</span>;  --line-strong: <span class="s">#2C3A32</span>;
+  --ink: <span class="s">#E9F1EA</span>;   --ink-2: <span class="s">#C9D3CB</span>;   --muted: <span class="s">#9DB0A3</span>;  --faint: <span class="s">#6F7C72</span>;
+  --pine: <span class="s">#34C07D</span>;  --pine-hover: <span class="s">#2CA96C</span>;  --pine-soft: <span class="s">#12352A</span>;
+  --ocre: <span class="s">#E0AD4C</span>;  --ocre-ink: <span class="s">#E0AD4C</span>;  --ocre-soft: <span class="s">#2A2416</span>;
+}
+
+<span class="c">/* Tema cosmético de exemplo (loja) */</span>
+<span class="k">[data-theme="mapa-antigo"]</span> {
+  --bg: <span class="s">#EFE6D2</span>;  --surface: <span class="s">#FBF6EA</span>;  --line: <span class="s">#D8C6A5</span>;
+  --ink: <span class="s">#4A3826</span>;  --pine: <span class="s">#9A6B3F</span>;    --ocre: <span class="s">#B8863B</span>;
+}</pre>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">3 · Extensão do <code style="font-size:.82em;">tailwind.config.js</code></h2>
+  <p style="margin:0 0 12px;">Mapeie os tokens para o Tailwind para usar <code>bg-surface</code>, <code>text-ink</code>, <code>text-pine</code>, <code>rounded-card</code> etc.</p>
+  <pre><span class="c">// tailwind.config.js</span>
+<span class="k">export default</span> {
+  darkMode: [<span class="s">'class'</span>, <span class="s">'[data-theme="dark"]'</span>],
+  theme: {
+    extend: {
+      colors: {
+        bg:<span class="s">'var(--bg)'</span>, surface:<span class="s">'var(--surface)'</span>, <span class="s">'surface-2'</span>:<span class="s">'var(--surface-2)'</span>,
+        line:<span class="s">'var(--line)'</span>, <span class="s">'line-strong'</span>:<span class="s">'var(--line-strong)'</span>,
+        ink:<span class="s">'var(--ink)'</span>, <span class="s">'ink-2'</span>:<span class="s">'var(--ink-2)'</span>, muted:<span class="s">'var(--muted)'</span>, faint:<span class="s">'var(--faint)'</span>,
+        pine:{DEFAULT:<span class="s">'var(--pine)'</span>, hover:<span class="s">'var(--pine-hover)'</span>, soft:<span class="s">'var(--pine-soft)'</span>},
+        ocre:{DEFAULT:<span class="s">'var(--ocre)'</span>, ink:<span class="s">'var(--ocre-ink)'</span>, soft:<span class="s">'var(--ocre-soft)'</span>},
+        ok:<span class="s">'var(--ok)'</span>, bad:<span class="s">'var(--bad)'</span>, warn:<span class="s">'var(--warn)'</span>,
+        bronze:<span class="s">'var(--bronze)'</span>, silver:<span class="s">'var(--silver)'</span>, gold:<span class="s">'var(--gold)'</span>, platinum:<span class="s">'var(--platinum)'</span>,
+      },
+      fontFamily:{ sans:[<span class="s">'Nunito'</span>,<span class="s">'system-ui'</span>,<span class="s">'sans-serif'</span>] },
+      borderRadius:{ chip:<span class="s">'10px'</span>, btn:<span class="s">'14px'</span>, card:<span class="s">'20px'</span>, xl2:<span class="s">'28px'</span> },
+      boxShadow:{
+        card:<span class="s">'0 2px 4px rgba(22,35,29,.04), 0 24px 44px -30px rgba(22,35,29,.45)'</span>,
+        btn:<span class="s">'0 6px 0 var(--pine-hover)'</span>,
+        flag:<span class="s">'0 16px 34px -18px rgba(22,35,29,.55)'</span>,
+      },
+    },
+  },
+};</pre>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">4 · Tipografia, espaçamento, raio &amp; sombra</h2>
+  <p style="margin:0 0 10px;">Fonte única: <b>Nunito</b>, auto-hospedada (<code>@fontsource/nunito</code>, pesos 600/700/800/900). Escala e pesos:</p>
+  <table style="width:100%;border-collapse:collapse;font-family:'Nunito';font-size:13.5px;margin-bottom:14px;">
+    <tbody>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 0;font-weight:800;color:#16231d;">Display</td><td style="color:#5c6b62;">30–44px · 900 · <code>tracking-tight</code></td><td style="color:#8a917f;">headers de tela, resultado</td></tr>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 0;font-weight:800;color:#16231d;">H2</td><td style="color:#5c6b62;">22–28px · 800/900</td><td style="color:#8a917f;">pergunta, títulos de card</td></tr>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 0;font-weight:800;color:#16231d;">Body</td><td style="color:#5c6b62;">15–16px · 600/700</td><td style="color:#8a917f;">texto, opções</td></tr>
+      <tr><td style="padding:7px 0;font-weight:800;color:#16231d;">Caption</td><td style="color:#5c6b62;">11–13px · 700/800 · <code>uppercase tracking</code></td><td style="color:#8a917f;">rótulos, kickers</td></tr>
+    </tbody>
+  </table>
+  <p style="margin:0 0 6px;"><b>Espaçamento</b> — escala 4px (Tailwind padrão): gap de UI <code>gap-2/3</code>, padding de card <code>p-5/6</code>, seções <code>gap-5</code>. <b>Raio</b> — <code>chip 10</code> · <code>btn 14</code> · <code>card 20</code> · <code>xl2 28</code> · <code>full</code> (pills/avatares). <b>Sombra</b> — <code>shadow-card</code> em superfícies, <code>shadow-btn</code> (offset sólido) nos botões primários, <code>shadow-flag</code> na bandeira protagonista.</p>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">5 · Componentes-chave (React + Tailwind)</h2>
+
+  <h3 style="font-size:15px;font-weight:900;margin:14px 0 6px;">Button</h3>
+  <pre><span class="c">// variants: primary | secondary | ghost | disabled</span>
+<span class="k">const</span> base = <span class="s">"inline-flex items-center justify-center gap-2 font-extrabold rounded-btn px-6 py-3.5 text-base transition"</span>;
+<span class="k">const</span> variants = {
+  primary:   <span class="s">"bg-pine text-white shadow-btn active:translate-y-0.5 active:shadow-none"</span>,
+  secondary: <span class="s">"bg-surface text-pine border-[1.5px] border-line-strong"</span>,
+  ghost:     <span class="s">"bg-transparent text-ink"</span>,
+  disabled:  <span class="s">"bg-line text-faint pointer-events-none"</span>,
+};</pre>
+
+  <h3 style="font-size:15px;font-weight:900;margin:16px 0 6px;">Card · Chip · Scorecard</h3>
+  <pre><span class="c">// Card</span>     <span class="s">"bg-surface border border-line rounded-card shadow-card p-5"</span>
+<span class="c">// Chip on</span>  <span class="s">"px-4 py-2 rounded-chip bg-pine text-white text-sm font-extrabold"</span>
+<span class="c">// Chip off</span> <span class="s">"px-4 py-2 rounded-chip bg-surface text-ink-2 border border-line ..."</span>
+<span class="c">// Scorecard</span>
+&lt;<span class="k">div</span> className=<span class="s">"bg-surface border border-line rounded-card p-5"</span>&gt;
+  &lt;<span class="k">div</span> className=<span class="s">"flex justify-between items-center"</span>&gt;
+    &lt;<span class="k">span</span> className=<span class="s">"text-sm font-extrabold text-muted"</span>&gt;XP total&lt;/span&gt;
+    &lt;Sparkles className=<span class="s">"w-5 h-5 text-ocre"</span>/&gt;
+  &lt;/div&gt;
+  &lt;<span class="k">div</span> className=<span class="s">"text-3xl font-black text-ink mt-2"</span>&gt;1 240&lt;/div&gt;
+&lt;/div&gt;</pre>
+
+  <h3 style="font-size:15px;font-weight:900;margin:16px 0 6px;">AnswerOption — estados normal / correto / errado / desabilitado</h3>
+  <pre><span class="k">const</span> answer = {
+  base:     <span class="s">"w-full flex items-center gap-3.5 px-5 py-4 rounded-[15px] text-base font-extrabold border-2 text-left"</span>,
+  normal:   <span class="s">"bg-surface border-line text-ink"</span>,
+  selected: <span class="s">"bg-surface border-pine text-ink shadow-[0_6px_16px_-8px_rgba(31,122,77,.5)]"</span>,
+  correct:  <span class="s">"bg-ok-soft border-ok text-[#14623C]"</span>,       <span class="c">// + &lt;CheckCircle2/&gt;</span>
+  wrong:    <span class="s">"bg-bad-soft border-bad text-[#93341F]"</span>,      <span class="c">// + &lt;XCircle/&gt;</span>
+  disabled: <span class="s">"bg-bg border-line text-faint pointer-events-none"</span>,
+};</pre>
+
+  <h3 style="font-size:15px;font-weight:900;margin:16px 0 6px;">DomainBadge — bronze / prata / ouro / platina</h3>
+  <p style="margin:0 0 8px;">Insígnia = escudo hexagonal (<code>clip-path</code>) com gradiente metálico + ícone Lucide (<code>Shield</code> / <code>ShieldCheck</code> / <code>Gem</code> na platina). O tier vem dos limiares de mastery do repo (ver §7).</p>
+  <pre><span class="k">const</span> TIER = {
+  bronze:   {grad:<span class="s">'from-[#C88A52] to-[#96602F]'</span>, ink:<span class="s">'#F3E6D4'</span>, Icon:Shield},
+  silver:   {grad:<span class="s">'from-[#CED6DB] to-[#98A3AA]'</span>, ink:<span class="s">'#3F4A50'</span>, Icon:Shield},
+  gold:     {grad:<span class="s">'from-[#ECC158] to-[#C1901F]'</span>, ink:<span class="s">'#5A4413'</span>, Icon:ShieldCheck},
+  platinum: {grad:<span class="s">'from-[#7FD7FF] to-[#34C07D]'</span>, ink:<span class="s">'#0F2B22'</span>, Icon:Gem},
+};
+<span class="k">const</span> hexClip = {clipPath:<span class="s">'polygon(50% 0,100% 24%,100% 70%,50% 100%,0 70%,0 24%)'</span>};
+
+<span class="k">function</span> DomainBadge({tier=<span class="s">'gold'</span>, size=64}) {
+  <span class="k">const</span> t = TIER[tier];
+  <span class="k">return</span> (
+    &lt;<span class="k">span</span> style={{...hexClip, width:size, height:size*1.16}}
+      className={<span class="s">`bg-gradient-to-br ${t.grad} inline-flex items-center justify-center`</span>}&gt;
+      &lt;t.Icon strokeWidth={2} color={t.ink} width={size*0.42}/&gt;
+    &lt;/span&gt;
+  );
+}</pre>
+
+  <h3 style="font-size:15px;font-weight:900;margin:16px 0 6px;">Navegação — mobile bottom bar &amp; desktop sidebar</h3>
+  <pre><span class="c">// Mobile: barra fixa, item central FAB (play) elevado</span>
+&lt;<span class="k">nav</span> className=<span class="s">"fixed bottom-0 inset-x-0 bg-surface/90 backdrop-blur border-t border-line
+            flex justify-around items-end px-3.5 pt-2.5 pb-5"</span>&gt; … &lt;/nav&gt;
+
+<span class="c">// Desktop: sidebar escura fixa (nunca centralizar mobile no desktop)</span>
+&lt;<span class="k">aside</span> className=<span class="s">"w-[250px] shrink-0 bg-[#132019] p-6 flex flex-col"</span>&gt;
+  &lt;NavItem active icon={Home}&gt;Início&lt;/NavItem&gt; …
+&lt;/aside&gt;
+&lt;<span class="k">main</span> className=<span class="s">"flex-1 overflow-y-auto px-8 py-6"</span>&gt; …grid do dashboard… &lt;/main&gt;</pre>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">6 · Ícones &amp; bandeiras (offline)</h2>
+  <p style="margin:0 0 8px;"><b>Ícones:</b> <code>lucide-react</code> — importe só o que usar (tree-shaking). Padrão: <code>strokeWidth 2</code>, <code>size 18–24</code>, <code>color currentColor</code>. Mapa usado nas telas: <code>Home, Layers (coleção), Trophy, BarChart3, ShoppingBag, Settings2, Compass (logo), Play, Flame (ofensiva), Sparkles (XP), Target (precisão), CheckCircle2, XCircle, Shield/ShieldCheck/Gem (badges), Lock, Search, Coins, Moon, Volume2, Bell</code>. Zero emojis na UI.</p>
+  <p style="margin:0 0 8px;"><b>Bandeiras:</b> use SVGs vetoriais empacotados no bundle (ex. <code>flag-icons</code> via <code>npm</code>, ou os 195 SVGs no <code>public/flags/</code>) — nunca um CDN. Renderize com <code>rounded-lg overflow-hidden shadow-flag</code>. No treino (mobile) a bandeira fica emoldurada em branco; no desktop, full-bleed.</p>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">7 · Mapeamento para o repositório</h2>
+  <table style="width:100%;border-collapse:collapse;font-family:'Nunito';font-size:13px;margin-bottom:12px;">
+    <tbody>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 8px 7px 0;font-weight:800;color:#16231d;white-space:nowrap;">tokens.css</td><td style="color:#5c6b62;">novo arquivo importado em <code>src/index.css</code> (substitui as cores teal atuais)</td></tr>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 8px 7px 0;font-weight:800;color:#16231d;">Home/Dashboard</td><td style="color:#5c6b62;"><code>src/pages/HomePage</code> — trocar layout <code>max-w-md</code> por sidebar+grid em <code>lg:</code></td></tr>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 8px 7px 0;font-weight:800;color:#16231d;">Treino</td><td style="color:#5c6b62;"><code>src/pages/TrainingPage</code> — <code>AnswerOption</code> + estados; bandeira protagonista</td></tr>
+      <tr style="border-bottom:1px solid #dfe6dd;"><td style="padding:7px 8px 7px 0;font-weight:800;color:#16231d;">Mastery/Badges</td><td style="color:#5c6b62;">reaproveitar limiares de <code>.specs/MASTERY_2.md</code> → <code>DomainBadge tier</code></td></tr>
+      <tr><td style="padding:7px 8px 7px 0;font-weight:800;color:#16231d;">Loja</td><td style="color:#5c6b62;"><code>.specs/COSMETICS.md</code> → temas como <code>[data-theme]</code>; moeda = ícone <code>Coins</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="font-size:20px;font-weight:900;margin:22px 0 6px;">8 · Acessibilidade</h2>
+  <ul style="margin:0 0 8px;padding-left:20px;font-size:14px;">
+    <li><b>Contraste:</b> pares de token atendem WCAG AA (<code>ink</code>/<code>surface</code> ≈ 13:1; <code>pine</code>/branco ≈ 4.8:1). Nunca texto <code>faint</code> sobre <code>bg</code> em tamanhos &lt; 14px.</li>
+    <li><b>Foco visível:</b> aplique um utilitário global <code>focus-visible:ring-2 focus-visible:ring-pine focus-visible:ring-offset-2 ring-offset-bg</code> em todos os alvos interativos.</li>
+    <li><b>Reduced motion:</b> <code>@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }</code> — e o toggle de Configurações força a mesma classe.</li>
+    <li><b>Alvos de toque:</b> mínimo 44×44px (opções, itens de nav, FAB). Estados de resposta comunicam por cor <b>e</b> ícone (<code>CheckCircle2</code>/<code>XCircle</code>), nunca só por cor.</li>
+    <li><b>Semântica:</b> quiz como <code>&lt;fieldset&gt;/&lt;legend&gt;</code>, opções como <code>&lt;button role="radio"&gt;</code>; <code>aria-live="polite"</code> no feedback de resultado.</li>
+  </ul>
+
+  <div style="margin-top:20px;padding:16px 18px;border-radius:14px;background:#e4f3ea;border:1px solid #bfe3cd;">
+    <div style="font-size:13px;font-weight:900;color:#14623c;">Ordem de adoção sugerida</div>
+    <p style="margin:6px 0 0;font-size:13.5px;color:#2f5a45;">1) tokens.css + tailwind.config → 2) Button/Card/Chip → 3) AnswerOption + Treino → 4) DomainBadge + Mastery → 5) Home dashboard (desktop) → 6) Coleção/Loja/Stats/Conquistas → 7) Configurações + camada de acessibilidade.</p>
+  </div>
+
+</x-import>
+
+</x-dc>
+</body>
+</html>

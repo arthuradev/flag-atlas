@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Flag Atlas</string>
+    <string name="title_activity_main">Flag Atlas</string>
+    <string name="package_name">dev.arthuradev.flagatlas</string>
+    <string name="custom_url_scheme">dev.arthuradev.flagatlas</string>
+</resources>

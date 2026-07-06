@@ -2,9 +2,12 @@ import { registerSW } from "virtual:pwa-register";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./app/App.tsx";
+import { setupNativeMobileExperience } from "./shared/native/mobile.ts";
 import "./index.css";
 
 registerSW({ immediate: true });
+
+void setupNativeMobileExperience();
 
 const rootElement = document.getElementById("root");
 

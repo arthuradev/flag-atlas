@@ -22,6 +22,11 @@ import { FlagImage } from "@/shared/components/FlagImage";
 import { Icon } from "@/shared/components/Icon";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import type { Locale } from "@/shared/i18n/locale";
+import {
+  hapticError,
+  hapticSuccess,
+  TRAINING_NATIVE_BACK_EVENT,
+} from "@/shared/native/mobile";
 
 const SURVIVAL_LIFE_SLOTS = Array.from(
   { length: SURVIVAL_STARTING_LIVES },
@@ -54,7 +59,7 @@ function TrainingTopBar({
   const visibleCurrent = Math.min(Math.max(0, current), safeTotal);
 
   return (
-    <header className="shrink-0 border-b border-line bg-background/95 px-3 py-2 backdrop-blur sm:px-5 sm:py-3">
+    <header className="mobile-safe-top shrink-0 border-b border-line bg-background/95 px-3 py-2 backdrop-blur sm:px-5 sm:py-3">
       <div className="mx-auto flex max-w-6xl items-center gap-3">
         <button
           type="button"
@@ -154,7 +159,7 @@ function TrainingFeedbackBar({
   return (
     <footer
       aria-live="polite"
-      className="shrink-0 border-t border-line bg-background/95 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 backdrop-blur sm:px-5 sm:pb-3 sm:pt-3"
+      className="mobile-safe-bottom shrink-0 border-t border-line bg-background/95 px-3 pt-2 backdrop-blur sm:px-5 sm:pb-3 sm:pt-3"
     >
       <div className="mx-auto max-w-6xl">
         {feedback ? (
@@ -355,6 +360,7 @@ export function TrainingPage() {
   useEffect(() => {
     if (feedback) {
       playSound(feedback.isCorrect ? "success" : "error");
+      void (feedback.isCorrect ? hapticSuccess() : hapticError());
     }
   }, [feedback]);
 
@@ -368,15 +374,30 @@ export function TrainingPage() {
     if (!session || summary) {
       return;
     }
+
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = "";
     };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [session, summary]);
+
+  useEffect(() => {
+    const handleNativeBack = () => {
+      setExitDialogOpen(true);
+    };
+
+    window.addEventListener(TRAINING_NATIVE_BACK_EVENT, handleNativeBack);
+
+    return () => {
+      window.removeEventListener(TRAINING_NATIVE_BACK_EVENT, handleNativeBack);
+    };
+  }, []);
 
   const handleRequestExit = () => setExitDialogOpen(true);
   const handleCancelExit = () => setExitDialogOpen(false);
@@ -496,9 +517,11 @@ export function TrainingPage() {
             <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:gap-4">
               {(question.optionCountryIds ?? []).map((optionId) => {
                 const option = getCountryById(optionId);
+
                 if (!option) {
                   return null;
                 }
+
                 const state = !feedback
                   ? "idle"
                   : optionId === feedback.correctCountryId
@@ -506,6 +529,7 @@ export function TrainingPage() {
                     : optionId === feedback.selectedCountryId
                       ? "wrong"
                       : "dimmed";
+
                 return (
                   <OptionButton
                     key={optionId}

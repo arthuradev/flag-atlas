@@ -7,15 +7,25 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:android": "tsc -b && vite build --base=./",
     "preview": "vite preview",
     "lint": "biome check .",
     "format": "biome format --write .",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "android:add": "cap add android",
+    "android:sync": "pnpm build:android && cap sync android",
+    "android:open": "pnpm android:sync && cap open android",
+    "android:run": "pnpm android:sync && cap run android",
+    "android:apk": "pnpm android:sync && cd android && gradlew.bat assembleDebug"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/haptics": "^8.0.2",
     "@fontsource-variable/nunito": "^5.2.7",
     "howler": "^2.2.4",
     "i18next": "^26.3.4",
@@ -28,6 +38,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.2",
+    "@capacitor/cli": "^8.4.1",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/vite": "^4.3.2",
     "@types/howler": "^2.2.13",

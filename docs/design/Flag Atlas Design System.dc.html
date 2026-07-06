@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400..900;1,400..800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  html,body{margin:0;background:#1b241f;-webkit-font-smoothing:antialiased;}
+  *{box-sizing:border-box;}
+  body{font-family:"Nunito",system-ui,sans-serif;}
+  svg.lucide{width:1.15em;height:1.15em;vertical-align:-0.16em;}
+  @keyframes fa-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;padding:56px 60px 120px;background:
+  radial-gradient(circle at 22% 18%, rgba(207,154,58,.05) 0 42px, transparent 43px 84px),
+  repeating-radial-gradient(circle at 78% 82%, transparent 0 46px, rgba(120,150,120,.045) 46px 47px),
+  repeating-radial-gradient(circle at 20% 78%, transparent 0 60px, rgba(120,150,120,.04) 60px 61px),
+  #1b241f;">
+
+  <div style="max-width:2560px;margin:0 auto;">
+    <div style="display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:8px;">
+      <span style="font-size:13px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:#cf9a3a;">Flag Atlas</span>
+      <span style="font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7f8c81;">Design System · duas direções de identidade</span>
+    </div>
+    <h1 style="margin:0 0 6px;font-size:34px;font-weight:900;color:#f1efe6;letter-spacing:-.01em;">Modern cartographic learning game</h1>
+    <p style="margin:0 0 40px;font-size:16px;color:#9aa79d;max-width:760px;line-height:1.55;">Verde-topográfico + ocre, Nunito refinada, ícones de linha e a bandeira como protagonista. Escolha uma direção (<b style="color:#cf9a3a;">1a</b> ou <b style="color:#cf9a3a;">1b</b>) — depois eu expando a escolhida no spec completo de tokens para React + Tailwind.</p>
+
+    <section style="display:flex;gap:52px;flex-wrap:wrap;align-items:flex-start;">
+
+      <!-- ══════════════ OPTION 1a — MERIDIAN ══════════════ -->
+      <article id="1a" style="width:1180px;flex:0 0 auto;border-radius:32px;overflow:hidden;background:#efe7d6;box-shadow:0 40px 90px -40px rgba(0,0,0,.6);border:1px solid #d9cdb2;">
+
+        <!-- hero -->
+        <div style="position:relative;padding:40px 44px 36px;background:
+          repeating-radial-gradient(circle at 84% 30%, transparent 0 34px, rgba(47,106,76,.07) 34px 35px),
+          repeating-radial-gradient(circle at 10% 90%, transparent 0 44px, rgba(193,137,47,.08) 44px 45px),
+          linear-gradient(160deg,#fbf7ec,#f3ecdb);border-bottom:1px solid #e3d9c2;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <span style="display:inline-block;padding:5px 12px;border-radius:999px;background:#2f6a4c;color:#fbf7ec;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Opção 1a</span>
+              <h2 style="margin:16px 0 4px;font-size:44px;font-weight:900;color:#24352b;letter-spacing:-.02em;line-height:1;">Meridian</h2>
+              <p style="margin:0;font-size:16px;font-weight:700;color:#2f6a4c;">Pergaminho &amp; Pinho · quente, editorial, tátil</p>
+              <p style="margin:8px 0 0;font-size:14px;color:#6f7a6b;max-width:520px;line-height:1.5;">Base creme de mapa antigo, verde-pinho profundo e ocre. Curvas de nível sutis, selos de carimbo e sombras macias. Divertido, mas com peso de atlas de verdade.</p>
+            </div>
+            <div style="width:120px;height:120px;border-radius:22px;background:
+              repeating-radial-gradient(circle at 50% 50%, #2f6a4c 0 2px, transparent 2px 13px);
+              display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px #e3d9c2;">
+              <i data-lucide="compass" width="52" height="52" style="color:#c1892f;"></i>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:40px 44px 48px;display:flex;flex-direction:column;gap:40px;">
+
+          <!-- PALETTE -->
+          <div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Paleta · claro</div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
+              <div><div style="height:64px;border-radius:14px;background:#efe7d6;border:1px solid #d9cdb2;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#24352b;">Background</div><div style="font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;">#efe7d6</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#fbf7ec;border:1px solid #d9cdb2;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#24352b;">Surface</div><div style="font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;">#fbf7ec</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#2f6a4c;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#24352b;">Primary · Pinho</div><div style="font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;">#2f6a4c</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#c1892f;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#24352b;">Accent · Ocre</div><div style="font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;">#c1892f</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#24352b;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#24352b;">Ink · texto</div><div style="font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;">#24352b</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fbf7ec;border:1px solid #e3d9c2;"><span style="width:22px;height:22px;border-radius:7px;background:#3f8f5f;"></span><div><div style="font-size:12px;font-weight:800;color:#24352b;">Success</div><div style="font-size:10px;color:#6f7a6b;font-family:ui-monospace,monospace;">#3f8f5f</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fbf7ec;border:1px solid #e3d9c2;"><span style="width:22px;height:22px;border-radius:7px;background:#c48a1f;"></span><div><div style="font-size:12px;font-weight:800;color:#24352b;">Warning</div><div style="font-size:10px;color:#6f7a6b;font-family:ui-monospace,monospace;">#c48a1f</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fbf7ec;border:1px solid #e3d9c2;"><span style="width:22px;height:22px;border-radius:7px;background:#b5462f;"></span><div><div style="font-size:12px;font-weight:800;color:#24352b;">Danger</div><div style="font-size:10px;color:#6f7a6b;font-family:ui-monospace,monospace;">#b5462f</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fbf7ec;border:1px solid #e3d9c2;"><span style="width:22px;height:22px;border-radius:7px;background:#e3d9c2;"></span><div><div style="font-size:12px;font-weight:800;color:#24352b;">Border</div><div style="font-size:10px;color:#6f7a6b;font-family:ui-monospace,monospace;">#e3d9c2</div></div></div>
+            </div>
+            <!-- dark + special -->
+            <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:230px;border-radius:14px;padding:14px 16px;background:#131d18;">
+                <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7f8c81;margin-bottom:10px;">Escuro</div>
+                <div style="display:flex;gap:8px;">
+                  <span style="flex:1;height:34px;border-radius:9px;background:#1b2822;border:1px solid #2a3a31;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#4fb083;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#d7a24a;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#e7efe6;"></span>
+                </div>
+              </div>
+              <div style="flex:1;min-width:230px;border-radius:14px;padding:14px 16px;background:#efe6d2;border:1px solid #d8c6a5;">
+                <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8a745a;margin-bottom:10px;">Tema cosmético · Mapa Antigo</div>
+                <div style="display:flex;gap:8px;">
+                  <span style="flex:1;height:34px;border-radius:9px;background:#fbf6ea;border:1px solid #d8c6a5;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#9a6b3f;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#b8863b;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#4a3826;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TYPOGRAPHY -->
+          <div style="border-top:1px solid #e3d9c2;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Tipografia · Nunito</div>
+            <div style="display:flex;flex-direction:column;gap:6px;color:#24352b;">
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;flex:0 0 auto;">Display 44/900</span><span style="font-size:44px;font-weight:900;letter-spacing:-.02em;line-height:1;">Continue o treino</span></div>
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;flex:0 0 auto;">H2 26/800</span><span style="font-size:26px;font-weight:800;letter-spacing:-.01em;">Qual é este país?</span></div>
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;flex:0 0 auto;">Body 16/600</span><span style="font-size:16px;font-weight:600;">Aprenda as bandeiras do mundo em treinos rápidos.</span></div>
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#6f7a6b;font-family:ui-monospace,monospace;flex:0 0 auto;">Caption 13/700</span><span style="font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#6f7a6b;">37 / 195 aprendidos</span></div>
+            </div>
+          </div>
+
+          <!-- BUTTONS + CHIPS -->
+          <div style="border-top:1px solid #e3d9c2;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Botões &amp; chips</div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+              <button style="border:none;cursor:pointer;font-family:inherit;padding:15px 26px;border-radius:16px;background:#2f6a4c;color:#fbf7ec;font-size:16px;font-weight:800;box-shadow:0 8px 18px -8px rgba(47,106,76,.6);display:inline-flex;align-items:center;gap:9px;"><i data-lucide="play" width="18" height="18"></i> Continuar treino</button>
+              <button style="cursor:pointer;font-family:inherit;padding:15px 24px;border-radius:16px;background:#fbf7ec;color:#2f6a4c;font-size:16px;font-weight:800;border:1.5px solid #cdbf9f;display:inline-flex;align-items:center;gap:9px;"><i data-lucide="rotate-ccw" width="18" height="18"></i> Revisar hoje</button>
+              <button style="cursor:pointer;font-family:inherit;padding:15px 20px;border-radius:16px;background:transparent;color:#24352b;font-size:16px;font-weight:800;border:none;display:inline-flex;align-items:center;gap:8px;">Continuar <i data-lucide="chevron-right" width="18" height="18"></i></button>
+              <button disabled style="font-family:inherit;padding:15px 24px;border-radius:16px;background:#e7ddc8;color:#a99f89;font-size:16px;font-weight:800;border:none;">Desabilitado</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;">
+              <span style="padding:8px 15px;border-radius:999px;background:#2f6a4c;color:#fbf7ec;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:7px;"><i data-lucide="check" width="15" height="15"></i> Todos</span>
+              <span style="padding:8px 15px;border-radius:999px;background:#fbf7ec;color:#4a5a4d;font-size:13px;font-weight:800;border:1px solid #e3d9c2;">África</span>
+              <span style="padding:8px 15px;border-radius:999px;background:#fbf7ec;color:#4a5a4d;font-size:13px;font-weight:800;border:1px solid #e3d9c2;">Ásia</span>
+              <span style="padding:8px 15px;border-radius:999px;background:#fbf7ec;color:#4a5a4d;font-size:13px;font-weight:800;border:1px solid #e3d9c2;">Europa</span>
+              <span style="padding:8px 15px;border-radius:999px;background:#f6ecd6;color:#96691f;font-size:13px;font-weight:800;border:1px solid #e5d3a8;display:inline-flex;align-items:center;gap:6px;"><i data-lucide="star" width="14" height="14"></i> Revisar</span>
+            </div>
+          </div>
+
+          <!-- FLAG CARD + ANSWER STATES -->
+          <div style="border-top:1px solid #e3d9c2;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Tela de treino · bandeira &amp; respostas</div>
+            <div style="border-radius:22px;background:#fbf7ec;border:1px solid #e3d9c2;padding:22px;box-shadow:0 1px 2px rgba(36,53,43,.05),0 20px 40px -28px rgba(36,53,43,.4);">
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800;color:#6f7a6b;margin-bottom:12px;">
+                <span>Pergunta 3/10</span>
+                <span style="display:inline-flex;gap:14px;"><span style="color:#b5462f;display:inline-flex;align-items:center;gap:5px;"><i data-lucide="flame" width="15" height="15"></i> 4</span><span style="color:#c1892f;display:inline-flex;align-items:center;gap:5px;"><i data-lucide="star" width="15" height="15"></i> +45</span></span>
+              </div>
+              <div style="height:6px;border-radius:99px;background:#e7ddc8;margin-bottom:20px;"><div style="width:30%;height:100%;border-radius:99px;background:#2f6a4c;"></div></div>
+              <!-- flag frame with contour texture -->
+              <div style="position:relative;border-radius:18px;padding:26px;background:
+                repeating-radial-gradient(circle at 30% 40%, transparent 0 26px, rgba(47,106,76,.05) 26px 27px),
+                #ffffff;border:1px solid #e3d9c2;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 4px #fbf7ec;">
+                <img src="https://flagcdn.com/w320/jp.png" alt="Bandeira do Japão" style="width:240px;max-width:70%;border-radius:8px;box-shadow:0 10px 24px -12px rgba(36,53,43,.5);">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;">
+                <div style="padding:16px 18px;border-radius:14px;font-size:16px;font-weight:800;color:#24352b;background:#ffffff;border:2px solid #e3d9c2;">Vietnã <span style="font-size:11px;font-weight:700;color:#8a917f;float:right;">normal</span></div>
+                <div style="padding:16px 18px;border-radius:14px;font-size:16px;font-weight:800;color:#1f5b3d;background:#e6f2ea;border:2px solid #3f8f5f;display:flex;justify-content:space-between;align-items:center;">Japão <i data-lucide="check-circle-2" width="20" height="20" style="color:#3f8f5f;"></i></div>
+                <div style="padding:16px 18px;border-radius:14px;font-size:16px;font-weight:800;color:#8f3221;background:#f7e5e0;border:2px solid #b5462f;display:flex;justify-content:space-between;align-items:center;">China <i data-lucide="x-circle" width="20" height="20" style="color:#b5462f;"></i></div>
+                <div style="padding:16px 18px;border-radius:14px;font-size:16px;font-weight:800;color:#a99f89;background:#f1e9d8;border:2px solid #e7ddc8;">Coreia do Sul <span style="font-size:11px;font-weight:700;float:right;">desabilitado</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DOMAIN BADGES -->
+          <div style="border-top:1px solid #e3d9c2;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Badges de domínio · selo de carimbo</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;">
+                <div style="width:66px;height:66px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 38% 32%,#c48a52,#8a5a30);box-shadow:0 0 0 3px #efe7d6,0 0 0 4.5px #b07940;display:flex;align-items:center;justify-content:center;"><i data-lucide="award" width="30" height="30" style="color:#f3e6d4;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#24352b;">Reconhecido</div><div style="font-size:11px;color:#6f7a6b;">Bronze</div>
+              </div>
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;">
+                <div style="width:66px;height:66px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 38% 32%,#c8d0d5,#8f9aa1);box-shadow:0 0 0 3px #efe7d6,0 0 0 4.5px #aab4bb;display:flex;align-items:center;justify-content:center;"><i data-lucide="award" width="30" height="30" style="color:#3f4a50;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#24352b;">Aprendido</div><div style="font-size:11px;color:#6f7a6b;">Prata</div>
+              </div>
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;">
+                <div style="width:66px;height:66px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 38% 32%,#e6bd55,#b98a24);box-shadow:0 0 0 3px #efe7d6,0 0 0 4.5px #d3a232;display:flex;align-items:center;justify-content:center;"><i data-lucide="award" width="30" height="30" style="color:#5a4413;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#24352b;">Dominado</div><div style="font-size:11px;color:#6f7a6b;">Ouro</div>
+              </div>
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;">
+                <div style="width:66px;height:66px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 38% 32%,#a9c3c7,#6c8f93);box-shadow:0 0 0 3px #efe7d6,0 0 0 4.5px #86a6aa;display:flex;align-items:center;justify-content:center;"><i data-lucide="gem" width="28" height="28" style="color:#eaf3f4;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#24352b;">Mestre</div><div style="font-size:11px;color:#6f7a6b;">Platina</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCORECARDS / DASHBOARD -->
+          <div style="border-top:1px solid #e3d9c2;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Scorecards &amp; dashboard</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+              <div style="padding:16px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;"><i data-lucide="sparkles" width="20" height="20" style="color:#c1892f;"></i><div style="font-size:28px;font-weight:900;color:#24352b;margin-top:6px;line-height:1;">1 240</div><div style="font-size:12px;font-weight:700;color:#6f7a6b;margin-top:3px;">XP total</div></div>
+              <div style="padding:16px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;"><i data-lucide="flame" width="20" height="20" style="color:#b5462f;"></i><div style="font-size:28px;font-weight:900;color:#24352b;margin-top:6px;line-height:1;">12</div><div style="font-size:12px;font-weight:700;color:#6f7a6b;margin-top:3px;">Dias seguidos</div></div>
+              <div style="padding:16px;border-radius:16px;background:#fbf7ec;border:1px solid #e3d9c2;"><i data-lucide="target" width="20" height="20" style="color:#2f6a4c;"></i><div style="font-size:28px;font-weight:900;color:#24352b;margin-top:6px;line-height:1;">88%</div><div style="font-size:12px;font-weight:700;color:#6f7a6b;margin-top:3px;">Precisão</div></div>
+              <div style="padding:16px;border-radius:16px;background:#2f6a4c;color:#fbf7ec;"><i data-lucide="globe" width="20" height="20" style="color:#d7a24a;"></i><div style="font-size:28px;font-weight:900;margin-top:6px;line-height:1;">37<span style="font-size:15px;opacity:.7;">/195</span></div><div style="font-size:12px;font-weight:700;opacity:.85;margin-top:3px;">Países</div></div>
+            </div>
+          </div>
+
+          <!-- NAV -->
+          <div style="border-top:1px solid #e3d9c2;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c1892f;margin-bottom:16px;">Navegação</div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+              <!-- desktop sidebar -->
+              <div style="width:220px;border-radius:18px;background:#fbf7ec;border:1px solid #e3d9c2;padding:16px 12px;">
+                <div style="display:flex;align-items:center;gap:9px;padding:0 8px 14px;"><i data-lucide="compass" width="22" height="22" style="color:#c1892f;"></i><span style="font-size:16px;font-weight:900;color:#24352b;">Flag Atlas</span></div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:11px;background:#2f6a4c;color:#fbf7ec;font-weight:800;font-size:14px;"><i data-lucide="home" width="18" height="18"></i> Início</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#4a5a4d;font-weight:700;font-size:14px;"><i data-lucide="map" width="18" height="18"></i> Continentes</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#4a5a4d;font-weight:700;font-size:14px;"><i data-lucide="backpack" width="18" height="18"></i> Coleção</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#4a5a4d;font-weight:700;font-size:14px;"><i data-lucide="trophy" width="18" height="18"></i> Conquistas</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#4a5a4d;font-weight:700;font-size:14px;"><i data-lucide="bar-chart-3" width="18" height="18"></i> Estatísticas</div>
+              </div>
+              <!-- mobile bottom -->
+              <div style="flex:1;min-width:300px;display:flex;flex-direction:column;justify-content:flex-end;">
+                <div style="border-radius:22px;background:#fbf7ec;border:1px solid #e3d9c2;padding:12px 10px;display:flex;justify-content:space-around;box-shadow:0 14px 30px -20px rgba(36,53,43,.5);">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#2f6a4c;font-size:11px;font-weight:800;"><i data-lucide="home" width="22" height="22"></i>Início</div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8a917f;font-size:11px;font-weight:700;"><i data-lucide="map" width="22" height="22"></i>Mapa</div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><span style="width:52px;height:52px;border-radius:50%;background:#2f6a4c;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px rgba(47,106,76,.7);margin-top:-22px;"><i data-lucide="play" width="24" height="24" style="color:#fbf7ec;"></i></span></div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8a917f;font-size:11px;font-weight:700;"><i data-lucide="backpack" width="22" height="22"></i>Coleção</div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8a917f;font-size:11px;font-weight:700;"><i data-lucide="trophy" width="22" height="22"></i>Prêmios</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </article>
+
+      <!-- ══════════════ OPTION 1b — TERRAIN ══════════════ -->
+      <article id="1b" style="width:1180px;flex:0 0 auto;border-radius:32px;overflow:hidden;background:#eef1ea;box-shadow:0 40px 90px -40px rgba(0,0,0,.6);border:1px solid #d5ddd2;">
+
+        <!-- hero -->
+        <div style="position:relative;padding:40px 44px 36px;background:
+          repeating-radial-gradient(circle at 88% 24%, transparent 0 30px, rgba(31,122,77,.08) 30px 31px),
+          linear-gradient(160deg,#ffffff,#eaf0e8);border-bottom:1px solid #dfe6dd;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <span style="display:inline-block;padding:5px 12px;border-radius:999px;background:#1f7a4d;color:#fff;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Opção 1b</span>
+              <h2 style="margin:16px 0 4px;font-size:44px;font-weight:900;color:#16231d;letter-spacing:-.02em;line-height:1;">Terrain</h2>
+              <p style="margin:0;font-size:16px;font-weight:700;color:#1f7a4d;">Sálvia &amp; Sinal · frio, limpo, premium</p>
+              <p style="margin:8px 0 0;font-size:14px;color:#5c6b62;max-width:520px;line-height:1.5;">Base sálvia quase-branca, verde-terreno vivo e ocre pontual. Superfícies planas, sombras nítidas, bandeira full-bleed e insígnias de escudo. Moderno e sério, sem perder a diversão.</p>
+            </div>
+            <div style="width:120px;height:120px;border-radius:22px;background:#16231d;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px -14px rgba(22,35,29,.7);">
+              <i data-lucide="map" width="52" height="52" style="color:#34c07d;"></i>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:40px 44px 48px;display:flex;flex-direction:column;gap:40px;">
+
+          <!-- PALETTE -->
+          <div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Paleta · claro</div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
+              <div><div style="height:64px;border-radius:14px;background:#eef1ea;border:1px solid #d5ddd2;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#16231d;">Background</div><div style="font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;">#eef1ea</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#ffffff;border:1px solid #d5ddd2;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#16231d;">Surface</div><div style="font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;">#ffffff</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#1f7a4d;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#16231d;">Primary · Terreno</div><div style="font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;">#1f7a4d</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#cf9a3a;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#16231d;">Accent · Ocre</div><div style="font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;">#cf9a3a</div></div>
+              <div><div style="height:64px;border-radius:14px;background:#16231d;"></div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#16231d;">Ink · texto</div><div style="font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;">#16231d</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid #dfe6dd;"><span style="width:22px;height:22px;border-radius:7px;background:#2f9e63;"></span><div><div style="font-size:12px;font-weight:800;color:#16231d;">Success</div><div style="font-size:10px;color:#5c6b62;font-family:ui-monospace,monospace;">#2f9e63</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid #dfe6dd;"><span style="width:22px;height:22px;border-radius:7px;background:#c9911f;"></span><div><div style="font-size:12px;font-weight:800;color:#16231d;">Warning</div><div style="font-size:10px;color:#5c6b62;font-family:ui-monospace,monospace;">#c9911f</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid #dfe6dd;"><span style="width:22px;height:22px;border-radius:7px;background:#c04a2e;"></span><div><div style="font-size:12px;font-weight:800;color:#16231d;">Danger</div><div style="font-size:10px;color:#5c6b62;font-family:ui-monospace,monospace;">#c04a2e</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid #dfe6dd;"><span style="width:22px;height:22px;border-radius:7px;background:#dfe6dd;"></span><div><div style="font-size:12px;font-weight:800;color:#16231d;">Border</div><div style="font-size:10px;color:#5c6b62;font-family:ui-monospace,monospace;">#dfe6dd</div></div></div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:230px;border-radius:14px;padding:14px 16px;background:#0f1713;">
+                <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7c8b81;margin-bottom:10px;">Escuro</div>
+                <div style="display:flex;gap:8px;">
+                  <span style="flex:1;height:34px;border-radius:9px;background:#16211b;border:1px solid #26332b;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#34c07d;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#e0ad4c;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#e9f1ea;"></span>
+                </div>
+              </div>
+              <div style="flex:1;min-width:230px;border-radius:14px;padding:14px 16px;background:#06283d;">
+                <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9cc4da;margin-bottom:10px;">Tema cosmético · Oceano</div>
+                <div style="display:flex;gap:8px;">
+                  <span style="flex:1;height:34px;border-radius:9px;background:#114b6e;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#2ec7c7;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#38bdf8;"></span>
+                  <span style="flex:1;height:34px;border-radius:9px;background:#e6f4fb;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TYPOGRAPHY -->
+          <div style="border-top:1px solid #dfe6dd;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Tipografia · Nunito</div>
+            <div style="display:flex;flex-direction:column;gap:6px;color:#16231d;">
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;flex:0 0 auto;">Display 44/900</span><span style="font-size:44px;font-weight:900;letter-spacing:-.02em;line-height:1;">Continue o treino</span></div>
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;flex:0 0 auto;">H2 26/800</span><span style="font-size:26px;font-weight:800;letter-spacing:-.01em;">Qual é este país?</span></div>
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;flex:0 0 auto;">Body 16/600</span><span style="font-size:16px;font-weight:600;">Aprenda as bandeiras do mundo em treinos rápidos.</span></div>
+              <div style="display:flex;align-items:baseline;gap:16px;"><span style="width:78px;font-size:11px;color:#5c6b62;font-family:ui-monospace,monospace;flex:0 0 auto;">Caption 13/700</span><span style="font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#5c6b62;">37 / 195 aprendidos</span></div>
+            </div>
+          </div>
+
+          <!-- BUTTONS + CHIPS -->
+          <div style="border-top:1px solid #dfe6dd;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Botões &amp; chips</div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+              <button style="border:none;cursor:pointer;font-family:inherit;padding:15px 26px;border-radius:14px;background:#1f7a4d;color:#fff;font-size:16px;font-weight:800;box-shadow:0 10px 20px -10px rgba(31,122,77,.7);display:inline-flex;align-items:center;gap:9px;"><i data-lucide="play" width="18" height="18"></i> Continuar treino</button>
+              <button style="cursor:pointer;font-family:inherit;padding:15px 24px;border-radius:14px;background:#fff;color:#1f7a4d;font-size:16px;font-weight:800;border:1.5px solid #cfdccb;display:inline-flex;align-items:center;gap:9px;"><i data-lucide="rotate-ccw" width="18" height="18"></i> Revisar hoje</button>
+              <button style="cursor:pointer;font-family:inherit;padding:15px 20px;border-radius:14px;background:transparent;color:#16231d;font-size:16px;font-weight:800;border:none;display:inline-flex;align-items:center;gap:8px;">Continuar <i data-lucide="chevron-right" width="18" height="18"></i></button>
+              <button disabled style="font-family:inherit;padding:15px 24px;border-radius:14px;background:#e3e8e0;color:#a4ad9f;font-size:16px;font-weight:800;border:none;">Desabilitado</button>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;">
+              <span style="padding:8px 15px;border-radius:10px;background:#1f7a4d;color:#fff;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:7px;"><i data-lucide="check" width="15" height="15"></i> Todos</span>
+              <span style="padding:8px 15px;border-radius:10px;background:#fff;color:#3d4d44;font-size:13px;font-weight:800;border:1px solid #dfe6dd;">África</span>
+              <span style="padding:8px 15px;border-radius:10px;background:#fff;color:#3d4d44;font-size:13px;font-weight:800;border:1px solid #dfe6dd;">Ásia</span>
+              <span style="padding:8px 15px;border-radius:10px;background:#fff;color:#3d4d44;font-size:13px;font-weight:800;border:1px solid #dfe6dd;">Europa</span>
+              <span style="padding:8px 15px;border-radius:10px;background:#faf1dc;color:#a1761d;font-size:13px;font-weight:800;border:1px solid #ecdcb0;display:inline-flex;align-items:center;gap:6px;"><i data-lucide="star" width="14" height="14"></i> Revisar</span>
+            </div>
+          </div>
+
+          <!-- FLAG CARD + ANSWER STATES -->
+          <div style="border-top:1px solid #dfe6dd;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Tela de treino · bandeira &amp; respostas</div>
+            <div style="border-radius:20px;background:#fff;border:1px solid #dfe6dd;padding:22px;box-shadow:0 2px 4px rgba(22,35,29,.04),0 24px 44px -30px rgba(22,35,29,.45);">
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800;color:#5c6b62;margin-bottom:12px;">
+                <span>Pergunta 3/10</span>
+                <span style="display:inline-flex;gap:14px;"><span style="color:#c04a2e;display:inline-flex;align-items:center;gap:5px;"><i data-lucide="flame" width="15" height="15"></i> 4</span><span style="color:#cf9a3a;display:inline-flex;align-items:center;gap:5px;"><i data-lucide="star" width="15" height="15"></i> +45</span></span>
+              </div>
+              <div style="height:6px;border-radius:99px;background:#e3e8e0;margin-bottom:20px;"><div style="width:30%;height:100%;border-radius:99px;background:#1f7a4d;"></div></div>
+              <!-- full-bleed flag -->
+              <div style="border-radius:16px;overflow:hidden;box-shadow:0 16px 34px -18px rgba(22,35,29,.55);border:1px solid #dfe6dd;">
+                <img src="https://flagcdn.com/w640/br.png" alt="Bandeira do Brasil" style="width:100%;display:block;">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;">
+                <div style="padding:16px 18px;border-radius:13px;font-size:16px;font-weight:800;color:#16231d;background:#fff;border:2px solid #dfe6dd;">Colômbia <span style="font-size:11px;font-weight:700;color:#8a917f;float:right;">normal</span></div>
+                <div style="padding:16px 18px;border-radius:13px;font-size:16px;font-weight:800;color:#14623c;background:#e4f3ea;border:2px solid #2f9e63;display:flex;justify-content:space-between;align-items:center;">Brasil <i data-lucide="check-circle-2" width="20" height="20" style="color:#2f9e63;"></i></div>
+                <div style="padding:16px 18px;border-radius:13px;font-size:16px;font-weight:800;color:#93341f;background:#f8e6e0;border:2px solid #c04a2e;display:flex;justify-content:space-between;align-items:center;">México <i data-lucide="x-circle" width="20" height="20" style="color:#c04a2e;"></i></div>
+                <div style="padding:16px 18px;border-radius:13px;font-size:16px;font-weight:800;color:#a4ad9f;background:#eef1ea;border:2px solid #e3e8e0;">Argentina <span style="font-size:11px;font-weight:700;float:right;">desabilitado</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DOMAIN BADGES -->
+          <div style="border-top:1px solid #dfe6dd;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Badges de domínio · escudo geométrico</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fff;border:1px solid #dfe6dd;">
+                <div style="width:56px;height:66px;margin:0 auto;clip-path:polygon(50% 0,100% 22%,100% 66%,50% 100%,0 66%,0 22%);background:linear-gradient(150deg,#c88a52,#96602f);display:flex;align-items:center;justify-content:center;"><i data-lucide="shield" width="26" height="26" style="color:#f3e6d4;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#16231d;">Reconhecido</div><div style="font-size:11px;color:#5c6b62;">Bronze</div>
+              </div>
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fff;border:1px solid #dfe6dd;">
+                <div style="width:56px;height:66px;margin:0 auto;clip-path:polygon(50% 0,100% 22%,100% 66%,50% 100%,0 66%,0 22%);background:linear-gradient(150deg,#ced6db,#98a3aa);display:flex;align-items:center;justify-content:center;"><i data-lucide="shield" width="26" height="26" style="color:#3f4a50;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#16231d;">Aprendido</div><div style="font-size:11px;color:#5c6b62;">Prata</div>
+              </div>
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#fff;border:1px solid #dfe6dd;">
+                <div style="width:56px;height:66px;margin:0 auto;clip-path:polygon(50% 0,100% 22%,100% 66%,50% 100%,0 66%,0 22%);background:linear-gradient(150deg,#ecc158,#c1901f);display:flex;align-items:center;justify-content:center;"><i data-lucide="shield-check" width="26" height="26" style="color:#5a4413;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#16231d;">Dominado</div><div style="font-size:11px;color:#5c6b62;">Ouro</div>
+              </div>
+              <div style="text-align:center;padding:18px 10px;border-radius:16px;background:#16231d;">
+                <div style="width:56px;height:66px;margin:0 auto;clip-path:polygon(50% 0,100% 22%,100% 66%,50% 100%,0 66%,0 22%);background:linear-gradient(150deg,#7fd7ff,#34c07d);display:flex;align-items:center;justify-content:center;"><i data-lucide="shield-check" width="26" height="26" style="color:#0f2b22;"></i></div>
+                <div style="margin-top:10px;font-size:13px;font-weight:800;color:#eef1ea;">Mestre</div><div style="font-size:11px;color:#8ba394;">Platina</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCORECARDS / DASHBOARD -->
+          <div style="border-top:1px solid #dfe6dd;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Scorecards &amp; dashboard</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+              <div style="padding:16px;border-radius:14px;background:#fff;border:1px solid #dfe6dd;"><i data-lucide="sparkles" width="20" height="20" style="color:#cf9a3a;"></i><div style="font-size:28px;font-weight:900;color:#16231d;margin-top:6px;line-height:1;">1 240</div><div style="font-size:12px;font-weight:700;color:#5c6b62;margin-top:3px;">XP total</div></div>
+              <div style="padding:16px;border-radius:14px;background:#fff;border:1px solid #dfe6dd;"><i data-lucide="flame" width="20" height="20" style="color:#c04a2e;"></i><div style="font-size:28px;font-weight:900;color:#16231d;margin-top:6px;line-height:1;">12</div><div style="font-size:12px;font-weight:700;color:#5c6b62;margin-top:3px;">Dias seguidos</div></div>
+              <div style="padding:16px;border-radius:14px;background:#fff;border:1px solid #dfe6dd;"><i data-lucide="target" width="20" height="20" style="color:#1f7a4d;"></i><div style="font-size:28px;font-weight:900;color:#16231d;margin-top:6px;line-height:1;">88%</div><div style="font-size:12px;font-weight:700;color:#5c6b62;margin-top:3px;">Precisão</div></div>
+              <div style="padding:16px;border-radius:14px;background:#16231d;color:#eef1ea;"><i data-lucide="globe" width="20" height="20" style="color:#34c07d;"></i><div style="font-size:28px;font-weight:900;margin-top:6px;line-height:1;">37<span style="font-size:15px;opacity:.6;">/195</span></div><div style="font-size:12px;font-weight:700;opacity:.8;margin-top:3px;">Países</div></div>
+            </div>
+          </div>
+
+          <!-- NAV -->
+          <div style="border-top:1px solid #dfe6dd;padding-top:32px;">
+            <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#1f7a4d;margin-bottom:16px;">Navegação</div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+              <div style="width:220px;border-radius:16px;background:#16231d;padding:16px 12px;">
+                <div style="display:flex;align-items:center;gap:9px;padding:0 8px 14px;"><i data-lucide="map" width="22" height="22" style="color:#34c07d;"></i><span style="font-size:16px;font-weight:900;color:#eef1ea;">Flag Atlas</span></div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;background:#1f7a4d;color:#fff;font-weight:800;font-size:14px;"><i data-lucide="home" width="18" height="18"></i> Início</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#9db0a3;font-weight:700;font-size:14px;"><i data-lucide="map" width="18" height="18"></i> Continentes</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#9db0a3;font-weight:700;font-size:14px;"><i data-lucide="backpack" width="18" height="18"></i> Coleção</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#9db0a3;font-weight:700;font-size:14px;"><i data-lucide="trophy" width="18" height="18"></i> Conquistas</div>
+                <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;color:#9db0a3;font-weight:700;font-size:14px;"><i data-lucide="bar-chart-3" width="18" height="18"></i> Estatísticas</div>
+              </div>
+              <div style="flex:1;min-width:300px;display:flex;flex-direction:column;justify-content:flex-end;">
+                <div style="border-radius:20px;background:#fff;border:1px solid #dfe6dd;padding:12px 10px;display:flex;justify-content:space-around;box-shadow:0 16px 32px -22px rgba(22,35,29,.5);">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#1f7a4d;font-size:11px;font-weight:800;"><i data-lucide="home" width="22" height="22"></i>Início</div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8a917f;font-size:11px;font-weight:700;"><i data-lucide="map" width="22" height="22"></i>Mapa</div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><span style="width:52px;height:52px;border-radius:16px;background:#1f7a4d;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px rgba(31,122,77,.7);margin-top:-22px;"><i data-lucide="play" width="24" height="24" style="color:#fff;"></i></span></div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8a917f;font-size:11px;font-weight:700;"><i data-lucide="backpack" width="22" height="22"></i>Coleção</div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8a917f;font-size:11px;font-weight:700;"><i data-lucide="trophy" width="22" height="22"></i>Prêmios</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </article>
+
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { this.renderIcons(); }
+  componentDidUpdate() { this.renderIcons(); }
+  renderIcons() {
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    } else {
+      setTimeout(() => this.renderIcons(), 200);
+    }
+  }
+}
+</script>
+</body>
+</html>
