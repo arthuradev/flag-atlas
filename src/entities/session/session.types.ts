@@ -77,6 +77,7 @@ export type SessionSummary = {
   config: SessionConfig;
   correctCount: number;
   wrongCount: number;
+  skippedCount: number;
   accuracy: number;
   bestStreak: number;
   /** XP total realmente adicionado ao progresso durante a sessÃ£o. */

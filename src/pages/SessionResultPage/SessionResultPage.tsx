@@ -4,12 +4,13 @@ import { useTranslation } from "react-i18next";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import { countSeenCountries } from "@/entities/progress/progress.selectors";
-import type { SessionSummary } from "@/entities/session/session.types";
+import type { MasteryLevel } from "@/entities/progress/progress.types";
+import type { MasteryPromotion, SessionSummary } from "@/entities/session/session.types";
 import { Mascot } from "@/features/cosmetics/components/Mascot";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
-import { MAX_MASTERY_POINTS } from "@/features/progress/logic/mastery";
+import { MASTERY_BADGE_META, MAX_MASTERY_POINTS } from "@/features/progress/logic/mastery";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { ShareResultButton } from "@/features/share/components/ShareResultButton";
@@ -30,25 +31,112 @@ function CountryRow({ countryId, detail }: { countryId: string; detail?: ReactNo
     return null;
   }
   return (
-    <li className="flex items-center gap-3 py-1.5">
+    <li className="flex min-w-0 items-center gap-3 py-1.5">
       <FlagImage
         flagPath={country.flagPath}
         alt=""
         className="h-6 w-9 rounded-sm object-cover shadow-sm"
       />
-      <span className="font-bold">{getCountryName(country, locale)}</span>
-      {detail && <span className="ml-auto text-sm text-text-muted">{detail}</span>}
+      <span className="min-w-0 flex-1 truncate font-bold">{getCountryName(country, locale)}</span>
+      {detail && <span className="ml-auto shrink-0 text-sm text-text-muted">{detail}</span>}
     </li>
   );
 }
 
-const PROMOTION_PREVIEW_LIMIT = 4;
+const BRONZE_PROMOTION_PREVIEW_LIMIT = 5;
+const HIGHLIGHT_PROMOTION_PREVIEW_LIMIT = 3;
+
+function isInitialBronzePromotion(promotion: MasteryPromotion): boolean {
+  return promotion.from === "new" && promotion.to === "recognized";
+}
+
+function promotionPoints(promotion: MasteryPromotion): string | null {
+  return promotion.pointsAfter === undefined
+    ? null
+    : `${promotion.pointsAfter}/${MAX_MASTERY_POINTS}`;
+}
+
+function tierNameForMastery(
+  level: MasteryLevel,
+  t: ReturnType<typeof useTranslation>["t"],
+): string {
+  return t(`mastery.badges.${MASTERY_BADGE_META[level].tier}`);
+}
+
+function BronzePromotionRow({ promotion }: { promotion: MasteryPromotion }) {
+  const { t } = useTranslation();
+  const points = promotionPoints(promotion);
+
+  return (
+    <CountryRow
+      countryId={promotion.countryId}
+      detail={
+        <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-extrabold">
+          <span>{tierNameForMastery(promotion.to, t)}</span>
+          {points && <span className="text-text-muted">{points}</span>}
+        </span>
+      }
+    />
+  );
+}
+
+function HighlightPromotionRow({ promotion }: { promotion: MasteryPromotion }) {
+  const locale = useSettingsStore((state) => state.locale);
+  const country = getCountryById(promotion.countryId);
+  const points = promotionPoints(promotion);
+
+  if (!country) {
+    return null;
+  }
+
+  return (
+    <li className="rounded-card border border-line bg-surface-2 p-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <FlagImage
+          flagPath={country.flagPath}
+          alt=""
+          className="h-7 w-10 shrink-0 rounded-sm object-cover shadow-sm"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-extrabold">{getCountryName(country, locale)}</p>
+          <p className="mt-1 text-xs font-semibold text-text-muted">{points}</p>
+        </div>
+        <MasteryBadge masteryLevel={promotion.to} size="sm" showTier />
+      </div>
+    </li>
+  );
+}
 
 function PromotionsCard({ promotions }: { promotions: SessionSummary["promotions"] }) {
   const { t } = useTranslation();
   const [isExpanded, setExpanded] = useState(false);
-  const hasManyPromotions = promotions.length > PROMOTION_PREVIEW_LIMIT;
-  const visiblePromotions = isExpanded ? promotions : promotions.slice(0, PROMOTION_PREVIEW_LIMIT);
+  const bronzePromotions = promotions.filter(isInitialBronzePromotion);
+  const highlightedPromotions = promotions.filter(
+    (promotion) => !isInitialBronzePromotion(promotion),
+  );
+  const visibleBronzePromotions = isExpanded
+    ? bronzePromotions
+    : bronzePromotions.slice(0, BRONZE_PROMOTION_PREVIEW_LIMIT);
+  const visibleHighlightedPromotions = isExpanded
+    ? highlightedPromotions
+    : highlightedPromotions.slice(0, HIGHLIGHT_PROMOTION_PREVIEW_LIMIT);
+  const visibleCount = visibleBronzePromotions.length + visibleHighlightedPromotions.length;
+  const hiddenCount = promotions.length - visibleCount;
+  const hasHiddenPromotions = hiddenCount > 0;
+  const tierSummary = Object.entries(
+    promotions.reduce<Record<string, number>>((counts, promotion) => {
+      const tier = MASTERY_BADGE_META[promotion.to].tier;
+      counts[tier] = (counts[tier] ?? 0) + 1;
+      return counts;
+    }, {}),
+  )
+    .filter(([tier]) => tier !== "none")
+    .map(([tier, count]) =>
+      t("result.badgesTierSummary", {
+        count,
+        tier: t(`mastery.badges.${tier}`),
+      }),
+    );
 
   if (promotions.length === 0) {
     return null;
@@ -56,53 +144,66 @@ function PromotionsCard({ promotions }: { promotions: SessionSummary["promotions
 
   return (
     <Card>
-      <div className="mb-2 flex items-start justify-between gap-3">
+      <div className="mb-3 flex items-start justify-between gap-3">
         <div>
           <h2 className="font-extrabold">{t("result.promoted")}</h2>
-          {hasManyPromotions && (
-            <p className="text-sm font-semibold text-text-muted">
-              {t("result.badgesSummary", { count: promotions.length })}
-            </p>
-          )}
+          <p className="mt-1 text-sm font-semibold text-text-muted">{tierSummary.join(" · ")}</p>
         </div>
-        {hasManyPromotions && (
+        {hasHiddenPromotions && (
           <span className="shrink-0 rounded-full bg-pine-soft px-2.5 py-1 text-xs font-extrabold text-primary">
             {t("result.badgesShowing", {
-              shown: visiblePromotions.length,
+              shown: visibleCount,
               total: promotions.length,
             })}
           </span>
         )}
       </div>
-      <ul>
-        {visiblePromotions.map((promotion) => (
-          <CountryRow
-            key={`${promotion.countryId}-${promotion.to}`}
-            countryId={promotion.countryId}
-            detail={
-              <span className="flex flex-wrap items-center justify-end gap-1.5">
-                <MasteryBadge masteryLevel={promotion.from} size="sm" showLabel={false} />
-                <Icon name="arrow-right" size={14} className="text-text-muted" />
-                <MasteryBadge masteryLevel={promotion.to} size="sm" showTier />
-                {promotion.pointsAfter !== undefined && (
-                  <span>
-                    {promotion.pointsAfter}/{MAX_MASTERY_POINTS}
-                  </span>
-                )}
-              </span>
-            }
-          />
-        ))}
-      </ul>
-      {hasManyPromotions && (
-        <button
-          type="button"
-          onClick={() => setExpanded((current) => !current)}
-          className="mt-3 inline-flex min-h-10 items-center justify-center rounded-btn px-3 text-sm font-extrabold text-primary transition hover:bg-pine-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          {t(isExpanded ? "result.showFewerBadges" : "result.showAllBadges")}
-        </button>
-      )}
+
+      <div className="flex flex-col gap-3">
+        {highlightedPromotions.length > 0 && (
+          <ul className="flex flex-col gap-2">
+            {visibleHighlightedPromotions.map((promotion) => (
+              <HighlightPromotionRow
+                key={`${promotion.countryId}-${promotion.to}`}
+                promotion={promotion}
+              />
+            ))}
+          </ul>
+        )}
+
+        {bronzePromotions.length > 0 && (
+          <div className="rounded-card border border-line bg-background/60 px-3 py-2">
+            <div className="mb-1 flex items-center justify-between gap-3">
+              <h3 className="text-sm font-extrabold text-text-muted">
+                {t("result.bronzeBadgesSummary", { count: bronzePromotions.length })}
+              </h3>
+              {hasHiddenPromotions && !isExpanded && (
+                <span className="text-xs font-extrabold text-text-muted">
+                  {t("result.badgesHiddenCount", { count: hiddenCount })}
+                </span>
+              )}
+            </div>
+            <ul className="divide-y divide-line">
+              {visibleBronzePromotions.map((promotion) => (
+                <BronzePromotionRow
+                  key={`${promotion.countryId}-${promotion.to}`}
+                  promotion={promotion}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {hasHiddenPromotions && (
+          <button
+            type="button"
+            onClick={() => setExpanded((current) => !current)}
+            className="inline-flex min-h-10 items-center justify-center rounded-btn px-3 text-sm font-extrabold text-primary transition hover:bg-pine-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {t(isExpanded ? "result.showFewerBadges" : "result.showAllBadges")}
+          </button>
+        )}
+      </div>
     </Card>
   );
 }
@@ -140,6 +241,7 @@ export function SessionResultPage() {
   const leveledUp = summary.levelAfter > summary.levelBefore;
   const isSurvival = summary.survival !== undefined;
   const bonusAndMissionXp = summary.answerBonusXpEarned + summary.missionXpEarned;
+  const skippedCount = summary.skippedCount ?? 0;
 
   const handlePlayAgain = () => {
     // Navegar antes de iniciar: iniciar a sessão limpa o summary, o que
@@ -215,6 +317,12 @@ export function SessionResultPage() {
               <Icon name="x-circle" size={20} className="text-danger" />
               {t("result.wrong", { count: summary.wrongCount })}
             </span>
+            {skippedCount > 0 && (
+              <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+                <Icon name="ban" size={20} className="text-muted" />
+                {t("result.skipped", { count: skippedCount })}
+              </span>
+            )}
             <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
               <Icon name="percent" size={20} className="text-primary" />
               {t("result.accuracy", { percent: summary.accuracy })}

@@ -21,18 +21,29 @@ export function buildShareText({
   totalCountries,
   t,
 }: BuildShareTextParams): string {
+  const skippedCount = summary.skippedCount ?? 0;
+  const totalAnswers = summary.correctCount + summary.wrongCount + skippedCount;
+  const skippedStats =
+    skippedCount > 0
+      ? [
+          t("share.wrongLine", { count: summary.wrongCount }),
+          t("share.skippedLine", { count: skippedCount }),
+        ]
+      : [];
   const stats = summary.survival
     ? [
         t("share.scoreLine", { score: summary.survival.score }),
         t("share.survivalCorrectLine", { count: summary.correctCount }),
         t("share.survivalWrongLine", { count: summary.wrongCount }),
+        ...(skippedCount > 0 ? [t("share.skippedLine", { count: skippedCount })] : []),
         t("share.bestStreakLine", { count: summary.bestStreak }),
       ]
     : [
         t("share.correctLine", {
           correct: summary.correctCount,
-          total: summary.correctCount + summary.wrongCount,
+          total: totalAnswers,
         }),
+        ...skippedStats,
         t("share.bestStreakLine", { count: summary.bestStreak }),
         t("share.xpLine", { xp: summary.xpEarned }),
         t("share.seenLine", { seen: seenCount, total: totalCountries }),

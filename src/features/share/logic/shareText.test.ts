@@ -8,6 +8,7 @@ function summaryOf(overrides: Partial<SessionSummary>): SessionSummary {
     config: { mode: "continue", questionType: "choice", size: 10 },
     correctCount: 8,
     wrongCount: 2,
+    skippedCount: 0,
     accuracy: 80,
     bestStreak: 5,
     xpEarned: 120,
@@ -77,6 +78,19 @@ describe("buildShareText", () => {
     );
   });
 
+  it("includes skipped answers in totals and lines when present", () => {
+    const text = buildShareText({
+      summary: summaryOf({ correctCount: 3, wrongCount: 4, skippedCount: 3, accuracy: 30 }),
+      seenCount: 37,
+      totalCountries: 195,
+      t: i18n.getFixedT("pt-BR"),
+    });
+
+    expect(text).toContain("Acertos: 3/10");
+    expect(text).toContain("Erros: 4");
+    expect(text).toContain("Puladas: 3");
+  });
+
   it("formats in en-US as well", () => {
     const text = buildShareText({
       summary: summaryOf({}),
@@ -87,6 +101,19 @@ describe("buildShareText", () => {
     expect(text).toContain("Session complete!");
     expect(text).toContain("Correct: 8/10");
     expect(text).toContain(`Play too: ${SHARE_URL}`);
+  });
+
+  it("includes skipped answers in en-US share text", () => {
+    const text = buildShareText({
+      summary: summaryOf({ correctCount: 3, wrongCount: 4, skippedCount: 3 }),
+      seenCount: 37,
+      totalCountries: 195,
+      t: i18n.getFixedT("en-US"),
+    });
+
+    expect(text).toContain("Correct: 3/10");
+    expect(text).toContain("Misses: 4");
+    expect(text).toContain("Skipped: 3");
   });
 });
 

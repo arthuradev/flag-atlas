@@ -329,17 +329,18 @@ export const useSessionStore = create<SessionState>((set, get) => {
       }
 
       const correctCount = session.answers.filter((answer) => answer.isCorrect).length;
-      const wrongCount = session.answers.length - correctCount;
-      const accuracy =
-        session.answers.length === 0
-          ? 0
-          : Math.round((correctCount / session.answers.length) * 100);
+      const skippedCount = session.answers.filter((answer) => answer.isSkipped).length;
+      const wrongCount = session.answers.filter(
+        (answer) => !answer.isCorrect && !answer.isSkipped,
+      ).length;
+      const totalAnswers = correctCount + wrongCount + skippedCount;
+      const accuracy = totalAnswers === 0 ? 0 : Math.round((correctCount / totalAnswers) * 100);
       const completedAt = new Date().toISOString();
 
       const completion = useProgressStore.getState().registerCompletedSession({
         mode: session.config.mode,
         questionType: session.config.questionType,
-        questionCount: session.answers.length,
+        questionCount: totalAnswers,
         correctCount,
         accuracy,
         bestStreak,
@@ -392,6 +393,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
           config: session.config,
           correctCount,
           wrongCount,
+          skippedCount,
           accuracy,
           bestStreak,
           xpEarned: totalXpEarned,

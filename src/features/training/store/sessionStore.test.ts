@@ -165,6 +165,7 @@ describe("sessionStore survival mode", () => {
     expect(summary?.survival).toEqual({ score: 2, previousBest: 0, isNewRecord: true });
     expect(summary?.correctCount).toBe(2);
     expect(summary?.wrongCount).toBe(3);
+    expect(summary?.skippedCount).toBe(0);
 
     const progress = useProgressStore.getState().progress;
     expect(progress.survival.bestScore).toBe(2);
@@ -213,6 +214,10 @@ describe("sessionStore normal flow with v3 summary", () => {
     }
     const summary = useSessionStore.getState().summary;
     expect(summary?.survival).toBeUndefined();
+    expect(summary?.correctCount).toBe(5);
+    expect(summary?.wrongCount).toBe(0);
+    expect(summary?.skippedCount).toBe(0);
+    expect(summary?.accuracy).toBe(100);
     expect(summary?.dailyStreak.countedToday).toBe(true);
     expect(summary?.dailyStreak.current).toBe(1);
     expect(summary?.unlockedAchievementIds).toContain("firstSteps");
@@ -224,6 +229,44 @@ describe("sessionStore normal flow with v3 summary", () => {
     expect(summary?.baseAnswerXpEarned).toBe(50);
     expect(summary?.missionXpEarned).toBeGreaterThanOrEqual(10);
     expect(useProgressStore.getState().progress.totalXp).toBe(summary?.xpEarned);
+  });
+
+  it("separates skipped answers from real wrong answers in the summary", () => {
+    const answerRight = () => {
+      const state = useSessionStore.getState();
+      const question = state.session?.questions[state.session.currentIndex];
+      if (!question) {
+        throw new Error("expected a question");
+      }
+      state.answerCurrentQuestion(question.countryId);
+      useSessionStore.getState().advance();
+    };
+    const answerWrong = () => {
+      const state = useSessionStore.getState();
+      const question = state.session?.questions[state.session.currentIndex];
+      const wrongOption = question?.optionCountryIds?.find((id) => id !== question.countryId);
+      if (!wrongOption) {
+        throw new Error("expected a wrong option");
+      }
+      state.answerCurrentQuestion(wrongOption);
+      useSessionStore.getState().advance();
+    };
+    const skip = () => {
+      useSessionStore.getState().skipCurrentQuestion();
+      useSessionStore.getState().advance();
+    };
+
+    answerRight();
+    answerWrong();
+    skip();
+    answerRight();
+    skip();
+
+    const summary = useSessionStore.getState().summary;
+    expect(summary?.correctCount).toBe(2);
+    expect(summary?.wrongCount).toBe(1);
+    expect(summary?.skippedCount).toBe(2);
+    expect(summary?.accuracy).toBe(40);
   });
 
   it("skips the current question as a wrong answer without selecting a wrong option", () => {
