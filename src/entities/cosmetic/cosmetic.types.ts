@@ -8,13 +8,7 @@
 
 import type { IconName } from "@/shared/components/Icon";
 
-export const COSMETIC_TYPES = [
-  "theme",
-  "soundPack",
-  "flagFrame",
-  "mascot",
-  "visualEffect",
-] as const;
+export const COSMETIC_TYPES = ["theme", "soundPack", "flagFrame", "visualEffect"] as const;
 
 export type CosmeticType = (typeof COSMETIC_TYPES)[number];
 
@@ -43,7 +37,6 @@ export type CosmeticEquipped = {
   themeId: string;
   soundPackId: string;
   flagFrameId: string;
-  mascotId: string;
   visualEffectId: string;
 };
 
@@ -60,7 +53,6 @@ export const DEFAULT_COSMETIC_IDS: Record<CosmeticType, string> = {
   theme: "theme-default",
   soundPack: "sound-default",
   flagFrame: "frame-default",
-  mascot: "mascot-none",
   visualEffect: "effect-none",
 };
 
@@ -69,7 +61,6 @@ export const EQUIPPED_KEY_BY_TYPE: Record<CosmeticType, keyof CosmeticEquipped> 
   theme: "themeId",
   soundPack: "soundPackId",
   flagFrame: "flagFrameId",
-  mascot: "mascotId",
   visualEffect: "visualEffectId",
 };
 
@@ -78,7 +69,6 @@ export function createInitialCosmeticEquipped(): CosmeticEquipped {
     themeId: DEFAULT_COSMETIC_IDS.theme,
     soundPackId: DEFAULT_COSMETIC_IDS.soundPack,
     flagFrameId: DEFAULT_COSMETIC_IDS.flagFrame,
-    mascotId: DEFAULT_COSMETIC_IDS.mascot,
     visualEffectId: DEFAULT_COSMETIC_IDS.visualEffect,
   };
 }

@@ -184,55 +184,6 @@ const FLAG_FRAMES: readonly CosmeticItem[] = [
   },
 ];
 
-const MASCOTS: readonly CosmeticItem[] = [
-  {
-    id: "mascot-none",
-    type: "mascot",
-    nameKey: "cosmetics.items.mascot-none.name",
-    descriptionKey: "cosmetics.items.mascot-none.description",
-    price: 0,
-    rarity: "common",
-    icon: "ban",
-    isDefault: true,
-  },
-  {
-    id: "mascot-globe",
-    type: "mascot",
-    nameKey: "cosmetics.items.mascot-globe.name",
-    descriptionKey: "cosmetics.items.mascot-globe.description",
-    price: 100,
-    rarity: "common",
-    icon: "globe",
-  },
-  {
-    id: "mascot-compass",
-    type: "mascot",
-    nameKey: "cosmetics.items.mascot-compass.name",
-    descriptionKey: "cosmetics.items.mascot-compass.description",
-    price: 120,
-    rarity: "rare",
-    icon: "compass",
-  },
-  {
-    id: "mascot-owl",
-    type: "mascot",
-    nameKey: "cosmetics.items.mascot-owl.name",
-    descriptionKey: "cosmetics.items.mascot-owl.description",
-    price: 160,
-    rarity: "epic",
-    icon: "owl",
-  },
-  {
-    id: "mascot-rocket",
-    type: "mascot",
-    nameKey: "cosmetics.items.mascot-rocket.name",
-    descriptionKey: "cosmetics.items.mascot-rocket.description",
-    price: 140,
-    rarity: "rare",
-    icon: "rocket",
-  },
-];
-
 const VISUAL_EFFECTS: readonly CosmeticItem[] = [
   {
     id: "effect-none",
@@ -286,6 +237,5 @@ export const COSMETIC_CATALOG: readonly CosmeticItem[] = [
   ...THEMES,
   ...SOUND_PACKS,
   ...FLAG_FRAMES,
-  ...MASCOTS,
   ...VISUAL_EFFECTS,
 ];

@@ -104,9 +104,10 @@ describe("equip", () => {
   });
 
   it("equipping does not spend coins", () => {
-    const start = inventory({ coins: 50, ownedItemIds: ["mascot-globe"] });
-    const next = equipCosmetic(start, "mascot-globe");
+    const start = inventory({ coins: 50, ownedItemIds: ["frame-neon"] });
+    const next = equipCosmetic(start, "frame-neon");
     expect(next.coins).toBe(50);
+    expect(next.equipped.flagFrameId).toBe("frame-neon");
   });
 });
 
@@ -128,7 +129,6 @@ describe("equipped resolution", () => {
     expect(equipped.theme.id).toBe("theme-default");
     expect(equipped.soundPack.id).toBe("sound-default");
     expect(equipped.flagFrame.id).toBe("frame-default");
-    expect(equipped.mascot.id).toBe("mascot-none");
     expect(equipped.visualEffect.id).toBe("effect-none");
   });
 });
@@ -167,10 +167,10 @@ describe("normalizeCosmeticInventory", () => {
     const result = normalizeCosmeticInventory({
       coins: 0,
       ownedItemIds: [],
-      equipped: { themeId: "theme-oceano", mascotId: "mascot-owl" },
+      equipped: { themeId: "theme-oceano", visualEffectId: "effect-glow" },
     });
     expect(result.equipped.themeId).toBe("theme-default");
-    expect(result.equipped.mascotId).toBe("mascot-none");
+    expect(result.equipped.visualEffectId).toBe("effect-none");
   });
 
   it("resets an equipped item of the wrong type back to default", () => {

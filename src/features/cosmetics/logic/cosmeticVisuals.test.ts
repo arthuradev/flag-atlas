@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { flagFrameClass } from "./flagFrames";
-import { mascotIcon } from "./mascots";
 import { soundFileForPack, soundPackDir } from "./soundPacks";
 import { isSpecialTheme, resolveDataTheme } from "./themes";
 import { resolveVisualEffectKind } from "./visualEffects";
@@ -58,20 +57,6 @@ describe("flag frames", () => {
 
   it("falls back to the default frame for unknown ids", () => {
     expect(flagFrameClass("frame-ghost")).toBe("");
-  });
-});
-
-describe("mascots", () => {
-  it("returns null for none", () => {
-    expect(mascotIcon("mascot-none")).toBeNull();
-  });
-
-  it("returns an icon for a known mascot", () => {
-    expect(mascotIcon("mascot-owl")).toBe("owl");
-  });
-
-  it("falls back to null for unknown ids", () => {
-    expect(mascotIcon("mascot-ghost")).toBeNull();
   });
 });
 

@@ -6,7 +6,6 @@ import {
   listCountriesNeedingReview,
 } from "@/entities/progress/progress.selectors";
 import { CoinBalance } from "@/features/cosmetics/components/CoinBalance";
-import { Mascot } from "@/features/cosmetics/components/Mascot";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
 import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine";
 import { useProgressStore } from "@/features/progress/store/progressStore";
@@ -79,7 +78,6 @@ export function HomePage() {
         </div>
         <h1 className="mt-3 text-3xl font-black">{t("app.name")}</h1>
         <p className="mt-1 font-semibold text-text-muted">{t("app.tagline")}</p>
-        <Mascot size="md" className="mt-2" />
       </header>
 
       <Card className="flex flex-col gap-3">

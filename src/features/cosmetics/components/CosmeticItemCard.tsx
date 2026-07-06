@@ -35,11 +35,7 @@ export function CosmeticItemCard({
       }`}
     >
       <div className="flex items-start gap-3">
-        <span
-          className={`flex h-12 w-12 shrink-0 items-center justify-center bg-pine-soft text-primary ${
-            item.type === "mascot" ? "rounded-full" : "rounded-xl"
-          }`}
-        >
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-pine-soft text-primary">
           <Icon name={item.icon} size={26} strokeWidth={1.9} />
         </span>
         <div className="min-w-0 flex-1">

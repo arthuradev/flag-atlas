@@ -5,8 +5,8 @@ import { type SVGProps, useId } from "react";
  *
  * One line-icon language for the whole product: 24×24 grid, `fill="none"`,
  * `stroke="currentColor"`, 2px stroke, round caps/joins — extended from the
- * original nav set. "Hero" icons (achievements, mascots, shop previews,
- * continents) add a soft duotone fill of the SAME color (`currentColor` +
+ * original nav set. "Hero" icons (achievements, shop previews, continents)
+ * add a soft duotone fill of the SAME color (`currentColor` +
  * low `fillOpacity`) so they read richer without leaving the line language
  * or breaking `currentColor` theming.
  *
@@ -70,9 +70,6 @@ export type IconName =
   // — cosmetics: frames —
   | "square"
   | "leaf"
-  // — cosmetics: mascots —
-  | "owl"
-  | "rocket"
   | "ban"
   // — cosmetics: effects & status —
   | "star"
@@ -539,38 +536,6 @@ function IconPaths({ name }: { name: IconName }) {
         </>
       );
 
-    // ————————————————————— cosmetics: mascots —————————————————————
-    case "owl":
-      return (
-        <>
-          <path
-            d="M12 4.4c-3.4 0-5.6 2.5-5.6 6.2 0 3.9 2.3 8.1 5.6 8.1s5.6-4.2 5.6-8.1c0-3.7-2.2-6.2-5.6-6.2z"
-            fill="currentColor"
-            fillOpacity="0.12"
-          />
-          <path d="M7.7 5.6 9.2 8" />
-          <path d="M16.3 5.6 14.8 8" />
-          <circle cx="9.7" cy="10.6" r="1.8" />
-          <circle cx="14.3" cy="10.6" r="1.8" />
-          <circle cx="9.7" cy="10.6" r="0.5" fill="currentColor" stroke="none" />
-          <circle cx="14.3" cy="10.6" r="0.5" fill="currentColor" stroke="none" />
-          <path d="M12 12.6l-1 1.5h2z" fill="currentColor" stroke="none" />
-        </>
-      );
-    case "rocket":
-      return (
-        <>
-          <path
-            d="M12 3.4c2.6 1.9 3.9 4.9 3.9 8.1l-1.2 3.1H9.3L8.1 11.5C8.1 8.3 9.4 5.3 12 3.4z"
-            fill="currentColor"
-            fillOpacity="0.12"
-          />
-          <circle cx="12" cy="9.2" r="1.6" />
-          <path d="M8.4 11.4 5.9 13.8l2.2.7" />
-          <path d="M15.6 11.4l2.5 2.4-2.2.7" />
-          <path d="M10.5 15.6c.3 1.7 1.5 3.4 1.5 3.4s1.2-1.7 1.5-3.4" />
-        </>
-      );
     case "ban":
       return (
         <>

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { answerFullSession, seedSessionSize, skipOnboarding } from "./helpers";
+import { answerFullSession, getMainTrainingCta, seedSessionSize, skipOnboarding } from "./helpers";
 
 test.describe("onboarding", () => {
   test("first visit shows onboarding and completes into home", async ({ page }) => {
@@ -11,12 +11,12 @@ test.describe("onboarding", () => {
     await page.getByRole("button", { name: "Avançar" }).click();
     await page.getByRole("button", { name: "Começar" }).click();
 
-    await expect(page.getByRole("button", { name: "Continuar treino" })).toBeVisible();
+    await expect(getMainTrainingCta(page)).toBeVisible();
     await expect(page.getByText("0/195 países aprendidos")).toBeVisible();
 
     // Próxima abertura vai direto para a Home.
     await page.goto("./");
-    await expect(page.getByRole("button", { name: "Continuar treino" })).toBeVisible();
+    await expect(getMainTrainingCta(page)).toBeVisible();
   });
 });
 
@@ -26,7 +26,7 @@ test.describe("training session", () => {
     await seedSessionSize(page, 5);
     await page.goto("./");
 
-    await page.getByRole("button", { name: "Continuar treino" }).click();
+    await getMainTrainingCta(page).click();
     await expect(page.getByText("1/5")).toBeVisible();
     await expect(page.locator("img[alt='Bandeira para adivinhar']")).toBeVisible();
     await expect(page.getByTestId("training-option")).toHaveCount(4);
@@ -121,7 +121,7 @@ test.describe("pwa offline", () => {
     await skipOnboarding(page);
     await seedSessionSize(page, 5);
     await page.goto("./");
-    await expect(page.getByRole("button", { name: "Continuar treino" })).toBeVisible();
+    await expect(getMainTrainingCta(page)).toBeVisible();
 
     // Aguarda o service worker ativar e concluir o precache.
     await page.evaluate(async () => {
@@ -132,8 +132,8 @@ test.describe("pwa offline", () => {
     await context.setOffline(true);
     await page.reload();
 
-    await expect(page.getByRole("button", { name: "Continuar treino" })).toBeVisible();
-    await page.getByRole("button", { name: "Continuar treino" }).click();
+    await expect(getMainTrainingCta(page)).toBeVisible();
+    await getMainTrainingCta(page).click();
     await expect(page.getByTestId("training-option")).toHaveCount(4);
 
     // A bandeira precisa carregar do cache offline.

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
-import { answerFullSession, seedSessionSize, skipOnboarding } from "./helpers";
+import { answerFullSession, getMainTrainingCta, seedSessionSize, skipOnboarding } from "./helpers";
 
 /** Semeia o progresso com um saldo de Moedas Atlas e itens já possuídos. */
 async function seedCosmetics(
@@ -35,8 +35,7 @@ test.describe("home v4", () => {
     await seedCosmetics(page, { coins: 120 });
     await page.goto("./");
 
-    // O CTA principal continua sendo "Continuar treino".
-    await expect(page.getByRole("button", { name: "Continuar treino" })).toBeVisible();
+    await expect(getMainTrainingCta(page)).toBeVisible();
     // Entrada da Loja com saldo visível.
     const shopLink = page.getByRole("link", { name: /Loja/ });
     await expect(shopLink).toBeVisible();
@@ -51,7 +50,7 @@ test.describe("shop v4", () => {
     await page.goto("./#/shop");
 
     await expect(page.getByRole("heading", { name: "Loja", exact: true })).toBeVisible();
-    for (const category of ["Temas", "Sons", "Molduras", "Mascotes", "Efeitos"]) {
+    for (const category of ["Temas", "Sons", "Molduras", "Efeitos"]) {
       await expect(page.getByRole("heading", { name: category })).toBeVisible();
     }
     await expect(page.getByTestId("coin-balance").first()).toContainText("300");
@@ -123,7 +122,7 @@ test.describe("existing modes still work under v4", () => {
     await skipOnboarding(page);
     await seedSessionSize(page, 5);
     await page.goto("./");
-    await page.getByRole("button", { name: "Continuar treino" }).click();
+    await getMainTrainingCta(page).click();
     await expect(page.getByText("1/5")).toBeVisible();
     await answerFullSession(page, 5);
     await expect(page.getByRole("heading", { name: "Sessão concluída!" })).toBeVisible();

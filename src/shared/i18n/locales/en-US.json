@@ -309,7 +309,7 @@
     "resetDone": "Progress reset.",
     "about": "About",
     "customization": "Customization",
-    "customizationBody": "Themes, sounds, frames, mascots and effects live in the Shop.",
+    "customizationBody": "Themes, sounds, frames and effects live in the Shop.",
     "openShop": "Open shop",
     "flagAttribution": "Flag images sourced from Flagpedia.net (public domain)."
   },
@@ -417,7 +417,6 @@
       "theme": "Themes",
       "soundPack": "Sounds",
       "flagFrame": "Frames",
-      "mascot": "Mascots",
       "visualEffect": "Effects"
     },
     "rarity": {
@@ -498,26 +497,6 @@
       "frame-biblioteca": {
         "name": "Library",
         "description": "A double sepia-toned frame."
-      },
-      "mascot-none": {
-        "name": "None",
-        "description": "No mascot."
-      },
-      "mascot-globe": {
-        "name": "Globe",
-        "description": "A friendly globe tags along."
-      },
-      "mascot-compass": {
-        "name": "Compass",
-        "description": "A compass always pointing ahead."
-      },
-      "mascot-owl": {
-        "name": "Atlas Owl",
-        "description": "The wise Flag Atlas owl."
-      },
-      "mascot-rocket": {
-        "name": "Little Rocket",
-        "description": "A little rocket ready to explore."
       },
       "effect-none": {
         "name": "None",

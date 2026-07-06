@@ -1,5 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
-import { answerFullSession, seedSessionSize, skipOnboarding } from "./helpers";
+import { answerFullSession, getMainTrainingCta, seedSessionSize, skipOnboarding } from "./helpers";
 
 /**
  * Remove a Web Share API e troca o clipboard por um stub gravável,
@@ -37,15 +37,33 @@ async function playSurvivalToTheEnd(page: Page): Promise<void> {
   await expect(endHeading).toBeVisible();
 }
 
+async function seedReturningUser(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      "flag-atlas:progress",
+      JSON.stringify({
+        schemaVersion: 1,
+        data: {
+          totalXp: 10,
+          level: 1,
+          countries: {},
+          completedSessions: 1,
+        },
+      }),
+    );
+  });
+}
+
 test.describe("home v3", () => {
   test("shows daily missions without cluttering the main CTA", async ({ page }) => {
     await skipOnboarding(page);
+    await seedReturningUser(page);
     await page.goto("./");
 
-    await expect(page.getByRole("button", { name: "Continuar treino" })).toBeVisible();
+    await expect(getMainTrainingCta(page)).toBeVisible();
     await expect(page.getByTestId("daily-missions")).toBeVisible();
     await expect(page.getByTestId("daily-missions").getByRole("listitem")).toHaveCount(3);
-    // Sem sessão concluída ainda: nada de streak, sem culpa.
+    // Sem atividade hoje: nada de streak, sem culpa.
     await expect(page.getByTestId("daily-streak")).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Conquistas" })).toBeVisible();
   });
@@ -59,7 +77,7 @@ test.describe("daily missions, streak and achievements flow", () => {
     await seedSessionSize(page, 5);
     await page.goto("./");
 
-    await page.getByRole("button", { name: "Continuar treino" }).click();
+    await getMainTrainingCta(page).click();
     await expect(page.getByText("1/5")).toBeVisible();
     await answerFullSession(page, 5);
 

@@ -31,6 +31,11 @@ export async function seedSessionSize(page: Page, size: number): Promise<void> {
 }
 
 /** Responde todas as perguntas da sessão atual clicando na primeira alternativa. */
+/** CTA principal da Home antes e depois do primeiro treino. */
+export function getMainTrainingCta(page: Page) {
+  return page.getByRole("button", { name: /Começar primeiro treino|Continuar treino/ });
+}
+
 export async function answerFullSession(page: Page, questions: number): Promise<void> {
   for (let i = 0; i < questions; i++) {
     const option = page.getByTestId("training-option").first();

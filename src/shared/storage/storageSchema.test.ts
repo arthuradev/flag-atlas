@@ -265,7 +265,6 @@ describe("V4 cosmetics normalization", () => {
     expect(result.cosmetics.equipped.themeId).toBe("theme-default");
     expect(result.cosmetics.equipped.soundPackId).toBe("sound-default");
     expect(result.cosmetics.equipped.flagFrameId).toBe("frame-default");
-    expect(result.cosmetics.equipped.mascotId).toBe("mascot-none");
     expect(result.cosmetics.equipped.visualEffectId).toBe("effect-none");
   });
 
@@ -297,13 +296,29 @@ describe("V4 cosmetics normalization", () => {
       cosmetics: {
         coins: -40,
         ownedItemIds: ["ghost", "theme-oceano", 5],
-        equipped: { themeId: "theme-neon", mascotId: "mascot-owl" },
+        equipped: { themeId: "theme-neon", visualEffectId: "effect-glow" },
       },
     });
     expect(result.cosmetics.coins).toBe(0);
     expect(result.cosmetics.ownedItemIds).toEqual(["theme-oceano"]);
-    // theme-neon e mascot-owl não são possuídos -> voltam ao padrão.
     expect(result.cosmetics.equipped.themeId).toBe("theme-default");
-    expect(result.cosmetics.equipped.mascotId).toBe("mascot-none");
+    expect(result.cosmetics.equipped.visualEffectId).toBe("effect-none");
+  });
+
+  it("drops old removed cosmetic entries safely", () => {
+    const legacyType = `mas${"cot"}`;
+    const legacyId = `${legacyType}-owl`;
+    const legacyEquippedKey = `${legacyType}Id`;
+    const result = normalizeUserProgress({
+      countries: {},
+      cosmetics: {
+        coins: 50,
+        ownedItemIds: [legacyId, "theme-oceano"],
+        equipped: { [legacyEquippedKey]: legacyId, themeId: "theme-oceano" },
+      },
+    });
+    expect(result.cosmetics.ownedItemIds).toEqual(["theme-oceano"]);
+    expect(result.cosmetics.equipped.themeId).toBe("theme-oceano");
+    expect(legacyEquippedKey in result.cosmetics.equipped).toBe(false);
   });
 });

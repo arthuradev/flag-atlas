@@ -6,7 +6,6 @@ import { getCountryById, getCountryName } from "@/entities/country/country.selec
 import { countSeenCountries } from "@/entities/progress/progress.selectors";
 import type { MasteryLevel } from "@/entities/progress/progress.types";
 import type { MasteryPromotion, SessionSummary } from "@/entities/session/session.types";
-import { Mascot } from "@/features/cosmetics/components/Mascot";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
@@ -273,7 +272,6 @@ export function SessionResultPage() {
         >
           <Icon name={isSurvival ? "shield" : "party"} size={38} strokeWidth={1.8} />
         </motion.div>
-        <Mascot size="sm" className="ml-2 align-middle" />
         <h1 className="mt-2 text-3xl font-extrabold">
           {t(isSurvival ? "survival.resultTitle" : "result.title")}
         </h1>

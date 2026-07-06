@@ -309,7 +309,7 @@
     "resetDone": "Progresso resetado.",
     "about": "Sobre",
     "customization": "Personalização",
-    "customizationBody": "Temas, sons, molduras, mascotes e efeitos ficam na Loja.",
+    "customizationBody": "Temas, sons, molduras e efeitos ficam na Loja.",
     "openShop": "Abrir loja",
     "flagAttribution": "Imagens de bandeiras obtidas do Flagpedia.net (domínio público)."
   },
@@ -417,7 +417,6 @@
       "theme": "Temas",
       "soundPack": "Sons",
       "flagFrame": "Molduras",
-      "mascot": "Mascotes",
       "visualEffect": "Efeitos"
     },
     "rarity": {
@@ -498,26 +497,6 @@
       "frame-biblioteca": {
         "name": "Biblioteca",
         "description": "Moldura dupla em tom sépia."
-      },
-      "mascot-none": {
-        "name": "Nenhum",
-        "description": "Sem mascote."
-      },
-      "mascot-globe": {
-        "name": "Globo",
-        "description": "Um globo amigável te acompanha."
-      },
-      "mascot-compass": {
-        "name": "Bússola",
-        "description": "Uma bússola sempre apontando adiante."
-      },
-      "mascot-owl": {
-        "name": "Corujinha Atlas",
-        "description": "A sábia corujinha do Flag Atlas."
-      },
-      "mascot-rocket": {
-        "name": "Foguetinho",
-        "description": "Um foguetinho pronto para explorar."
       },
       "effect-none": {
         "name": "Nenhum",
