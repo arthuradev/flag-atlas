@@ -21,17 +21,50 @@
     "all": "All"
   },
   "onboarding": {
-    "welcomeTitle": "Welcome to Flag Atlas",
-    "welcomeBody": "Learn the flags of the world in quick, fun training sessions.",
-    "worldTitle": "Complete the world",
-    "worldBody": "Master countries, advance through continents and track your progress.",
-    "paceTitle": "Train at your own pace",
-    "paceBody": "No pressure. Miss, review and play one more whenever you want.",
-    "next": "Next",
-    "start": "Start",
-    "stepLabel": "Step {{current}} of {{total}}"
+    "brandTagline": "Learn the flags of all 195 countries in the world.",
+    "skip": "Skip",
+    "stepLabel": "Step {{current}} of {{total}}",
+    "splash": {
+      "skip": "Skip intro"
+    },
+    "cta": {
+      "welcome": "Let's explore!",
+      "training": "Continue",
+      "progress": "Almost there"
+    },
+    "welcome": {
+      "title": "Hi, I'm Globi!",
+      "body": "I'll guide you through the world of flags — at your pace, one country at a time."
+    },
+    "training": {
+      "question": "Which country is this flag?",
+      "answer": "Japan",
+      "decoy1": "Thailand",
+      "decoy2": "South Korea",
+      "title": "Learn in just minutes",
+      "body": "Answer quick questions, review your misses and grow at your own pace."
+    },
+    "progress": {
+      "level": "Level {{level}}",
+      "xp": "{{xp}} XP",
+      "southAmerica": "South America",
+      "europe": "Europe",
+      "africa": "Africa",
+      "title": "Master the map",
+      "body": "Earn XP, advance through continents and plant your flag in every country."
+    },
+    "profile": {
+      "title": "What should I call you?",
+      "body": "Create your profile to save your progress.",
+      "nameLabel": "Your name",
+      "namePlaceholder": "Your name",
+      "language": "Language",
+      "sound": "Sounds and music",
+      "begin": "Start journey"
+    }
   },
   "home": {
+    "greeting": "Hi, {{name}}!",
     "learnedCount": "{{learned}}/{{total}} countries learned",
     "continueTraining": "Continue training",
     "startFirstTraining": "Start first training",

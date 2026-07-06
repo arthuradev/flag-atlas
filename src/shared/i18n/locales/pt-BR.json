@@ -21,17 +21,50 @@
     "all": "Todos"
   },
   "onboarding": {
-    "welcomeTitle": "Bem-vindo ao Flag Atlas",
-    "welcomeBody": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
-    "worldTitle": "Complete o mundo",
-    "worldBody": "Domine países, avance por continentes e acompanhe seu progresso.",
-    "paceTitle": "Treine no seu ritmo",
-    "paceBody": "Sem pressão. Erre, revise e jogue mais uma quando quiser.",
-    "next": "Avançar",
-    "start": "Começar",
-    "stepLabel": "Passo {{current}} de {{total}}"
+    "brandTagline": "Aprenda as bandeiras dos 195 países do mundo.",
+    "skip": "Pular",
+    "stepLabel": "Passo {{current}} de {{total}}",
+    "splash": {
+      "skip": "Pular introdução"
+    },
+    "cta": {
+      "welcome": "Vamos explorar!",
+      "training": "Continuar",
+      "progress": "Falta pouco"
+    },
+    "welcome": {
+      "title": "Oi, eu sou o Globi!",
+      "body": "Vou te guiar pelo mundo das bandeiras — no seu ritmo, um país de cada vez."
+    },
+    "training": {
+      "question": "Que país é essa bandeira?",
+      "answer": "Japão",
+      "decoy1": "Tailândia",
+      "decoy2": "Coreia do Sul",
+      "title": "Aprenda em poucos minutos",
+      "body": "Responda perguntas rápidas, revise seus erros e evolua no seu ritmo."
+    },
+    "progress": {
+      "level": "Nível {{level}}",
+      "xp": "{{xp}} XP",
+      "southAmerica": "América do Sul",
+      "europe": "Europa",
+      "africa": "África",
+      "title": "Domine o mapa",
+      "body": "Ganhe XP, avance por continentes e finque sua bandeira em cada país."
+    },
+    "profile": {
+      "title": "Como devo te chamar?",
+      "body": "Crie seu perfil para salvar seu progresso.",
+      "nameLabel": "Seu nome",
+      "namePlaceholder": "Seu nome",
+      "language": "Idioma",
+      "sound": "Sons e músicas",
+      "begin": "Começar jornada"
+    }
   },
   "home": {
+    "greeting": "Olá, {{name}}!",
     "learnedCount": "{{learned}}/{{total}} países aprendidos",
     "continueTraining": "Continuar treino",
     "startFirstTraining": "Começar primeiro treino",

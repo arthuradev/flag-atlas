@@ -7,6 +7,7 @@ import {
 } from "@/entities/progress/progress.selectors";
 import { CoinBalance } from "@/features/cosmetics/components/CoinBalance";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
+import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
 import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
@@ -53,6 +54,7 @@ export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const progress = useProgressStore((state) => state.progress);
+  const playerName = useOnboardingStore((state) => state.playerName);
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
   const startSession = useSessionStore((state) => state.startSession);
   const learned = countLearnedCountries(progress);
@@ -77,7 +79,12 @@ export function HomePage() {
         <div className="mx-auto flex size-20 items-center justify-center rounded-xl2 bg-[#EAF6F8] p-1 shadow-card ring-1 ring-line lg:mx-0">
           <BrandImage asset="globi" decorative className="size-16" />
         </div>
-        <h1 className="mt-3 text-3xl font-black">{t("app.name")}</h1>
+        {playerName && (
+          <p className="mt-3 text-sm font-extrabold text-primary">
+            {t("home.greeting", { name: playerName })}
+          </p>
+        )}
+        <h1 className={`${playerName ? "mt-0.5" : "mt-3"} text-3xl font-black`}>{t("app.name")}</h1>
         <p className="mt-1 font-semibold text-text-muted">{t("app.tagline")}</p>
       </header>
 

@@ -4,15 +4,24 @@ import { answerFullSession, getMainTrainingCta, seedSessionSize, skipOnboarding 
 test.describe("onboarding", () => {
   test("first visit shows onboarding and completes into home", async ({ page }) => {
     await page.goto("./");
-    await expect(page.getByRole("heading", { name: "Bem-vindo ao Flag Atlas" })).toBeVisible();
 
-    await page.getByRole("button", { name: "Avançar" }).click();
-    await expect(page.getByRole("heading", { name: "Complete o mundo" })).toBeVisible();
-    await page.getByRole("button", { name: "Avançar" }).click();
-    await page.getByRole("button", { name: "Começar" }).click();
+    // A splash animada avança sozinha para as boas-vindas.
+    await expect(page.getByRole("heading", { name: "Oi, eu sou o Globi!" })).toBeVisible();
+    await page.getByRole("button", { name: "Vamos explorar!" }).click();
+
+    await expect(page.getByRole("heading", { name: "Aprenda em poucos minutos" })).toBeVisible();
+    await page.getByRole("button", { name: "Continuar" }).click();
+
+    await expect(page.getByRole("heading", { name: "Domine o mapa" })).toBeVisible();
+    await page.getByRole("button", { name: "Falta pouco" }).click();
+
+    await expect(page.getByRole("heading", { name: "Como devo te chamar?" })).toBeVisible();
+    await page.getByPlaceholder("Seu nome").fill("Ana");
+    await page.getByRole("button", { name: "Começar jornada" }).click();
 
     await expect(getMainTrainingCta(page)).toBeVisible();
     await expect(page.getByText("0/195 países aprendidos")).toBeVisible();
+    await expect(page.getByText("Olá, Ana!")).toBeVisible();
 
     // Próxima abertura vai direto para a Home.
     await page.goto("./");

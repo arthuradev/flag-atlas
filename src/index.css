@@ -401,3 +401,157 @@ textarea {
 .mobile-safe-bottom {
   padding-bottom: calc(var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)) + 0.75rem);
 }
+
+/* ==========================================================================
+   Onboarding — "Primeira Experiência" (Claude Design)
+   Ambient keyframes for the splash, world backdrop and the Globi mascot.
+   All are neutralised under prefers-reduced-motion by the global rule above;
+   the in-app "reduce motion" setting additionally strips these classes in JS.
+   ========================================================================== */
+@keyframes fa-onb-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fa-onb-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes fa-onb-word {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fa-onb-spark {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15) rotate(24deg);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1) rotate(20deg);
+  }
+}
+@keyframes fa-onb-twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes fa-onb-confetti {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.5);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(46px) scale(1);
+  }
+}
+@keyframes fa-onb-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+@keyframes fa-globi-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes fa-globi-wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+}
+@keyframes fa-globi-blink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.1);
+  }
+}
+
+.fa-onb-in {
+  animation: fa-onb-in 0.36s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+.fa-onb-pop {
+  animation: fa-onb-pop 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+}
+.fa-onb-word {
+  animation: fa-onb-word 0.5s ease-out 0.9s both;
+}
+.fa-onb-spark {
+  animation: fa-onb-spark 0.6s ease-out 0.8s both;
+}
+.fa-onb-twinkle {
+  animation: fa-onb-twinkle 3s ease-in-out infinite;
+}
+.fa-onb-confetti {
+  animation: fa-onb-confetti 1.15s ease-out both;
+}
+.fa-onb-ring {
+  animation: fa-onb-ring 2.6s ease-out infinite;
+}
+.fa-globi-float {
+  animation: fa-globi-float 3.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.fa-globi-wave {
+  animation: fa-globi-wave 2.3s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: left bottom;
+}
+.fa-globi-blink {
+  animation: fa-globi-blink 4.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
