@@ -1,6 +1,6 @@
 import { type KeyboardEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { getLevelProgress } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
@@ -77,11 +77,13 @@ function SidebarLabel({ children, isCollapsed }: { children: string; isCollapsed
 
 export function AppShell() {
   const { t } = useTranslation();
+  const location = useLocation();
   const level = useProgressStore((state) => state.progress.level);
   const totalXp = useProgressStore((state) => state.progress.totalXp);
   const reduceMotion = useSettingsStore((state) => state.reduceMotion);
   const levelProgress = getLevelProgress(totalXp);
   const xpPct = Math.round(levelProgress.progressRatio * 100);
+  const isTrainingRoute = location.pathname.startsWith("/training");
 
   // Sidebar recolhida por padrão no desktop; abrir e fechar são ações explícitas.
   // A largura é CSS puro (não framer), então a expansão funciona mesmo com
@@ -134,226 +136,236 @@ export function AppShell() {
         {t("common.continue")}
       </a>
 
-      <aside
-        onKeyDown={handleSidebarKeyDown}
-        aria-label={t("app.name")}
-        style={{ width: isExpanded ? SIDEBAR_EXPANDED_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
-        className={`z-40 hidden shrink-0 flex-col overflow-hidden border-r border-white/10 bg-sidebar text-sidebar-fg lg:fixed lg:inset-y-0 lg:left-0 lg:flex ${transitionClass} ${
-          isExpanded ? "p-[18px] shadow-[18px_0_48px_-24px_rgba(0,0,0,0.75)]" : "p-3"
-        }`}
-      >
-        <div className={`mb-6 flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
-          {isCollapsed ? (
-            <button
-              type="button"
-              aria-label={t("app.openSidebar")}
-              aria-expanded={isExpanded}
-              title={t("app.openSidebar")}
-              onClick={expandSidebar}
-              className="flex size-12 items-center justify-center rounded-btn text-sidebar-fg transition hover:bg-white/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
-                <Icon name="compass" size={24} strokeWidth={2.2} />
-              </span>
-            </button>
-          ) : (
-            <>
-              <Link
-                to="/home"
-                aria-label={t("app.name")}
-                className="flex min-w-0 flex-1 items-center gap-3 rounded-btn p-1.5 text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      {!isTrainingRoute && (
+        <aside
+          onKeyDown={handleSidebarKeyDown}
+          aria-label={t("app.name")}
+          style={{ width: isExpanded ? SIDEBAR_EXPANDED_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
+          className={`z-40 hidden shrink-0 flex-col overflow-hidden border-r border-white/10 bg-sidebar text-sidebar-fg lg:fixed lg:inset-y-0 lg:left-0 lg:flex ${transitionClass} ${
+            isExpanded ? "p-[18px] shadow-[18px_0_48px_-24px_rgba(0,0,0,0.75)]" : "p-3"
+          }`}
+        >
+          <div className={`mb-6 flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
+            {isCollapsed ? (
+              <button
+                type="button"
+                aria-label={t("app.openSidebar")}
+                aria-expanded={isExpanded}
+                title={t("app.openSidebar")}
+                onClick={expandSidebar}
+                className="flex size-12 items-center justify-center rounded-btn text-sidebar-fg transition hover:bg-white/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
                   <Icon name="compass" size={24} strokeWidth={2.2} />
                 </span>
-                <span className="min-w-0 overflow-hidden whitespace-nowrap">
-                  <span className="block truncate text-lg font-black leading-tight">
-                    {t("app.name")}
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/home"
+                  aria-label={t("app.name")}
+                  className="flex min-w-0 flex-1 items-center gap-3 rounded-btn p-1.5 text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
+                    <Icon name="compass" size={24} strokeWidth={2.2} />
                   </span>
-                  <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-sidebar-fg-muted">
-                    Terrain
+                  <span className="min-w-0 overflow-hidden whitespace-nowrap">
+                    <span className="block truncate text-lg font-black leading-tight">
+                      {t("app.name")}
+                    </span>
+                    <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-sidebar-fg-muted">
+                      Terrain
+                    </span>
                   </span>
-                </span>
-              </Link>
+                </Link>
+                <button
+                  type="button"
+                  aria-label={t("app.closeSidebar")}
+                  aria-expanded={isExpanded}
+                  title={t("app.closeSidebar")}
+                  onClick={collapseSidebar}
+                  className="inline-flex size-10 shrink-0 items-center justify-center rounded-btn text-sidebar-fg-muted transition hover:bg-white/10 hover:text-sidebar-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <Icon name="x" size={20} strokeWidth={2.4} />
+                </button>
+              </>
+            )}
+          </div>
+
+          <nav className="flex flex-1 flex-col gap-1.5" aria-label={t("app.name")}>
+            {PRIMARY_NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                aria-label={item.ariaLabel}
+                title={t(item.labelKey)}
+                className={({ isActive }) => navItemClass(isActive, isCollapsed)}
+              >
+                <Icon name={item.icon} size={20} />
+                <SidebarLabel isCollapsed={isCollapsed}>{t(item.labelKey)}</SidebarLabel>
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="relative mt-2 border-t border-white/10 pt-2">
+            {isProfileMenuOpen && (
+              <div
+                role="menu"
+                aria-label={t("profile.menuLabel")}
+                className="absolute inset-x-0 bottom-full mb-2 flex flex-col gap-0.5 rounded-btn border border-white/10 bg-sidebar-raised p-1.5 shadow-card"
+              >
+                {PROFILE_MENU_ITEMS.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    role="menuitem"
+                    onClick={() => setProfileMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-chip px-3 py-2 text-sm font-bold text-sidebar-fg-muted transition hover:bg-white/10 hover:text-sidebar-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <Icon name={item.icon} size={18} />
+                    <span className="truncate">{t(item.labelKey)}</span>
+                  </NavLink>
+                ))}
+              </div>
+            )}
+
+            <div className={`flex items-center gap-2 ${isCollapsed ? "flex-col" : ""}`}>
               <button
                 type="button"
-                aria-label={t("app.closeSidebar")}
-                aria-expanded={isExpanded}
-                title={t("app.closeSidebar")}
-                onClick={collapseSidebar}
-                className="inline-flex size-10 shrink-0 items-center justify-center rounded-btn text-sidebar-fg-muted transition hover:bg-white/10 hover:text-sidebar-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-haspopup="menu"
+                aria-expanded={isProfileMenuOpen}
+                aria-label={t("profile.openMenu")}
+                onClick={() => {
+                  if (isCollapsed) {
+                    setExpanded(true);
+                    setProfileMenuOpen(true);
+                    return;
+                  }
+                  setProfileMenuOpen((open) => !open);
+                }}
+                className={`flex min-w-0 items-center rounded-btn text-left transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  isCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1.5"
+                }`}
               >
-                <Icon name="x" size={20} strokeWidth={2.4} />
-              </button>
-            </>
-          )}
-        </div>
-
-        <nav className="flex flex-1 flex-col gap-1.5" aria-label={t("app.name")}>
-          {PRIMARY_NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              aria-label={item.ariaLabel}
-              title={t(item.labelKey)}
-              className={({ isActive }) => navItemClass(isActive, isCollapsed)}
-            >
-              <Icon name={item.icon} size={20} />
-              <SidebarLabel isCollapsed={isCollapsed}>{t(item.labelKey)}</SidebarLabel>
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="relative mt-2 border-t border-white/10 pt-2">
-          {isProfileMenuOpen && (
-            <div
-              role="menu"
-              aria-label={t("profile.menuLabel")}
-              className="absolute inset-x-0 bottom-full mb-2 flex flex-col gap-0.5 rounded-btn border border-white/10 bg-sidebar-raised p-1.5 shadow-card"
-            >
-              {PROFILE_MENU_ITEMS.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  role="menuitem"
-                  onClick={() => setProfileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-chip px-3 py-2 text-sm font-bold text-sidebar-fg-muted transition hover:bg-white/10 hover:text-sidebar-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <Icon name={item.icon} size={18} />
-                  <span className="truncate">{t(item.labelKey)}</span>
-                </NavLink>
-              ))}
-            </div>
-          )}
-
-          <div className={`flex items-center gap-2 ${isCollapsed ? "flex-col" : ""}`}>
-            <button
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded={isProfileMenuOpen}
-              aria-label={t("profile.openMenu")}
-              onClick={() => {
-                if (isCollapsed) {
-                  setExpanded(true);
-                  setProfileMenuOpen(true);
-                  return;
-                }
-                setProfileMenuOpen((open) => !open);
-              }}
-              className={`flex min-w-0 items-center rounded-btn text-left transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                isCollapsed ? "justify-center p-1.5" : "flex-1 gap-3 p-1.5"
-              }`}
-            >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-primary-foreground shadow-sm ring-2 ring-white/10">
-                {level}
-              </span>
-              {!isCollapsed && (
-                <span className="min-w-0 flex-1 overflow-hidden">
-                  <span className="block truncate text-sm font-extrabold text-sidebar-fg">
-                    {t("profile.player")}
-                  </span>
-                  <span className="block truncate text-xs font-bold text-sidebar-fg-muted">
-                    {t("home.level", { level })}
-                  </span>
-                  <span className="mt-1 block h-1 w-full overflow-hidden rounded-full bg-white/10">
-                    <span
-                      className="block h-full rounded-full bg-primary"
-                      style={{ width: `${xpPct}%` }}
-                    />
-                  </span>
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-primary-foreground shadow-sm ring-2 ring-white/10">
+                  {level}
                 </span>
-              )}
-            </button>
+                {!isCollapsed && (
+                  <span className="min-w-0 flex-1 overflow-hidden">
+                    <span className="block truncate text-sm font-extrabold text-sidebar-fg">
+                      {t("profile.player")}
+                    </span>
+                    <span className="block truncate text-xs font-bold text-sidebar-fg-muted">
+                      {t("home.level", { level })}
+                    </span>
+                    <span className="mt-1 block h-1 w-full overflow-hidden rounded-full bg-white/10">
+                      <span
+                        className="block h-full rounded-full bg-primary"
+                        style={{ width: `${xpPct}%` }}
+                      />
+                    </span>
+                  </span>
+                )}
+              </button>
 
-            <NavLink
-              to="/settings"
-              aria-label={t("home.settings")}
-              title={t("home.settings")}
-              onClick={() => setProfileMenuOpen(false)}
-              className={({ isActive }) =>
-                `inline-flex size-10 shrink-0 items-center justify-center rounded-btn transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar ${
-                  isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-sidebar-fg-muted hover:bg-white/10 hover:text-sidebar-fg"
-                }`
-              }
-            >
-              <Icon name="settings" size={20} />
-            </NavLink>
+              <NavLink
+                to="/settings"
+                aria-label={t("home.settings")}
+                title={t("home.settings")}
+                onClick={() => setProfileMenuOpen(false)}
+                className={({ isActive }) =>
+                  `inline-flex size-10 shrink-0 items-center justify-center rounded-btn transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar ${
+                    isActive
+                      ? "bg-primary text-primary-foreground"
+                      : "text-sidebar-fg-muted hover:bg-white/10 hover:text-sidebar-fg"
+                  }`
+                }
+              >
+                <Icon name="settings" size={20} />
+              </NavLink>
+            </div>
           </div>
-        </div>
-      </aside>
+        </aside>
+      )}
 
-      <div className="flex min-h-dvh min-w-0 flex-col lg:pl-20">
-        <header className="sticky top-0 z-30 border-b border-line bg-background/88 px-4 py-3 backdrop-blur lg:hidden">
-          <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-            <Link
-              to="/home"
-              className="inline-flex items-center gap-2 rounded-btn font-black text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span className="flex size-10 items-center justify-center rounded-btn bg-ink text-platinum shadow-sm">
-                <Icon name="compass" size={22} />
-              </span>
-              {t("app.name")}
-            </Link>
-            <Link
-              to="/settings"
-              aria-label={t("home.settings")}
-              className="inline-flex size-10 items-center justify-center rounded-btn border border-line bg-surface text-muted shadow-sm transition hover:bg-surface-2 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Icon name="settings" size={20} />
-            </Link>
-          </div>
-        </header>
+      <div className={`flex min-h-dvh min-w-0 flex-col ${isTrainingRoute ? "" : "lg:pl-20"}`}>
+        {!isTrainingRoute && (
+          <header className="sticky top-0 z-30 border-b border-line bg-background/88 px-4 py-3 backdrop-blur lg:hidden">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
+              <Link
+                to="/home"
+                className="inline-flex items-center gap-2 rounded-btn font-black text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span className="flex size-10 items-center justify-center rounded-btn bg-ink text-platinum shadow-sm">
+                  <Icon name="compass" size={22} />
+                </span>
+                {t("app.name")}
+              </Link>
+              <Link
+                to="/settings"
+                aria-label={t("home.settings")}
+                className="inline-flex size-10 items-center justify-center rounded-btn border border-line bg-surface text-muted shadow-sm transition hover:bg-surface-2 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Icon name="settings" size={20} />
+              </Link>
+            </div>
+          </header>
+        )}
 
         <main
           id="main-content"
-          className="min-w-0 flex-1 px-4 pb-28 pt-5 sm:px-6 lg:flex lg:flex-col lg:px-10 lg:pb-16 lg:pt-8 lg:[justify-content:safe_center]"
+          className={
+            isTrainingRoute
+              ? "min-w-0 flex-1 overflow-hidden"
+              : "min-w-0 flex-1 px-4 pb-28 pt-5 sm:px-6 lg:flex lg:flex-col lg:px-10 lg:pb-16 lg:pt-8 lg:[justify-content:safe_center]"
+          }
         >
           <Outlet />
         </main>
       </div>
 
-      <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/94 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 shadow-[0_-18px_36px_-28px_rgba(22,35,29,0.65)] backdrop-blur lg:hidden"
-        aria-label={t("app.name")}
-      >
-        <div className="mx-auto flex max-w-md items-end justify-between gap-1">
-          {MOBILE_NAV_ITEMS.slice(0, 2).map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              aria-label={item.ariaLabel}
-              className={({ isActive }) => mobileNavItemClass(isActive)}
-            >
-              <Icon name={item.icon} size={21} />
-              <span className="truncate">{t(item.labelKey)}</span>
-            </NavLink>
-          ))}
+      {!isTrainingRoute && (
+        <nav
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/94 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 shadow-[0_-18px_36px_-28px_rgba(22,35,29,0.65)] backdrop-blur lg:hidden"
+          aria-label={t("app.name")}
+        >
+          <div className="mx-auto flex max-w-md items-end justify-between gap-1">
+            {MOBILE_NAV_ITEMS.slice(0, 2).map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                aria-label={item.ariaLabel}
+                className={({ isActive }) => mobileNavItemClass(isActive)}
+              >
+                <Icon name={item.icon} size={21} />
+                <span className="truncate">{t(item.labelKey)}</span>
+              </NavLink>
+            ))}
 
-          <NavLink
-            to="/training"
-            aria-label={t("home.continueTraining")}
-            className="mx-1 flex -translate-y-3 flex-col items-center justify-center rounded-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span className="flex size-14 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-btn">
-              <Icon name="play" size={25} fill="currentColor" strokeWidth={1.8} />
-            </span>
-          </NavLink>
-
-          {MOBILE_NAV_ITEMS.slice(2).map((item) => (
             <NavLink
-              key={item.to}
-              to={item.to}
-              aria-label={item.ariaLabel}
-              className={({ isActive }) => mobileNavItemClass(isActive)}
+              to="/training"
+              aria-label={t("home.continueTraining")}
+              className="mx-1 flex -translate-y-3 flex-col items-center justify-center rounded-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <Icon name={item.icon} size={21} />
-              <span className="truncate">{t(item.labelKey)}</span>
+              <span className="flex size-14 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-btn">
+                <Icon name="play" size={25} fill="currentColor" strokeWidth={1.8} />
+              </span>
             </NavLink>
-          ))}
-        </div>
-      </nav>
+
+            {MOBILE_NAV_ITEMS.slice(2).map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                aria-label={item.ariaLabel}
+                className={({ isActive }) => mobileNavItemClass(isActive)}
+              >
+                <Icon name={item.icon} size={21} />
+                <span className="truncate">{t(item.labelKey)}</span>
+              </NavLink>
+            ))}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

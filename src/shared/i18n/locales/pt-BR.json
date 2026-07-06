@@ -210,6 +210,12 @@
     "badgeUnlocked": "Insígnia desbloqueada",
     "platinumUnlocked": "Insígnia Platina desbloqueada! Você realmente domina essa bandeira.",
     "markedForReview": "Vamos revisar essa em breve.",
+    "answerPrompt": "Escolha uma resposta para ver o feedback.",
+    "exitButtonAria": "Sair do treino",
+    "exitTitle": "Calma! Quer sair do treino?",
+    "exitBody": "Você encerrará esta sessão agora e não verá o resumo final.",
+    "keepTraining": "Continuar treinando",
+    "leaveTraining": "Sair do treino",
     "sessionSize": "Tamanho da sessão",
     "questionsCount": "{{count}} perguntas",
     "emptyPool": "Nenhum país disponível para treinar."

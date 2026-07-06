@@ -1,8 +1,9 @@
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
+import type { Country } from "@/entities/country/country.types";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { flagFrameClass } from "@/features/cosmetics/logic/flagFrames";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
@@ -14,14 +15,13 @@ import {
   getSurvivalLivesRemaining,
   SURVIVAL_STARTING_LIVES,
 } from "@/features/training/logic/survival";
-import { useSessionStore } from "@/features/training/store/sessionStore";
+import { type AnswerFeedback, useSessionStore } from "@/features/training/store/sessionStore";
 import { playSound } from "@/shared/audio/soundPlayer";
 import { Button } from "@/shared/components/Button";
-import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
 import { Icon } from "@/shared/components/Icon";
-import { PageShell } from "@/shared/components/PageShell";
 import { ProgressBar } from "@/shared/components/ProgressBar";
+import type { Locale } from "@/shared/i18n/locale";
 
 const ADVANCE_DELAY_CORRECT_MS = 1200;
 const ADVANCE_DELAY_WRONG_MS = 2000;
@@ -30,6 +30,281 @@ const SURVIVAL_LIFE_SLOTS = Array.from(
   (_, index) => `survival-life-${index + 1}`,
 );
 
+type TrainingTopBarProps = {
+  current: number;
+  total: number;
+  currentStreak: number;
+  sessionXp: number;
+  isSurvival: boolean;
+  livesRemaining: number;
+  score: number;
+  onExit: () => void;
+};
+
+function TrainingTopBar({
+  current,
+  total,
+  currentStreak,
+  sessionXp,
+  isSurvival,
+  livesRemaining,
+  score,
+  onExit,
+}: TrainingTopBarProps) {
+  const { t } = useTranslation();
+  const safeTotal = Math.max(1, total);
+  const visibleCurrent = Math.min(Math.max(0, current), safeTotal);
+
+  return (
+    <header className="shrink-0 border-b border-line bg-background/95 px-3 py-2 backdrop-blur sm:px-5 sm:py-3">
+      <div className="mx-auto flex max-w-6xl items-center gap-3">
+        <button
+          type="button"
+          aria-label={t("training.exitButtonAria")}
+          onClick={onExit}
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-btn border border-line bg-surface text-muted shadow-sm transition hover:bg-surface-2 hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Icon name="x" size={21} strokeWidth={2.5} />
+        </button>
+
+        <div className="min-w-0 flex-1">
+          <div className="mb-1.5 flex items-center justify-between gap-3 text-xs font-extrabold text-text-muted sm:text-sm">
+            <span>
+              <span className="sr-only">
+                {t("training.questionLabel", { current: visibleCurrent, total: safeTotal })}
+              </span>
+              <span aria-hidden="true">{t("training.questionShort", { current, total })}</span>
+            </span>
+            <span className="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
+              {isSurvival && (
+                <>
+                  <span data-testid="survival-lives" className="inline-flex items-center gap-0.5">
+                    <span className="sr-only">
+                      {t("survival.livesLabel", {
+                        lives: livesRemaining,
+                        total: SURVIVAL_STARTING_LIVES,
+                      })}
+                    </span>
+                    {SURVIVAL_LIFE_SLOTS.map((slot, index) => (
+                      <Icon
+                        key={slot}
+                        name="heart"
+                        size={16}
+                        fill={index < livesRemaining ? "currentColor" : "none"}
+                        className={index < livesRemaining ? "text-danger" : "text-faint"}
+                      />
+                    ))}
+                  </span>
+                  <span data-testid="survival-score" className="inline-flex items-center gap-1">
+                    <span className="sr-only">{t("survival.scoreLabel", { score })}</span>
+                    <Icon name="trophy" size={16} className="text-warning" />
+                    <span aria-hidden="true">{score}</span>
+                  </span>
+                </>
+              )}
+              <span className="inline-flex items-center gap-1">
+                <span className="sr-only">{t("training.streak", { count: currentStreak })}</span>
+                <Icon name="flame" size={16} className="text-danger" />
+                <span aria-hidden="true">{currentStreak}</span>
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <span className="sr-only">{t("training.sessionXp", { xp: sessionXp })}</span>
+                <Icon name="sparkles" size={16} className="text-warning" />
+                <span aria-hidden="true">{sessionXp}</span>
+              </span>
+            </span>
+          </div>
+          <ProgressBar
+            value={Math.max(0, visibleCurrent - 1)}
+            max={safeTotal}
+            size="thin"
+            label={t("training.questionLabel", { current: visibleCurrent, total: safeTotal })}
+            colorClassName="bg-primary"
+          />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+type TrainingFeedbackBarProps = {
+  feedback: AnswerFeedback | null;
+  isTyping: boolean;
+  country: Country;
+  selectedCountry: Country | undefined;
+  locale: Locale;
+  onContinue: () => void;
+};
+
+function FeedbackDetail({ children }: { children: ReactNode }) {
+  return <p className="text-sm font-semibold text-text-muted sm:text-base">{children}</p>;
+}
+
+function TrainingFeedbackBar({
+  feedback,
+  isTyping,
+  country,
+  selectedCountry,
+  locale,
+  onContinue,
+}: TrainingFeedbackBarProps) {
+  const { t } = useTranslation();
+
+  return (
+    <footer
+      aria-live="polite"
+      className="shrink-0 border-t border-line bg-background/95 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-2 backdrop-blur sm:px-5 sm:pb-3 sm:pt-3"
+    >
+      <div className="mx-auto max-w-6xl">
+        {feedback ? (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`flex flex-col gap-3 rounded-card border-2 bg-surface p-3 shadow-card sm:flex-row sm:items-center sm:gap-4 sm:p-4 ${
+              feedback.isCorrect ? "border-success" : "border-danger"
+            }`}
+          >
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <Icon
+                  name={feedback.isCorrect ? "check-circle" : "x-circle"}
+                  size={22}
+                  className={feedback.isCorrect ? "text-success" : "text-danger"}
+                />
+                <p className="text-lg font-extrabold">
+                  {feedback.isCorrect ? t("training.correctTitle") : t("training.wrongTitle")}
+                </p>
+                {feedback.xpGained > 0 && (
+                  <span className="rounded-full bg-warning/10 px-2.5 py-1 text-sm font-extrabold text-warning">
+                    {t("training.xpGained", { xp: feedback.xpGained })}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-1 flex flex-col gap-1">
+                {feedback.isCorrect && isTyping && (
+                  <p className="font-bold">{getCountryName(country, locale)}</p>
+                )}
+                {!feedback.isCorrect && (
+                  <>
+                    <FeedbackDetail>
+                      {t("training.correctAnswerWas", {
+                        country: getCountryName(country, locale),
+                      })}
+                    </FeedbackDetail>
+                    {selectedCountry && (
+                      <FeedbackDetail>
+                        {t("training.youChose", {
+                          country: getCountryName(selectedCountry, locale),
+                        })}
+                      </FeedbackDetail>
+                    )}
+                    {feedback.typedAnswer !== undefined && (
+                      <FeedbackDetail>
+                        {t("typing.youTyped", { answer: feedback.typedAnswer })}
+                      </FeedbackDetail>
+                    )}
+                    <p className="text-sm font-semibold text-text-muted">
+                      {t("training.markedForReview")}
+                    </p>
+                  </>
+                )}
+                {feedback.promoted && (
+                  <div className="flex flex-wrap items-center gap-2 text-sm font-bold text-success">
+                    <span>
+                      {t(
+                        feedback.masteryAfter === "master"
+                          ? "training.platinumUnlocked"
+                          : "training.masteryUp",
+                        {
+                          country: getCountryName(country, locale),
+                          from: t(`mastery.${feedback.masteryBefore}`),
+                          to: t(`mastery.${feedback.masteryAfter}`),
+                        },
+                      )}
+                    </span>
+                    <MasteryBadge masteryLevel={feedback.masteryAfter} size="sm" showTier />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <Button size="lg" className="w-full shrink-0 sm:w-auto" onClick={onContinue}>
+              {t("common.continue")}
+            </Button>
+          </motion.div>
+        ) : (
+          <div className="flex min-h-16 items-center justify-center rounded-card border border-dashed border-line bg-surface/70 px-4 text-center text-sm font-bold text-text-muted sm:min-h-20">
+            {t("training.answerPrompt")}
+          </div>
+        )}
+      </div>
+    </footer>
+  );
+}
+
+type TrainingExitDialogProps = {
+  open: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+};
+
+function TrainingExitDialog({ open, onCancel, onConfirm }: TrainingExitDialogProps) {
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    document.getElementById("training-exit-keep")?.focus();
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onCancel();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, onCancel]);
+
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="training-exit-title"
+        aria-describedby="training-exit-description"
+        className="w-full max-w-md rounded-card border border-line bg-surface p-5 shadow-card"
+      >
+        <h2 id="training-exit-title" className="text-xl font-black text-text">
+          {t("training.exitTitle")}
+        </h2>
+        <p
+          id="training-exit-description"
+          className="mt-2 text-sm font-semibold text-text-muted sm:text-base"
+        >
+          {t("training.exitBody")}
+        </p>
+        <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <Button id="training-exit-keep" variant="secondary" onClick={onCancel}>
+            {t("training.keepTraining")}
+          </Button>
+          <Button variant="danger" onClick={onConfirm}>
+            {t("training.leaveTraining")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TrainingPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -37,11 +312,13 @@ export function TrainingPage() {
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
   const flagFrameId = useEquippedId("flagFrame");
   const [effectKey, setEffectKey] = useState(0);
+  const [isExitDialogOpen, setExitDialogOpen] = useState(false);
   const { session, feedback, sessionXp, currentStreak, summary } = useSessionStore();
   const startSession = useSessionStore((state) => state.startSession);
   const answerCurrentQuestion = useSessionStore((state) => state.answerCurrentQuestion);
   const answerCurrentQuestionTyped = useSessionStore((state) => state.answerCurrentQuestionTyped);
   const advance = useSessionStore((state) => state.advance);
+  const clearSession = useSessionStore((state) => state.clearSession);
 
   useEffect(() => {
     if (summary && !session) {
@@ -56,7 +333,7 @@ export function TrainingPage() {
   }, [session, summary, startSession, defaultSessionSize]);
 
   useEffect(() => {
-    if (!feedback) {
+    if (!feedback || isExitDialogOpen) {
       return;
     }
     const timer = setTimeout(
@@ -64,7 +341,7 @@ export function TrainingPage() {
       feedback.isCorrect ? ADVANCE_DELAY_CORRECT_MS : ADVANCE_DELAY_WRONG_MS,
     );
     return () => clearTimeout(timer);
-  }, [feedback, advance]);
+  }, [feedback, advance, isExitDialogOpen]);
 
   useEffect(() => {
     if (feedback) {
@@ -78,42 +355,38 @@ export function TrainingPage() {
     }
   }, [feedback]);
 
+  useEffect(() => {
+    if (!session || summary) {
+      return;
+    }
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [session, summary]);
+
+  const handleRequestExit = () => setExitDialogOpen(true);
+  const handleCancelExit = () => setExitDialogOpen(false);
+  const handleConfirmExit = () => {
+    clearSession();
+    setExitDialogOpen(false);
+    navigate("/home", { replace: true });
+  };
+
   if (!session) {
     return (
-      <PageShell title={t("training.title")} backTo="/home" width="wide">
+      <div className="flex h-dvh items-center justify-center overflow-hidden bg-background text-text">
         <span className="sr-only">{t("training.title")}</span>
-      </PageShell>
+      </div>
     );
   }
 
   const question = session.questions[session.currentIndex];
   const country = question ? getCountryById(question.countryId) : undefined;
-  if (!question || !country) {
-    return (
-      <PageShell title={t("training.title")} backTo="/home" width="wide">
-        <div className="mx-auto flex max-w-md flex-1 flex-col items-center justify-center gap-4 text-center">
-          <span className="flex size-16 items-center justify-center rounded-xl2 bg-pine-soft text-primary">
-            <Icon name="map" size={34} />
-          </span>
-          <p className="text-text-muted">
-            {session.config.mode === "review"
-              ? t("review.nothingToReview")
-              : t("training.emptyPool")}
-          </p>
-          <Button
-            size="lg"
-            onClick={() =>
-              startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize })
-            }
-          >
-            <Icon name="play" size={20} fill="currentColor" strokeWidth={1.8} />
-            {t("home.continueTraining")}
-          </Button>
-        </div>
-      </PageShell>
-    );
-  }
-
   const isTyping = session.config.questionType === "typing";
   const isSurvival = session.config.mode === "survival";
   const current = session.currentIndex + 1;
@@ -124,81 +397,76 @@ export function TrainingPage() {
     ? getCountryById(feedback.selectedCountryId)
     : undefined;
 
+  if (!question || !country) {
+    return (
+      <div className="grid h-dvh grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-background text-text">
+        <TrainingTopBar
+          current={0}
+          total={total}
+          currentStreak={currentStreak}
+          sessionXp={sessionXp}
+          isSurvival={isSurvival}
+          livesRemaining={livesRemaining}
+          score={score}
+          onExit={handleRequestExit}
+        />
+        <main className="flex min-h-0 items-center justify-center overflow-y-auto px-4 py-6">
+          <div className="mx-auto flex max-w-md flex-col items-center justify-center gap-4 text-center">
+            <span className="flex size-16 items-center justify-center rounded-xl2 bg-pine-soft text-primary">
+              <Icon name="map" size={34} />
+            </span>
+            <p className="text-text-muted">
+              {session.config.mode === "review"
+                ? t("review.nothingToReview")
+                : t("training.emptyPool")}
+            </p>
+            <Button
+              size="lg"
+              onClick={() =>
+                startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize })
+              }
+            >
+              <Icon name="play" size={20} fill="currentColor" strokeWidth={1.8} />
+              {t("home.continueTraining")}
+            </Button>
+          </div>
+        </main>
+        <TrainingExitDialog
+          open={isExitDialogOpen}
+          onCancel={handleCancelExit}
+          onConfirm={handleConfirmExit}
+        />
+      </div>
+    );
+  }
+
   return (
-    <PageShell
-      backTo="/home"
-      title={t(isSurvival ? "survival.title" : "training.title")}
-      width="wide"
-    >
-      <div className="flex flex-1 flex-col gap-4 sm:gap-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-sm font-extrabold text-text-muted sm:text-base">
-          {isSurvival ? (
-            <span data-testid="survival-lives" className="inline-flex items-center gap-1">
-              <span className="sr-only">
-                {t("survival.livesLabel", {
-                  lives: livesRemaining,
-                  total: SURVIVAL_STARTING_LIVES,
-                })}
-              </span>
-              {SURVIVAL_LIFE_SLOTS.map((slot, index) => (
-                <Icon
-                  key={slot}
-                  name="heart"
-                  size={18}
-                  fill={index < livesRemaining ? "currentColor" : "none"}
-                  className={index < livesRemaining ? "text-danger" : "text-faint"}
-                />
-              ))}
-            </span>
-          ) : (
-            <span>
-              <span className="sr-only">{t("training.questionLabel", { current, total })}</span>
-              <span aria-hidden="true">{t("training.questionShort", { current, total })}</span>
-            </span>
-          )}
-          <span className="flex items-center gap-3">
-            {isSurvival && (
-              <span data-testid="survival-score" className="inline-flex items-center gap-1">
-                <span className="sr-only">{t("survival.scoreLabel", { score })}</span>
-                <Icon name="trophy" size={17} className="text-warning" />
-                <span aria-hidden="true">{score}</span>
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1">
-              <span className="sr-only">{t("training.streak", { count: currentStreak })}</span>
-              <Icon name="flame" size={17} className="text-danger" />
-              <span aria-hidden="true">{currentStreak}</span>
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <span className="sr-only">{t("training.sessionXp", { xp: sessionXp })}</span>
-              <Icon name="sparkles" size={17} className="text-warning" />
-              <span aria-hidden="true">{sessionXp}</span>
-            </span>
-          </span>
-        </div>
-        {!isSurvival && (
-          <ProgressBar
-            value={current - 1}
-            max={total}
-            size="thin"
-            label={t("training.questionLabel", { current, total })}
-            colorClassName="bg-primary"
-          />
-        )}
+    <div className="grid h-dvh grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden bg-background text-text">
+      <TrainingTopBar
+        current={current}
+        total={total}
+        currentStreak={currentStreak}
+        sessionXp={sessionXp}
+        isSurvival={isSurvival}
+        livesRemaining={livesRemaining}
+        score={score}
+        onExit={handleRequestExit}
+      />
 
-        <h2 className="text-center text-xl font-black sm:text-2xl">
-          {t(isTyping ? "typing.prompt" : "training.whichCountry")}
-        </h2>
-
+      <main className="min-h-0 overflow-y-auto px-3 py-2 sm:px-5 sm:py-3 lg:overflow-hidden">
         <motion.div
           key={session.currentIndex}
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="flex flex-col gap-4 sm:gap-6"
+          className="mx-auto flex min-h-full max-w-5xl flex-col justify-center gap-2 sm:gap-3"
         >
-          <Card
-            className={`relative mx-auto flex h-52 w-full max-w-3xl items-center justify-center bg-surface p-4 shadow-flag sm:h-72 sm:p-6 lg:h-[29rem] ${flagFrameClass(flagFrameId)}`}
+          <h1 className="shrink-0 text-center text-lg font-black sm:text-2xl">
+            {t(isTyping ? "typing.prompt" : "training.whichCountry")}
+          </h1>
+
+          <div
+            className={`relative mx-auto flex h-[clamp(7rem,22dvh,10rem)] w-full max-w-3xl shrink-0 items-center justify-center overflow-hidden rounded-card border border-line bg-surface p-2 shadow-flag sm:h-[clamp(9rem,30dvh,18rem)] sm:p-4 lg:h-[clamp(11rem,34dvh,22rem)] ${flagFrameClass(flagFrameId)}`}
           >
             <FlagImage
               key={question.countryId}
@@ -207,7 +475,7 @@ export function TrainingPage() {
               className="max-h-full max-w-full rounded-lg object-contain shadow-flag"
             />
             <VisualEffectBurst playKey={effectKey} className="rounded-card" />
-          </Card>
+          </div>
 
           {isTyping ? (
             <TypedAnswerForm
@@ -216,7 +484,7 @@ export function TrainingPage() {
               onSubmit={answerCurrentQuestionTyped}
             />
           ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+            <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:gap-4">
               {(question.optionCountryIds ?? []).map((optionId) => {
                 const option = getCountryById(optionId);
                 if (!option) {
@@ -242,78 +510,22 @@ export function TrainingPage() {
             </div>
           )}
         </motion.div>
+      </main>
 
-        <div aria-live="polite" className="min-h-28">
-          {feedback && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="mx-auto w-full max-w-3xl"
-            >
-              <Card
-                className={`flex flex-col gap-1 border-2 p-4 ${
-                  feedback.isCorrect ? "border-success" : "border-danger"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <p className="text-lg font-extrabold">
-                    {feedback.isCorrect ? t("training.correctTitle") : t("training.wrongTitle")}
-                  </p>
-                  {feedback.xpGained > 0 && (
-                    <span className="font-bold text-warning">
-                      {t("training.xpGained", { xp: feedback.xpGained })}
-                    </span>
-                  )}
-                </div>
-                {feedback.isCorrect && isTyping && (
-                  <p className="font-bold">{getCountryName(country, locale)}</p>
-                )}
-                {!feedback.isCorrect && (
-                  <>
-                    <p className="text-text-muted">
-                      {t("training.correctAnswerWas", { country: getCountryName(country, locale) })}
-                    </p>
-                    {selectedCountry && (
-                      <p className="text-text-muted">
-                        {t("training.youChose", {
-                          country: getCountryName(selectedCountry, locale),
-                        })}
-                      </p>
-                    )}
-                    {feedback.typedAnswer !== undefined && (
-                      <p className="text-text-muted">
-                        {t("typing.youTyped", { answer: feedback.typedAnswer })}
-                      </p>
-                    )}
-                    <p className="text-sm text-text-muted">{t("training.markedForReview")}</p>
-                  </>
-                )}
-                {feedback.promoted && (
-                  <div className="flex flex-wrap items-center gap-2 text-sm font-bold text-success">
-                    <span>
-                      {t(
-                        feedback.masteryAfter === "master"
-                          ? "training.platinumUnlocked"
-                          : "training.masteryUp",
-                        {
-                          country: getCountryName(country, locale),
-                          from: t(`mastery.${feedback.masteryBefore}`),
-                          to: t(`mastery.${feedback.masteryAfter}`),
-                        },
-                      )}
-                    </span>
-                    <MasteryBadge masteryLevel={feedback.masteryAfter} size="sm" showTier />
-                  </div>
-                )}
-                <Button variant="ghost" size="md" className="self-end" onClick={advance}>
-                  {t("common.continue")}
-                </Button>
-              </Card>
-            </motion.div>
-          )}
-        </div>
-      </div>
-    </PageShell>
+      <TrainingFeedbackBar
+        feedback={feedback}
+        isTyping={isTyping}
+        country={country}
+        selectedCountry={selectedCountry}
+        locale={locale}
+        onContinue={advance}
+      />
+
+      <TrainingExitDialog
+        open={isExitDialogOpen}
+        onCancel={handleCancelExit}
+        onConfirm={handleConfirmExit}
+      />
+    </div>
   );
 }

@@ -210,6 +210,12 @@
     "badgeUnlocked": "Badge unlocked",
     "platinumUnlocked": "Platinum badge unlocked! You truly know this flag.",
     "markedForReview": "We'll review this one soon.",
+    "answerPrompt": "Choose an answer to see feedback.",
+    "exitButtonAria": "Leave training",
+    "exitTitle": "Wait! Leave this training session?",
+    "exitBody": "You will end this session now and will not see the final summary.",
+    "keepTraining": "Keep training",
+    "leaveTraining": "Leave training",
     "sessionSize": "Session size",
     "questionsCount": "{{count}} questions",
     "emptyPool": "No countries available to train."
