@@ -10,6 +10,7 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 - Favicon, manifest PWA, ícones de instalação e app icon passam a usar os novos assets oficiais.
 - Interface principal atualizada para usar Globi/app icon no onboarding, Home, header mobile e sidebar sem adicionar splash animada complexa.
 - `scripts/generate-icons.mjs` agora deriva PNGs PWA, ícones Android e splash estático a partir dos SVGs oficiais da marca.
+- Sidebar refinada para mostrar o Globi inteiro em tile claro; tema escuro ajustado para o Azul Atlas e tons oficiais da marca.
 
 ### Versão 4.5 — Mastery 2.0 e insígnias
 
