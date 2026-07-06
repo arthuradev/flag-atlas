@@ -1,140 +1,178 @@
 /**
- * Gera os ícones PNG da PWA em public/icons/ sem dependências externas,
- * desenhando pixel a pixel e codificando PNG com zlib do Node.
+ * Generates derived icon and splash PNGs from the official SVG sources in
+ * public/brand/. Playwright is already a dev dependency for E2E, so this keeps
+ * brand generation reproducible without adding a rasterization package.
  *
- * Uso: node scripts/generate-icons.mjs
+ * Usage: node scripts/generate-icons.mjs
  */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
-import { deflateSync } from "node:zlib";
+import { mkdirSync, readFileSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
+import { chromium } from "@playwright/test";
 
-const outDir = resolve(import.meta.dirname, "..", "public", "icons");
-mkdirSync(outDir, { recursive: true });
+const rootDir = resolve(import.meta.dirname, "..");
+const brandDir = join(rootDir, "public", "brand");
+const appIconSvg = join(brandDir, "app-icon.svg");
+const globiSvg = join(brandDir, "globi.svg");
+const navy = "#12303B";
+const mist = "#EAF6F8";
 
-const TEAL = [13, 148, 136, 255];
-const TEAL_DARK = [10, 118, 110, 255];
-const WHITE = [255, 255, 255, 255];
-const TRANSPARENT = [0, 0, 0, 0];
-
-function crc32(buffer) {
-  let crc = 0xffffffff;
-  for (const byte of buffer) {
-    crc ^= byte;
-    for (let i = 0; i < 8; i++) {
-      crc = crc & 1 ? (crc >>> 1) ^ 0xedb88320 : crc >>> 1;
-    }
-  }
-  return (crc ^ 0xffffffff) >>> 0;
+function ensureParentDir(filePath) {
+  mkdirSync(dirname(filePath), { recursive: true });
 }
 
-function chunk(type, data) {
-  const length = Buffer.alloc(4);
-  length.writeUInt32LE = undefined; // guard: sempre big-endian em PNG
-  const lengthBe = Buffer.alloc(4);
-  lengthBe.writeUInt32BE(data.length, 0);
-  const typeAndData = Buffer.concat([Buffer.from(type, "ascii"), data]);
-  const crc = Buffer.alloc(4);
-  crc.writeUInt32BE(crc32(typeAndData), 0);
-  return Buffer.concat([lengthBe, typeAndData, crc]);
+function svgDataUri(filePath) {
+  return `data:image/svg+xml;base64,${readFileSync(filePath).toString("base64")}`;
 }
 
-function encodePng(pixels, size) {
-  const raw = Buffer.alloc((size * 4 + 1) * size);
-  for (let y = 0; y < size; y++) {
-    raw[y * (size * 4 + 1)] = 0; // filtro none por linha
-    for (let x = 0; x < size; x++) {
-      const [r, g, b, a] = pixels[y * size + x];
-      const offset = y * (size * 4 + 1) + 1 + x * 4;
-      raw[offset] = r;
-      raw[offset + 1] = g;
-      raw[offset + 2] = b;
-      raw[offset + 3] = a;
-    }
-  }
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(size, 0);
-  ihdr.writeUInt32BE(size, 4);
-  ihdr[8] = 8; // bit depth
-  ihdr[9] = 6; // RGBA
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk("IHDR", ihdr),
-    chunk("IDAT", deflateSync(raw, { level: 9 })),
-    chunk("IEND", Buffer.alloc(0)),
-  ]);
-}
+async function renderAsset(page, target) {
+  const {
+    source,
+    output,
+    width,
+    height,
+    background = "transparent",
+    imageWidth = width,
+    imageHeight = height,
+  } = target;
 
-/**
- * Desenha o ícone: quadrado arredondado teal, mastro e bandeira ondulada.
- * `padding` controla a área segura (maior para ícones maskable).
- */
-function drawIcon(size, { padding, transparentOutside }) {
-  const pixels = new Array(size * size);
-  const radius = size * 0.22;
-  const inset = size * padding;
-
-  const poleX = size * (padding + 0.16);
-  const poleWidth = Math.max(2, size * 0.045);
-  const poleTop = size * (padding + 0.12);
-  const poleBottom = size * (1 - padding - 0.1);
-
-  const flagLeft = poleX + poleWidth;
-  const flagRight = size * (1 - padding - 0.12);
-  const flagTop = size * (padding + 0.14);
-  const flagHeight = size * 0.3;
-  const waveAmp = size * 0.035;
-
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      let color = transparentOutside ? TRANSPARENT : TEAL;
-
-      // Quadrado arredondado de fundo
-      const rx = Math.max(inset + radius - x, x - (size - inset - radius), 0);
-      const ry = Math.max(inset + radius - y, y - (size - inset - radius), 0);
-      const insideBg =
-        x >= inset &&
-        x < size - inset &&
-        y >= inset &&
-        y < size - inset &&
-        rx * rx + ry * ry <= radius * radius;
-      if (insideBg) {
-        color = TEAL;
-      } else if (!transparentOutside) {
-        color = TEAL; // maskable: fundo cobre tudo
+  ensureParentDir(output);
+  await page.setViewportSize({ width, height });
+  await page.setContent(
+    `<!doctype html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        width: ${width}px;
+        height: ${height}px;
+        margin: 0;
+        overflow: hidden;
+        background: ${background};
       }
 
-      if (color !== TRANSPARENT) {
-        // Sombra sutil na metade de baixo do fundo
-        if (y > size * 0.55 && (transparentOutside ? insideBg : true)) {
-          color = y > size * 0.85 ? TEAL_DARK : color;
-        }
-        // Mastro
-        if (x >= poleX && x < poleX + poleWidth && y >= poleTop && y <= poleBottom) {
-          color = WHITE;
-        }
-        // Bandeira ondulada
-        if (x >= flagLeft && x <= flagRight) {
-          const progress = (x - flagLeft) / (flagRight - flagLeft);
-          const wave = Math.sin(progress * Math.PI * 1.5) * waveAmp;
-          const top = flagTop + wave;
-          if (y >= top && y <= top + flagHeight) {
-            color = WHITE;
-          }
-        }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      pixels[y * size + x] = color;
-    }
-  }
-  return pixels;
+      img {
+        display: block;
+        width: ${imageWidth}px;
+        height: ${imageHeight}px;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="${svgDataUri(source)}" alt="" />
+  </body>
+</html>`,
+    { waitUntil: "load" },
+  );
+
+  await page.locator("img").evaluate((image) => image.decode());
+  await page.screenshot({
+    path: output,
+    omitBackground: background === "transparent",
+  });
+  console.log(`Generated ${relative(rootDir, output)} (${width}x${height})`);
 }
 
-for (const { file, size, padding, transparentOutside } of [
-  { file: "icon-192.png", size: 192, padding: 0.04, transparentOutside: true },
-  { file: "icon-512.png", size: 512, padding: 0.04, transparentOutside: true },
-  { file: "icon-512-maskable.png", size: 512, padding: 0.14, transparentOutside: false },
-]) {
-  const png = encodePng(drawIcon(size, { padding, transparentOutside }), size);
-  writeFileSync(join(outDir, file), png);
-  console.log(`Generated ${file} (${png.length} bytes)`);
+const pwaTargets = [
+  {
+    source: appIconSvg,
+    output: join(rootDir, "public", "icons", "icon-192.png"),
+    width: 192,
+    height: 192,
+  },
+  {
+    source: appIconSvg,
+    output: join(rootDir, "public", "icons", "icon-512.png"),
+    width: 512,
+    height: 512,
+  },
+  {
+    source: appIconSvg,
+    output: join(rootDir, "public", "icons", "icon-512-maskable.png"),
+    width: 512,
+    height: 512,
+    background: navy,
+  },
+];
+
+const androidIconDensities = [
+  { dir: "mipmap-mdpi", iconSize: 48, foregroundSize: 108 },
+  { dir: "mipmap-hdpi", iconSize: 72, foregroundSize: 162 },
+  { dir: "mipmap-xhdpi", iconSize: 96, foregroundSize: 216 },
+  { dir: "mipmap-xxhdpi", iconSize: 144, foregroundSize: 324 },
+  { dir: "mipmap-xxxhdpi", iconSize: 192, foregroundSize: 432 },
+];
+
+const androidIconTargets = androidIconDensities.flatMap(({ dir, iconSize, foregroundSize }) => {
+  const mipmapDir = join(rootDir, "android", "app", "src", "main", "res", dir);
+  const foregroundImageSize = Math.round(foregroundSize * 0.72);
+
+  return [
+    {
+      source: appIconSvg,
+      output: join(mipmapDir, "ic_launcher.png"),
+      width: iconSize,
+      height: iconSize,
+    },
+    {
+      source: appIconSvg,
+      output: join(mipmapDir, "ic_launcher_round.png"),
+      width: iconSize,
+      height: iconSize,
+    },
+    {
+      source: globiSvg,
+      output: join(mipmapDir, "ic_launcher_foreground.png"),
+      width: foregroundSize,
+      height: foregroundSize,
+      imageWidth: foregroundImageSize,
+      imageHeight: foregroundImageSize,
+    },
+  ];
+});
+
+const splashSizes = [
+  { dir: "drawable", width: 480, height: 320 },
+  { dir: "drawable-land-mdpi", width: 480, height: 320 },
+  { dir: "drawable-land-hdpi", width: 800, height: 480 },
+  { dir: "drawable-land-xhdpi", width: 1280, height: 720 },
+  { dir: "drawable-land-xxhdpi", width: 1600, height: 960 },
+  { dir: "drawable-land-xxxhdpi", width: 1920, height: 1280 },
+  { dir: "drawable-port-mdpi", width: 320, height: 480 },
+  { dir: "drawable-port-hdpi", width: 480, height: 800 },
+  { dir: "drawable-port-xhdpi", width: 720, height: 1280 },
+  { dir: "drawable-port-xxhdpi", width: 960, height: 1600 },
+  { dir: "drawable-port-xxxhdpi", width: 1280, height: 1920 },
+];
+
+const splashTargets = splashSizes.map(({ dir, width, height }) => {
+  const imageSize = Math.round(Math.min(width, height) * 0.3);
+
+  return {
+    source: appIconSvg,
+    output: join(rootDir, "android", "app", "src", "main", "res", dir, "splash.png"),
+    width,
+    height,
+    background: mist,
+    imageWidth: imageSize,
+    imageHeight: imageSize,
+  };
+});
+
+const browser = await chromium.launch();
+const page = await browser.newPage({ deviceScaleFactor: 1 });
+
+try {
+  for (const target of [...pwaTargets, ...androidIconTargets, ...splashTargets]) {
+    await renderAsset(page, target);
+  }
+} finally {
+  await browser.close();
 }

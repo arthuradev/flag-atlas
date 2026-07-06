@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" width="420" height="300" role="img" aria-label="Flag Atlas — logo vertical">
+  
+  <g transform="translate(104.9 -1.3) scale(0.838)">
+    <ellipse cx="128" cy="124" rx="78" ry="75" fill="#17B4C9" stroke="#12303B" stroke-width="8"></ellipse>
+    <ellipse cx="95" cy="100" rx="22" ry="15" transform="rotate(-18 95 100)" fill="#2FB98A"></ellipse>
+    <ellipse cx="164" cy="140" rx="20" ry="14" transform="rotate(-8 164 140)" fill="#2FB98A"></ellipse>
+    <circle cx="84" cy="140" r="9" fill="#FF6F61" opacity="0.30"></circle>
+    <circle cx="172" cy="140" r="9" fill="#FF6F61" opacity="0.30"></circle>
+    <circle cx="106" cy="118" r="10" fill="#12303B"></circle>
+    <circle cx="150" cy="118" r="10" fill="#12303B"></circle>
+    <circle cx="110" cy="114" r="3.6" fill="#FFFFFF"></circle>
+    <circle cx="154" cy="114" r="3.6" fill="#FFFFFF"></circle>
+    <path d="M104 147 Q128 169 152 147" fill="none" stroke="#12303B" stroke-width="6" stroke-linecap="round"></path>
+    <rect x="150" y="30" width="9" height="27" rx="4.5" fill="#12303B"></rect>
+    <path d="M159 33 C176 29 193 30 201 38 L192 47 L201 56 C191 61 173 59 159 55 Z" fill="#FF6F61" stroke="#12303B" stroke-width="5" stroke-linejoin="round"></path>
+    <circle cx="154.5" cy="30" r="6.5" fill="#FFC53D" stroke="#12303B" stroke-width="3"></circle>
+  </g>
+  <text x="210" y="252" text-anchor="middle" font-family="Fredoka, &#39;Trebuchet MS&#39;, system-ui, sans-serif" font-weight="600" font-size="66" letter-spacing="-1.8"><tspan fill="#17B4C9">Flag</tspan><tspan fill="#12303B"> Atlas</tspan></text>
+</svg>

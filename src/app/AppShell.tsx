@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { getLevelProgress } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
+import { BrandImage } from "@/shared/components/BrandImage";
 import { Icon, type IconName } from "@/shared/components/Icon";
 
 type NavItem = {
@@ -155,8 +156,8 @@ export function AppShell() {
                 onClick={expandSidebar}
                 className="flex size-12 items-center justify-center rounded-btn text-sidebar-fg transition hover:bg-white/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
-                  <Icon name="compass" size={24} strokeWidth={2.2} />
+                <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-btn bg-[#12303B] shadow-sm ring-1 ring-white/10">
+                  <BrandImage asset="appIcon" decorative className="size-11" />
                 </span>
               </button>
             ) : (
@@ -166,15 +167,15 @@ export function AppShell() {
                   aria-label={t("app.name")}
                   className="flex min-w-0 flex-1 items-center gap-3 rounded-btn p-1.5 text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-primary text-primary-foreground shadow-sm">
-                    <Icon name="compass" size={24} strokeWidth={2.2} />
+                  <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-btn bg-[#12303B] shadow-sm ring-1 ring-white/10">
+                    <BrandImage asset="appIcon" decorative className="size-11" />
                   </span>
                   <span className="min-w-0 overflow-hidden whitespace-nowrap">
                     <span className="block truncate text-lg font-black leading-tight">
                       {t("app.name")}
                     </span>
-                    <span className="block truncate text-xs font-extrabold uppercase tracking-[0.16em] text-sidebar-fg-muted">
-                      Terrain
+                    <span className="block truncate text-xs font-bold leading-tight text-sidebar-fg-muted">
+                      {t("app.tagline")}
                     </span>
                   </span>
                 </Link>
@@ -296,8 +297,8 @@ export function AppShell() {
                 to="/home"
                 className="inline-flex items-center gap-2 rounded-btn font-black text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <span className="flex size-10 items-center justify-center rounded-btn bg-ink text-platinum shadow-sm">
-                  <Icon name="compass" size={22} />
+                <span className="flex size-10 items-center justify-center overflow-hidden rounded-btn bg-[#12303B] shadow-sm">
+                  <BrandImage asset="appIcon" decorative className="size-10" />
                 </span>
                 {t("app.name")}
               </Link>

@@ -4,6 +4,13 @@ Este arquivo deve ser atualizado pelo Claude Code durante a implementação.
 
 ## Unreleased
 
+### Identidade visual — Globi
+
+- Globi definido como mascote oficial do Flag Atlas, com fontes da marca preservadas em `public/brand/`.
+- Favicon, manifest PWA, ícones de instalação e app icon passam a usar os novos assets oficiais.
+- Interface principal atualizada para usar Globi/app icon no onboarding, Home, header mobile e sidebar sem adicionar splash animada complexa.
+- `scripts/generate-icons.mjs` agora deriva PNGs PWA, ícones Android e splash estático a partir dos SVGs oficiais da marca.
+
 ### Versão 4.5 — Mastery 2.0 e insígnias
 
 - Domínio por país migrado de escala `0–10` para `0–100`; `masteryLevelForPoints` não concede Mestre por pontos sozinho, e `deriveMasteryLevel` exige pontos altos + evidência real.

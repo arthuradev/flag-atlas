@@ -11,6 +11,7 @@ import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine"
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useSessionStore } from "@/features/training/store/sessionStore";
+import { BrandImage } from "@/shared/components/BrandImage";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Icon, type IconName } from "@/shared/components/Icon";
@@ -73,8 +74,8 @@ export function HomePage() {
   return (
     <PageTransition className="mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-6 py-4 lg:min-h-0">
       <header className="text-center lg:text-left">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-xl2 bg-ink text-platinum shadow-card lg:mx-0">
-          <Icon name="globe" size={34} strokeWidth={2.1} />
+        <div className="mx-auto flex size-20 items-center justify-center rounded-xl2 bg-[#EAF6F8] p-1 shadow-card ring-1 ring-line lg:mx-0">
+          <BrandImage asset="globi" decorative className="size-16" />
         </div>
         <h1 className="mt-3 text-3xl font-black">{t("app.name")}</h1>
         <p className="mt-1 font-semibold text-text-muted">{t("app.tagline")}</p>

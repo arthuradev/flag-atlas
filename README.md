@@ -64,6 +64,12 @@ O MVP implementa:
 - Playwright
 - Biome
 
+## Identidade visual
+
+O **Globi** é o mascote oficial do Flag Atlas. A marca também usa o símbolo **Bandeira-Mundo** para favicon, selo e ícones pequenos.
+
+Os assets fonte ficam em `public/brand/`. Ícones PNG derivados para PWA ficam em `public/icons/`, e os ícones/splash estático do Android são regenerados pelo script `scripts/generate-icons.mjs` a partir desses SVGs oficiais.
+
 ## Status
 
 - **MVP**: completo (Fases 0–9 de `.specs/TASKS.md`).
@@ -101,10 +107,10 @@ Continua sem backend, login, ranking, loja ou moedas. O progresso V1/V2 é prese
 A Versão 4 adiciona **personalização cosmética** — só aparência e som, sem alterar dificuldade, aprendizado, XP real ou vantagem. É tudo local e offline: **sem dinheiro real, sem microtransação, sem backend, sem login, sem pay-to-win**.
 
 - **Moedas Atlas** (`cosmetics.coins`): moeda local e cosmética, ganha jogando. +10 por sessão concluída, +5 de bônus por sessão perfeita, +15 por missão diária, +25 por conquista e, na sobrevivência, moedas pelo score (com teto). São concedidas uma única vez por evento e o saldo nunca fica negativo. Saldo mostrado discretamente na Home (linha 🛍️ Loja) e no resumo da sessão.
-- **Loja** (`/shop`, atalho 🛍️ na Home, no resumo e nas Configurações): compra e equipa cosméticos com Moedas Atlas. Categorias: **Temas, Sons, Molduras, Mascotes e Efeitos**. Cada item mostra preço e estado (Comprar / Equipar / Equipado); itens gratuitos nunca são vendidos. "Continuar treino" segue como CTA principal.
+- **Loja** (`/shop`, atalho 🛍️ na Home, no resumo e nas Configurações): compra e equipa cosméticos com Moedas Atlas. Categorias: **Temas, Sons, Molduras e Efeitos**. Cada item mostra preço e estado (Comprar / Equipar / Equipado); itens gratuitos nunca são vendidos. "Continuar treino" segue como CTA principal.
 - **Temas** (CSS Variables): `Padrão` segue o claro/escuro/sistema das Configurações; 6 temas especiais (Mapa Antigo, Neon Atlas, Oceano, Espaço, Biblioteca, Minimalista) trazem paleta própria. Sem imagens externas, funciona offline.
 - **Sound packs** (Howler, WAV locais): Padrão e Silencioso são grátis; Suave, Arcade e Digital são cosméticos. Respeitam mute e volume das Configurações.
-- **Molduras** decoram só o card da bandeira no treino (todos os modos), sem distorcer a bandeira. **Mascote** discreto (Globo, Bússola, Corujinha Atlas, Foguetinho ou nenhum) na Home e no resumo. **Efeitos visuais** sutis (brilho, confete, pulso neon, estrelas) em momentos de feedback — sempre desativados com "Reduzir animações" ligado.
+- **Molduras** decoram só o card da bandeira no treino (todos os modos), sem distorcer a bandeira. **Efeitos visuais** sutis (brilho, confete, pulso neon, estrelas) aparecem em momentos de feedback — sempre desativados com "Reduzir animações" ligado.
 - **Como ganhar moedas:** jogue. Qualquer sessão comum, revisão, digitação, bandeiras parecidas ou sobrevivência concede moedas ao concluir; missões e conquistas também. Não é preciso ter moedas para aprender — cosmético nunca bloqueia conteúdo.
 
 Continua sem backend, login e ranking. O progresso V1/V2/V3 é preservado: o schema segue **v1** e o novo campo `cosmetics` (moedas, itens possuídos e equipados) é normalizado com defaults seguros; o `settings.theme` claro/escuro é mantido. Detalhes em `.specs/COSMETICS.md` e `.specs/V4_ACCEPTANCE_CRITERIA.md`.
@@ -155,7 +161,7 @@ Para os E2E na primeira vez: `pnpm exec playwright install chromium`.
 ```bash
 node scripts/generate-data.mjs <dir-do-zip-extraido>  # regenera src/shared/data a partir do pacote oficial
 node scripts/generate-sounds.mjs                       # regenera os sons WAV de public/sounds
-node scripts/generate-icons.mjs                        # regenera os ícones PNG da PWA
+node scripts/generate-icons.mjs                        # regenera ícones PWA/Android e splash estático a partir de public/brand/
 ```
 
 ## Deploy

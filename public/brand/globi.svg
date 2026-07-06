@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Globi — mascote do Flag Atlas">
+  
+  <rect x="100" y="197" width="27" height="20" rx="10" fill="#12303B"></rect>
+  <rect x="129" y="197" width="27" height="20" rx="10" fill="#12303B"></rect>
+  
+  <ellipse cx="128" cy="124" rx="78" ry="75" fill="#17B4C9" stroke="#12303B" stroke-width="8"></ellipse>
+  <ellipse cx="95" cy="100" rx="22" ry="15" transform="rotate(-18 95 100)" fill="#2FB98A"></ellipse>
+  <ellipse cx="164" cy="140" rx="20" ry="14" transform="rotate(-8 164 140)" fill="#2FB98A"></ellipse>
+  <path d="M52 128 C90 143 166 143 204 128" fill="none" stroke="#12303B" stroke-opacity="0.12" stroke-width="4"></path>
+  
+  <circle cx="84" cy="140" r="9" fill="#FF6F61" opacity="0.30"></circle>
+  <circle cx="172" cy="140" r="9" fill="#FF6F61" opacity="0.30"></circle>
+  
+  <circle cx="106" cy="118" r="10" fill="#12303B"></circle>
+  <circle cx="150" cy="118" r="10" fill="#12303B"></circle>
+  <circle cx="110" cy="114" r="3.6" fill="#FFFFFF"></circle>
+  <circle cx="154" cy="114" r="3.6" fill="#FFFFFF"></circle>
+  <path d="M104 147 Q128 169 152 147" fill="none" stroke="#12303B" stroke-width="6" stroke-linecap="round"></path>
+  
+  <rect x="150" y="30" width="9" height="27" rx="4.5" fill="#12303B"></rect>
+  <path d="M159 33 C176 29 193 30 201 38 L192 47 L201 56 C191 61 173 59 159 55 Z" fill="#FF6F61" stroke="#12303B" stroke-width="5" stroke-linejoin="round"></path>
+  <circle cx="154.5" cy="30" r="6.5" fill="#FFC53D" stroke="#12303B" stroke-width="3"></circle>
+</svg>

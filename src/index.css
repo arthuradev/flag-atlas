@@ -4,37 +4,37 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* Terrain: modern cartographic learning game. */
-  --fa-background: #eef1ea;
+  /* Flag Atlas brand palette with a quiet cartographic surface. */
+  --fa-background: #eef6f7;
   --fa-surface: #ffffff;
-  --fa-surface-raised: #f6f8f3;
-  --fa-surface-2: #f6f8f3;
+  --fa-surface-raised: #f7fbfb;
+  --fa-surface-2: #f7fbfb;
   --fa-text: #16231d;
   --fa-text-2: #3d4d44;
   --fa-text-muted: #5c6b62;
   --fa-text-faint: #8a917f;
-  --fa-primary: #1f7a4d;
-  --fa-primary-hover: #1a6a42;
+  --fa-primary: #0e8ca1;
+  --fa-primary-hover: #0b7284;
   --fa-primary-foreground: #ffffff;
-  --fa-primary-soft: #e4f3ea;
-  --fa-accent: #cf9a3a;
-  --fa-accent-foreground: #a1761d;
-  --fa-accent-soft: #faf1dc;
-  --fa-success: #2f9e63;
-  --fa-success-soft: #e4f3ea;
+  --fa-primary-soft: #ddf4f7;
+  --fa-accent: #ffc53d;
+  --fa-accent-foreground: #855e00;
+  --fa-accent-soft: #fff3c9;
+  --fa-success: #2fb98a;
+  --fa-success-soft: #e1f6ef;
   --fa-warning: #c9911f;
-  --fa-danger: #c04a2e;
-  --fa-danger-soft: #f8e6e0;
-  --fa-border: #dfe6dd;
-  --fa-border-strong: #cfdccb;
-  --fa-ring: #1f7a4d;
-  --fa-progress: #cf9a3a;
+  --fa-danger: #ff6f61;
+  --fa-danger-soft: #ffe8e5;
+  --fa-border: #dcebed;
+  --fa-border-strong: #c6dde1;
+  --fa-ring: #17b4c9;
+  --fa-progress: #ffc53d;
   --fa-bronze: #c88a52;
   --fa-silver: #98a3aa;
   --fa-gold: #c1901f;
   --fa-platinum: #34c07d;
-  --fa-contour-color: rgba(31, 122, 77, 0.055);
-  --fa-contour-accent: rgba(207, 154, 58, 0.06);
+  --fa-contour-color: rgba(14, 140, 161, 0.055);
+  --fa-contour-accent: rgba(255, 197, 61, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(22, 35, 29, 0.04),
     0 24px 44px -30px rgba(22, 35, 29, 0.45);
   --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
@@ -43,10 +43,10 @@
   /* Desktop sidebar rail — a deep, atmospheric dark surface shared by every
      theme so the navigation reads as part of the game (never a bright SaaS
      panel). Defined once here; all [data-theme] blocks inherit it. */
-  --fa-sidebar: #0b1512;
-  --fa-sidebar-raised: #13221c;
-  --fa-sidebar-fg: #e9f1ea;
-  --fa-sidebar-fg-muted: #8fa89a;
+  --fa-sidebar: #12303b;
+  --fa-sidebar-raised: #183f4d;
+  --fa-sidebar-fg: #eaf6f8;
+  --fa-sidebar-fg-muted: #93b5bd;
 
   color-scheme: light;
   font-synthesis: none;
@@ -63,27 +63,27 @@
   --fa-text-2: #c9d3cb;
   --fa-text-muted: #9db0a3;
   --fa-text-faint: #6f7c72;
-  --fa-primary: #34c07d;
-  --fa-primary-hover: #2ca96c;
-  --fa-primary-foreground: #0f1713;
-  --fa-primary-soft: #12352a;
-  --fa-accent: #e0ad4c;
-  --fa-accent-foreground: #e0ad4c;
-  --fa-accent-soft: #2a2416;
-  --fa-success: #34c07d;
+  --fa-primary: #17b4c9;
+  --fa-primary-hover: #0e8ca1;
+  --fa-primary-foreground: #08242c;
+  --fa-primary-soft: #12303b;
+  --fa-accent: #ffc53d;
+  --fa-accent-foreground: #ffd66c;
+  --fa-accent-soft: #302811;
+  --fa-success: #2fb98a;
   --fa-success-soft: #12352a;
-  --fa-warning: #e0ad4c;
-  --fa-danger: #f07a5f;
+  --fa-warning: #ffc53d;
+  --fa-danger: #ff7f73;
   --fa-danger-soft: #3a1f18;
   --fa-border: #26332b;
   --fa-border-strong: #2c3a32;
-  --fa-ring: #34c07d;
-  --fa-progress: #e0ad4c;
-  --fa-contour-color: rgba(52, 192, 125, 0.075);
-  --fa-contour-accent: rgba(224, 173, 76, 0.08);
+  --fa-ring: #17b4c9;
+  --fa-progress: #ffc53d;
+  --fa-contour-color: rgba(23, 180, 201, 0.075);
+  --fa-contour-accent: rgba(255, 197, 61, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.18),
     0 24px 44px -30px rgba(0, 0, 0, 0.85);
-  --fa-shadow-btn: 0 7px 0 #1b7c50;
+  --fa-shadow-btn: 0 7px 0 #0e8ca1;
   --fa-shadow-flag: 0 18px 38px -18px rgba(0, 0, 0, 0.85);
 
   color-scheme: dark;

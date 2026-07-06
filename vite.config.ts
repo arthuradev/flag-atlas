@@ -13,15 +13,15 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
+      includeAssets: ["brand/favicon.svg", "brand/symbol.svg", "brand/globi.svg", "icons/*.png"],
       manifest: {
         name: "Flag Atlas",
         short_name: "Flag Atlas",
         description: "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
         lang: "pt-BR",
         display: "standalone",
-        background_color: "#f2f7f8",
-        theme_color: "#0d9488",
+        background_color: "#EAF6F8",
+        theme_color: "#12303B",
         icons: [
           { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" },

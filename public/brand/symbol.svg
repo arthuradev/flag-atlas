@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Flag Atlas — símbolo Bandeira-Mundo">
+  <circle cx="116" cy="178" r="72" fill="#17B4C9" stroke="#12303B" stroke-width="11"></circle>
+  <path d="M52 168 C86 181 146 181 180 168" fill="none" stroke="#12303B" stroke-opacity="0.16" stroke-width="7" stroke-linecap="round"></path>
+  <ellipse cx="92" cy="158" rx="16" ry="10" transform="rotate(-16 92 158)" fill="#2FB98A"></ellipse>
+  <ellipse cx="150" cy="172" rx="13" ry="9" transform="rotate(-8 150 172)" fill="#2FB98A"></ellipse>
+  <rect x="140" y="44" width="13" height="134" rx="6.5" fill="#12303B"></rect>
+  <path d="M153 50 C188 40 221 44 237 62 L217 86 L237 110 C214 126 178 122 153 112 Z" fill="#FF6F61" stroke="#12303B" stroke-width="11" stroke-linejoin="round"></path>
+  <circle cx="146.5" cy="44" r="10" fill="#FFC53D" stroke="#12303B" stroke-width="5"></circle>
+</svg>
