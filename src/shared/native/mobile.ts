@@ -1,15 +1,6 @@
-import {
-  Capacitor,
-  SystemBarType,
-  SystemBars,
-  SystemBarsStyle,
-} from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
-import {
-  Haptics,
-  ImpactStyle,
-  NotificationType,
-} from "@capacitor/haptics";
+import { Capacitor, SystemBars, SystemBarsStyle, SystemBarType } from "@capacitor/core";
+import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 
 export const TRAINING_NATIVE_BACK_EVENT = "flag-atlas:request-training-exit";
 

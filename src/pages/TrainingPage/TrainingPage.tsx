@@ -22,11 +22,7 @@ import { FlagImage } from "@/shared/components/FlagImage";
 import { Icon } from "@/shared/components/Icon";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import type { Locale } from "@/shared/i18n/locale";
-import {
-  hapticError,
-  hapticSuccess,
-  TRAINING_NATIVE_BACK_EVENT,
-} from "@/shared/native/mobile";
+import { hapticError, hapticSuccess, TRAINING_NATIVE_BACK_EVENT } from "@/shared/native/mobile";
 
 const SURVIVAL_LIFE_SLOTS = Array.from(
   { length: SURVIVAL_STARTING_LIVES },
