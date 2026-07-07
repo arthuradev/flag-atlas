@@ -6,6 +6,7 @@ import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { BrandImage } from "@/shared/components/BrandImage";
 import { Icon, type IconName } from "@/shared/components/Icon";
+import { ProgressBar } from "@/shared/components/ProgressBar";
 
 type NavItem = {
   ariaLabel: string;
@@ -49,9 +50,6 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
   { to: "/challenges", icon: "target", labelKey: "home.challenges", ariaLabel: "abrir modos" },
 ];
 
-const SIDEBAR_COLLAPSED_WIDTH = 80;
-const SIDEBAR_EXPANDED_WIDTH = 280;
-
 function navItemClass(isActive: boolean, isCollapsed: boolean): string {
   return `flex min-h-11 items-center rounded-btn font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar ${
     isCollapsed ? "justify-center px-0" : "gap-3 px-3"
@@ -83,7 +81,6 @@ export function AppShell() {
   const totalXp = useProgressStore((state) => state.progress.totalXp);
   const reduceMotion = useSettingsStore((state) => state.reduceMotion);
   const levelProgress = getLevelProgress(totalXp);
-  const xpPct = Math.round(levelProgress.progressRatio * 100);
   const isTrainingRoute = location.pathname.startsWith("/training");
 
   // Sidebar recolhida por padrão no desktop; abrir e fechar são ações explícitas.
@@ -141,9 +138,10 @@ export function AppShell() {
         <aside
           onKeyDown={handleSidebarKeyDown}
           aria-label={t("app.name")}
-          style={{ width: isExpanded ? SIDEBAR_EXPANDED_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
           className={`z-40 hidden shrink-0 flex-col overflow-hidden border-r border-white/10 bg-sidebar text-sidebar-fg lg:fixed lg:inset-y-0 lg:left-0 lg:flex ${transitionClass} ${
-            isExpanded ? "p-[18px] shadow-[18px_0_48px_-24px_rgba(0,0,0,0.75)]" : "p-3"
+            isExpanded
+              ? "w-[280px] p-[18px] shadow-[18px_0_48px_-24px_rgba(0,0,0,0.75)]"
+              : "w-20 p-3"
           }`}
         >
           <div className={`mb-6 flex items-center ${isCollapsed ? "justify-center" : "gap-2"}`}>
@@ -259,12 +257,13 @@ export function AppShell() {
                     <span className="block truncate text-xs font-bold text-sidebar-fg-muted">
                       {t("home.level", { level })}
                     </span>
-                    <span className="mt-1 block h-1 w-full overflow-hidden rounded-full bg-white/10">
-                      <span
-                        className="block h-full rounded-full bg-primary"
-                        style={{ width: `${xpPct}%` }}
-                      />
-                    </span>
+                    <ProgressBar
+                      value={levelProgress.currentLevelXp}
+                      max={Math.max(1, levelProgress.xpForNextLevel)}
+                      label={t("home.levelProgress")}
+                      size="thin"
+                      colorClassName="bg-primary"
+                    />
                   </span>
                 )}
               </button>

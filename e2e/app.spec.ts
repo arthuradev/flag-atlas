@@ -5,19 +5,40 @@ test.describe("onboarding", () => {
   test("first visit shows onboarding and completes into home", async ({ page }) => {
     await page.goto("./");
 
-    // A splash animada avança sozinha para as boas-vindas.
-    await expect(page.getByRole("heading", { name: "Oi, eu sou o Globi!" })).toBeVisible();
-    await page.getByRole("button", { name: "Vamos explorar!" }).click();
+    await page.getByRole("button", { name: "Pular introdução" }).click();
 
-    await expect(page.getByRole("heading", { name: "Aprenda em poucos minutos" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Vamos descobrir o mundo pelas bandeiras." }),
+    ).toBeVisible();
     await page.getByRole("button", { name: "Continuar" }).click();
 
-    await expect(page.getByRole("heading", { name: "Domine o mapa" })).toBeVisible();
-    await page.getByRole("button", { name: "Falta pouco" }).click();
+    await expect(page.getByRole("heading", { name: "Como você quer começar?" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Continuar" })).toBeDisabled();
+    await page.getByRole("button", { name: /Estou começando agora/ }).click();
+    await page.getByRole("button", { name: "Continuar" }).click();
 
-    await expect(page.getByRole("heading", { name: "Como devo te chamar?" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Qual será sua meta diária?" })).toBeVisible();
+    await page.getByRole("button", { name: /10/ }).click();
+    await page.getByRole("button", { name: "Continuar" }).click();
+
+    await expect(
+      page.getByRole("heading", { name: "Qual destas bandeiras é a do Brasil?" }),
+    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Verificar" })).toBeDisabled();
+    await page.getByTestId("lesson-zero-option").filter({ hasText: "Brasil" }).click();
+    await page.getByRole("button", { name: "Verificar" }).click();
+
+    await expect(page.getByText("Boa! Essa é a bandeira do Brasil.")).toBeVisible();
+    await page.getByRole("button", { name: "Continuar" }).click();
+
+    await expect(page.getByRole("heading", { name: "Primeira lição concluída!" })).toBeVisible();
+    await expect(page.getByText("+15 XP")).toBeVisible();
+    await expect(page.getByText("100%")).toBeVisible();
+    await page.getByRole("button", { name: "Continuar" }).click();
+
+    await expect(page.getByRole("heading", { name: "Salve seu progresso" })).toBeVisible();
     await page.getByPlaceholder("Seu nome").fill("Ana");
-    await page.getByRole("button", { name: "Começar jornada" }).click();
+    await page.getByRole("button", { name: "Criar perfil" }).click();
 
     await expect(getMainTrainingCta(page)).toBeVisible();
     await expect(page.getByText("0/195 países aprendidos")).toBeVisible();
@@ -26,6 +47,33 @@ test.describe("onboarding", () => {
     // Próxima abertura vai direto para a Home.
     await page.goto("./");
     await expect(getMainTrainingCta(page)).toBeVisible();
+  });
+
+  test("profile step can be skipped without blocking the app", async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem(
+        "flag-atlas:onboarding",
+        JSON.stringify({
+          schemaVersion: 1,
+          data: {
+            hasSeenSplash: true,
+            hasCompletedIntro: true,
+            selectedStartMode: "some",
+            dailyGoal: 5,
+            hasCompletedLessonZero: true,
+            hasSeenFirstReward: true,
+            hasCompletedOnboarding: false,
+          },
+        }),
+      );
+    });
+    await page.goto("./#/onboarding");
+
+    await expect(page.getByRole("heading", { name: "Salve seu progresso" })).toBeVisible();
+    await page.getByRole("button", { name: "Agora não" }).click();
+
+    await expect(getMainTrainingCta(page)).toBeVisible();
+    await expect(page.getByText("Olá, explorador!")).toBeVisible();
   });
 });
 

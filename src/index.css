@@ -402,6 +402,46 @@ textarea {
   padding-bottom: calc(var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)) + 0.75rem);
 }
 
+.fa-progress {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--fa-progress);
+  display: block;
+}
+
+.fa-progress::-webkit-progress-bar {
+  background: color-mix(in srgb, var(--fa-border) 70%, transparent);
+  border-radius: 999px;
+}
+
+.fa-progress::-webkit-progress-value {
+  background: var(--fa-progress);
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  transition: width 300ms ease-out;
+}
+
+.fa-progress::-moz-progress-bar {
+  background: var(--fa-progress);
+  border-radius: 999px;
+  transition: width 300ms ease-out;
+}
+
+.fa-progress-primary {
+  color: var(--fa-primary);
+}
+
+.fa-progress-primary::-webkit-progress-value,
+.fa-progress-primary::-moz-progress-bar {
+  background: var(--fa-primary);
+}
+
+.fa-progress-still::-webkit-progress-value,
+.fa-progress-still::-moz-progress-bar {
+  transition: none;
+}
+
 /* ==========================================================================
    Onboarding — "Primeira Experiência" (Claude Design)
    Ambient keyframes for the splash, world backdrop and the Globi mascot.
@@ -554,4 +594,98 @@ textarea {
   animation: fa-globi-blink 4.2s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
+}
+
+.fa-onb-splash {
+  background: linear-gradient(180deg, #0b1e27, #123040);
+  color: var(--fa-accent);
+}
+
+.fa-onb-splash-glow {
+  background: radial-gradient(ellipse at center, rgba(23, 180, 201, 0.28), transparent 70%);
+}
+
+.fa-onb-splash-star-one {
+  top: 20%;
+  left: 22%;
+  animation-delay: 0s;
+}
+
+.fa-onb-splash-star-two {
+  top: 16%;
+  left: 74%;
+  animation-delay: 0.6s;
+}
+
+.fa-onb-splash-star-three {
+  top: 66%;
+  left: 30%;
+  animation-delay: 1s;
+}
+
+.fa-onb-splash-star-four {
+  top: 70%;
+  left: 70%;
+  animation-delay: 0.3s;
+}
+
+.fa-onb-backdrop-glow {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--fa-ring) 20%, transparent),
+    transparent 70%
+  );
+}
+
+.fa-onb-backdrop-star-one {
+  top: 10%;
+  left: 18%;
+  animation-delay: 0s;
+}
+
+.fa-onb-backdrop-star-two {
+  top: 14%;
+  left: 80%;
+  animation-delay: 0.7s;
+}
+
+.fa-onb-backdrop-star-three {
+  top: 44%;
+  left: 88%;
+  animation-delay: 1.2s;
+}
+
+.fa-onb-backdrop-star-four {
+  top: 72%;
+  left: 24%;
+  animation-delay: 0.4s;
+}
+
+.fa-onb-backdrop-star-five {
+  top: 80%;
+  left: 70%;
+  animation-delay: 1s;
+}
+
+.fa-onb-brand-panel {
+  background: linear-gradient(160deg, var(--fa-ring), var(--fa-primary));
+  text-align: left;
+}
+
+.fa-onb-confetti-one {
+  left: 15%;
+  top: 8%;
+  animation-delay: 0s;
+}
+
+.fa-onb-confetti-two {
+  left: 68%;
+  top: 2%;
+  animation-delay: 0.18s;
+}
+
+.fa-onb-confetti-three {
+  left: 82%;
+  top: 34%;
+  animation-delay: 0.34s;
 }

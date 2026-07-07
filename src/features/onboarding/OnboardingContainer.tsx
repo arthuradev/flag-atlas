@@ -1,87 +1,222 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { AnimatedSplash } from "./components/AnimatedSplash";
 import { OnboardingLayout } from "./components/OnboardingLayout";
+import {
+  evaluateLessonZeroAnswer,
+  getLessonZeroCountries,
+  type LessonZeroOutcome,
+} from "./logic/lessonZero";
+import { DailyGoalStep } from "./steps/DailyGoalStep";
+import { LessonFeedbackStep } from "./steps/LessonFeedbackStep";
+import { LessonZeroStep } from "./steps/LessonZeroStep";
 import { ProfileStep } from "./steps/ProfileStep";
-import { ProgressStep } from "./steps/ProgressStep";
-import { TrainingStep } from "./steps/TrainingStep";
+import { RewardStep } from "./steps/RewardStep";
+import { StartModeStep } from "./steps/StartModeStep";
 import { WelcomeStep } from "./steps/WelcomeStep";
 import { useOnboardingStore } from "./store/onboardingStore";
 
-type Phase = "splash" | "welcome" | "training" | "progress" | "profile";
+type Phase =
+  | "splash"
+  | "welcome"
+  | "start"
+  | "goal"
+  | "lesson"
+  | "feedback"
+  | "reward"
+  | "profile"
+  | "complete";
 
-const STEP_ORDER = ["welcome", "training", "progress", "profile"] as const;
+const STEP_ORDER = ["welcome", "start", "goal", "lesson", "reward", "profile"] as const;
 
-const CTA_KEYS: Record<(typeof STEP_ORDER)[number], string> = {
-  welcome: "onboarding.cta.welcome",
-  training: "onboarding.cta.training",
-  progress: "onboarding.cta.progress",
-  profile: "onboarding.profile.begin",
-};
+function resolveInitialPhase(state: ReturnType<typeof useOnboardingStore.getState>): Phase {
+  if (state.hasCompletedOnboarding) {
+    return "complete";
+  }
+  if (!state.hasSeenSplash) {
+    return "splash";
+  }
+  if (!state.hasCompletedIntro) {
+    return "welcome";
+  }
+  if (!state.selectedStartMode) {
+    return "start";
+  }
+  if (!state.dailyGoal) {
+    return "goal";
+  }
+  if (!state.hasCompletedLessonZero) {
+    return "lesson";
+  }
+  if (!state.hasSeenFirstReward) {
+    return "reward";
+  }
+  return "profile";
+}
 
-/**
- * Drives the first-run experience as a small state machine:
- * splash -> welcome -> training -> progress -> profile -> home. Only the
- * "completed" flag (plus the chosen name) is persisted; returning users never
- * see this again (see router `RootRedirect`).
- */
+function getStepIndex(phase: Phase): number {
+  if (phase === "feedback") {
+    return STEP_ORDER.indexOf("lesson");
+  }
+  const index = STEP_ORDER.indexOf(phase as (typeof STEP_ORDER)[number]);
+  return Math.max(0, index);
+}
+
 export function OnboardingContainer() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const completeOnboarding = useOnboardingStore((state) => state.completeOnboarding);
   const reduceMotion = useSettingsStore((state) => state.reduceMotion);
+  const progress = useProgressStore((state) => state.progress);
+  const registerAnswer = useProgressStore((state) => state.registerAnswer);
+  const registerCompletedSession = useProgressStore((state) => state.registerCompletedSession);
+  const onboarding = useOnboardingStore();
+
+  const [phase, setPhase] = useState<Phase>(() => resolveInitialPhase(onboarding));
+  const [selectedLessonCountryId, setSelectedLessonCountryId] = useState<string | null>(null);
+  const [lessonOutcome, setLessonOutcome] = useState<LessonZeroOutcome | null>(null);
+  const [profileName, setProfileName] = useState(onboarding.profileName);
+
   const animate = !reduceMotion;
+  const lessonCountries = useMemo(() => getLessonZeroCountries(), []);
 
-  const [phase, setPhase] = useState<Phase>("splash");
-  const [name, setName] = useState("");
+  useEffect(() => {
+    if (phase === "complete" || onboarding.hasCompletedOnboarding) {
+      navigate("/home", { replace: true });
+    }
+  }, [onboarding.hasCompletedOnboarding, navigate, phase]);
 
-  const stepIndex = STEP_ORDER.indexOf(phase as (typeof STEP_ORDER)[number]);
+  const handleSplashDone = useCallback(() => {
+    onboarding.markSplashSeen();
+    setPhase("welcome");
+  }, [onboarding]);
 
-  const goNext = () => {
-    if (stepIndex < 0) {
+  const handleVerifyLesson = () => {
+    if (!selectedLessonCountryId) {
       return;
     }
-    const next = STEP_ORDER[stepIndex + 1];
-    if (next) {
-      setPhase(next);
-    }
+    const outcome = evaluateLessonZeroAnswer(
+      selectedLessonCountryId,
+      progress.countries.br,
+      new Date().toISOString(),
+    );
+    setLessonOutcome(outcome);
+    setPhase("feedback");
   };
 
-  const skip = () => setPhase("profile");
+  const handleFinishLesson = () => {
+    if (!lessonOutcome) {
+      return;
+    }
+    registerAnswer(lessonOutcome.countryProgress, lessonOutcome.xpGained, lessonOutcome.answeredAt);
+    registerCompletedSession({
+      mode: "continue",
+      questionType: "choice",
+      questionCount: 1,
+      correctCount: lessonOutcome.isCorrect ? 1 : 0,
+      accuracy: lessonOutcome.accuracy,
+      bestStreak: lessonOutcome.isCorrect ? 1 : 0,
+    });
+    onboarding.completeLessonZero();
+    setPhase("reward");
+  };
 
-  const begin = () => {
-    completeOnboarding(name.trim());
+  const handleCreateProfile = () => {
+    onboarding.completeOnboarding(profileName);
+    navigate("/home", { replace: true });
+  };
+
+  const handleSkipProfile = () => {
+    onboarding.completeOnboarding("");
     navigate("/home", { replace: true });
   };
 
   if (phase === "splash") {
-    return <AnimatedSplash reduceMotion={reduceMotion} onDone={() => setPhase("welcome")} />;
+    return <AnimatedSplash reduceMotion={reduceMotion} onDone={handleSplashDone} />;
   }
 
-  const isProfile = phase === "profile";
+  const primary =
+    phase === "profile" || phase === "complete"
+      ? undefined
+      : {
+          label:
+            phase === "lesson"
+              ? t("onboarding.lesson.verify")
+              : phase === "feedback"
+                ? t("common.continue")
+                : t("common.continue"),
+          onClick:
+            phase === "welcome"
+              ? () => {
+                  onboarding.completeIntro();
+                  setPhase("start");
+                }
+              : phase === "start"
+                ? () => setPhase("goal")
+                : phase === "goal"
+                  ? () => setPhase("lesson")
+                  : phase === "lesson"
+                    ? handleVerifyLesson
+                    : phase === "feedback"
+                      ? handleFinishLesson
+                      : () => {
+                          onboarding.markFirstRewardSeen();
+                          setPhase("profile");
+                        },
+          disabled:
+            (phase === "start" && !onboarding.selectedStartMode) ||
+            (phase === "goal" && !onboarding.dailyGoal) ||
+            (phase === "lesson" && !selectedLessonCountryId),
+          icon: phase === "lesson" ? ("check" as const) : ("arrow" as const),
+        };
 
   return (
     <OnboardingLayout
-      stepIndex={stepIndex}
+      stepIndex={getStepIndex(phase)}
       stepCount={STEP_ORDER.length}
       animate={animate}
-      onSkip={isProfile ? undefined : skip}
-      primary={
-        isProfile
-          ? undefined
-          : { label: t(CTA_KEYS[phase as (typeof STEP_ORDER)[number]]), onClick: goNext }
-      }
+      primary={primary}
     >
-      <div key={phase}>
-        {phase === "welcome" && <WelcomeStep animate={animate} />}
-        {phase === "training" && <TrainingStep animate={animate} />}
-        {phase === "progress" && <ProgressStep animate={animate} />}
-        {phase === "profile" && (
-          <ProfileStep name={name} onNameChange={setName} onBegin={begin} animate={animate} />
-        )}
-      </div>
+      {phase === "welcome" && <WelcomeStep animate={animate} />}
+      {phase === "start" && (
+        <StartModeStep
+          selectedMode={onboarding.selectedStartMode}
+          onSelect={onboarding.selectStartMode}
+          animate={animate}
+        />
+      )}
+      {phase === "goal" && (
+        <DailyGoalStep
+          selectedGoal={onboarding.dailyGoal}
+          onSelect={onboarding.setDailyGoal}
+          animate={animate}
+        />
+      )}
+      {phase === "lesson" && (
+        <LessonZeroStep
+          countries={lessonCountries}
+          selectedCountryId={selectedLessonCountryId}
+          onSelect={setSelectedLessonCountryId}
+          animate={animate}
+        />
+      )}
+      {phase === "feedback" && lessonOutcome && (
+        <LessonFeedbackStep outcome={lessonOutcome} animate={animate} />
+      )}
+      {phase === "reward" && (
+        <RewardStep outcome={lessonOutcome} dailyGoal={onboarding.dailyGoal} animate={animate} />
+      )}
+      {phase === "profile" && (
+        <ProfileStep
+          name={profileName}
+          onNameChange={setProfileName}
+          onBegin={handleCreateProfile}
+          onSkip={handleSkipProfile}
+          animate={animate}
+        />
+      )}
     </OnboardingLayout>
   );
 }

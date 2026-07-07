@@ -21,52 +21,93 @@
     "all": "All"
   },
   "onboarding": {
-    "brandTagline": "Learn the flags of all 195 countries in the world.",
+    "brandTagline": "A few minutes a day to discover the world through flags.",
     "skip": "Skip",
     "stepLabel": "Step {{current}} of {{total}}",
     "splash": {
-      "skip": "Skip intro"
+      "skip": "Skip intro",
+      "tagline": "Learn the flags of the world"
     },
-    "cta": {
-      "welcome": "Let's explore!",
-      "training": "Continue",
-      "progress": "Almost there"
+    "side": {
+      "title": "A light first journey that is playable and saved on this device.",
+      "start": "Starting point",
+      "goal": "Daily goal",
+      "lesson": "First lesson"
     },
     "welcome": {
-      "title": "Hi, I'm Globi!",
-      "body": "I'll guide you through the world of flags — at your pace, one country at a time."
+      "title": "Let's discover the world through flags.",
+      "body": "One flag at a time, at your pace. A few minutes a day is enough."
     },
-    "training": {
-      "question": "Which country is this flag?",
-      "answer": "Japan",
-      "decoy1": "Thailand",
-      "decoy2": "South Korea",
-      "title": "Learn in just minutes",
-      "body": "Answer quick questions, review your misses and grow at your own pace."
+    "start": {
+      "title": "How do you want to start?",
+      "body": "Choose a starting point. You can change it later.",
+      "options": {
+        "new": {
+          "title": "I'm just starting",
+          "body": "A gentle start with more familiar flags."
+        },
+        "some": {
+          "title": "I know some flags",
+          "body": "A quick session adjusts your starting level."
+        },
+        "review": {
+          "title": "I want hard countries",
+          "body": "Focus on the flags people often confuse."
+        }
+      }
     },
-    "progress": {
-      "level": "Level {{level}}",
-      "xp": "{{xp}} XP",
-      "southAmerica": "South America",
-      "europe": "Europe",
-      "africa": "Africa",
-      "title": "Master the map",
-      "body": "Earn XP, advance through continents and plant your flag in every country."
+    "goal": {
+      "title": "What will your daily goal be?",
+      "body": "A light commitment. You can change it whenever you want.",
+      "questionsPerDay": "questions per day",
+      "selected": "Selected",
+      "hint": "The goal is an invitation, not an obligation."
+    },
+    "lesson": {
+      "badge": "New flag",
+      "title": "Which of these flags is Brazil's?",
+      "verify": "Check",
+      "flagAlt": "Flag of {{country}}"
+    },
+    "feedback": {
+      "correctTitle": "Nice!",
+      "correctBody": "Nice! That is the flag of {{country}}.",
+      "wrongTitle": "Let's review it together.",
+      "wrongBody": "The flag of {{country}} is the correct answer. You chose {{selected}}, and that's okay: this will get easier with practice.",
+      "correctAnswer": "Correct answer"
+    },
+    "reward": {
+      "title": "First lesson complete!",
+      "xp": "Total XP",
+      "xpValue": "+{{xp}} XP",
+      "accuracy": "Accuracy",
+      "accuracyValue": "{{accuracy}}%",
+      "firstFlag": "Recognition",
+      "firstFlagValue": "Brazil",
+      "dailyGoal": "Daily goal progress",
+      "goalProgress": "{{current}}/{{goal}} questions today"
     },
     "profile": {
-      "title": "What should I call you?",
-      "body": "Create your profile to save your progress.",
-      "nameLabel": "Your name",
+      "title": "Save your progress",
+      "body": "Your progress is saved on this device. No account, no email and no password.",
+      "nameLabel": "What should we call you?",
       "namePlaceholder": "Your name",
       "language": "Language",
       "sound": "Sounds and music",
-      "begin": "Start journey"
+      "begin": "Start journey",
+      "create": "Create profile",
+      "skip": "Not now"
     }
   },
   "home": {
     "greeting": "Hi, {{name}}!",
+    "greetingFallback": "Hi, explorer!",
+    "dashboardTitle": "Your flag journey",
     "learnedCount": "{{learned}}/{{total}} countries learned",
     "continueTraining": "Continue training",
+    "continueTrainingHint": "Keep going with a {{count}}-question session.",
+    "continueWhereLeft": "Continue where you left off",
+    "firstTrainingTitle": "First training today",
     "startFirstTraining": "Start first training",
     "firstTrainingHint": "Start with a short {{count}}-question session.",
     "continents": "Continents",
@@ -77,8 +118,39 @@
     "achievements": "Achievements",
     "shop": "Shop",
     "level": "Level {{level}}",
+    "levelShort": "Level",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Level progress",
+    "seen": "Seen",
+    "toReview": "Review",
+    "dailyGoal": {
+      "title": "Daily goal",
+      "questions": "questions"
+    },
+    "streakTitle": "Streak",
+    "streakDays": "days",
+    "trainingModes": {
+      "title": "Training modes",
+      "all": "View all",
+      "typing": {
+        "title": "Typing mode",
+        "body": "Type the country to really memorize it."
+      },
+      "survival": {
+        "title": "Survival",
+        "body": "Train with lives and try to beat your record."
+      },
+      "similar": {
+        "title": "Similar flags",
+        "body": "Compare countries that look confusing at first."
+      },
+      "review": {
+        "title": "Review mode",
+        "body": "Return to the flags that need reinforcement."
+      }
+    },
+    "reviewCountries": "Countries to review",
+    "noReviewCountries": "Nothing pending right now. Keep discovering new flags.",
     "firstSteps": {
       "title": "First steps",
       "train": "Play your first training session",

@@ -9,27 +9,13 @@ type WorldBackdropProps = {
   className?: string;
 };
 
-const STARS = [
-  { top: "10%", left: "18%", delay: "0s" },
-  { top: "14%", left: "80%", delay: "0.7s" },
-  { top: "44%", left: "88%", delay: "1.2s" },
-  { top: "72%", left: "24%", delay: "0.4s" },
-  { top: "80%", left: "70%", delay: "1s" },
-];
-
 export function WorldBackdrop({ animate = true, className = "" }: WorldBackdropProps) {
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
       aria-hidden
     >
-      <div
-        className="absolute left-1/2 top-[-6%] h-[52%] w-[135%] -translate-x-1/2"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, color-mix(in srgb, var(--fa-ring) 20%, transparent), transparent 70%)",
-        }}
-      />
+      <div className="fa-onb-backdrop-glow absolute left-1/2 top-[-6%] h-[52%] w-[135%] -translate-x-1/2" />
       <svg
         viewBox="0 0 384 812"
         preserveAspectRatio="xMidYMid slice"
@@ -60,11 +46,12 @@ export function WorldBackdrop({ animate = true, className = "" }: WorldBackdropP
         <circle cx="92" cy="210" r="3" fill="var(--fa-accent)" />
         <circle cx="300" cy="280" r="3" fill="var(--fa-accent)" />
       </svg>
-      {STARS.map((star) => (
+      {["one", "two", "three", "four", "five"].map((star) => (
         <span
-          key={`${star.top}-${star.left}`}
-          className={`absolute size-[3px] rounded-full bg-text ${animate ? "fa-onb-twinkle" : "opacity-40"}`}
-          style={{ top: star.top, left: star.left, animationDelay: star.delay }}
+          key={star}
+          className={`fa-onb-backdrop-star-${star} absolute size-[3px] rounded-full bg-text ${
+            animate ? "fa-onb-twinkle" : "opacity-40"
+          }`}
         />
       ))}
     </div>

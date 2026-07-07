@@ -21,52 +21,93 @@
     "all": "Todos"
   },
   "onboarding": {
-    "brandTagline": "Aprenda as bandeiras dos 195 países do mundo.",
+    "brandTagline": "Poucos minutos por dia para conhecer o mundo pelas bandeiras.",
     "skip": "Pular",
     "stepLabel": "Passo {{current}} de {{total}}",
     "splash": {
-      "skip": "Pular introdução"
+      "skip": "Pular introdução",
+      "tagline": "Aprenda as bandeiras do mundo"
     },
-    "cta": {
-      "welcome": "Vamos explorar!",
-      "training": "Continuar",
-      "progress": "Falta pouco"
+    "side": {
+      "title": "Uma primeira jornada leve, jogável e salva neste aparelho.",
+      "start": "Ponto de partida",
+      "goal": "Meta diária",
+      "lesson": "Primeira lição"
     },
     "welcome": {
-      "title": "Oi, eu sou o Globi!",
-      "body": "Vou te guiar pelo mundo das bandeiras — no seu ritmo, um país de cada vez."
+      "title": "Vamos descobrir o mundo pelas bandeiras.",
+      "body": "Uma bandeira de cada vez, no seu ritmo. Poucos minutos por dia bastam."
     },
-    "training": {
-      "question": "Que país é essa bandeira?",
-      "answer": "Japão",
-      "decoy1": "Tailândia",
-      "decoy2": "Coreia do Sul",
-      "title": "Aprenda em poucos minutos",
-      "body": "Responda perguntas rápidas, revise seus erros e evolua no seu ritmo."
+    "start": {
+      "title": "Como você quer começar?",
+      "body": "Escolha um ponto de partida. Dá para mudar depois.",
+      "options": {
+        "new": {
+          "title": "Estou começando agora",
+          "body": "Um início leve com bandeiras mais familiares."
+        },
+        "some": {
+          "title": "Já conheço algumas bandeiras",
+          "body": "Um treino rápido ajusta seu nível inicial."
+        },
+        "review": {
+          "title": "Quero revisar países difíceis",
+          "body": "Foque nas bandeiras que mais confundem."
+        }
+      }
     },
-    "progress": {
-      "level": "Nível {{level}}",
-      "xp": "{{xp}} XP",
-      "southAmerica": "América do Sul",
-      "europe": "Europa",
-      "africa": "África",
-      "title": "Domine o mapa",
-      "body": "Ganhe XP, avance por continentes e finque sua bandeira em cada país."
+    "goal": {
+      "title": "Qual será sua meta diária?",
+      "body": "Um compromisso leve. Você pode mudar quando quiser.",
+      "questionsPerDay": "perguntas por dia",
+      "selected": "Selecionado",
+      "hint": "A meta é um convite, não uma obrigação."
+    },
+    "lesson": {
+      "badge": "Nova bandeira",
+      "title": "Qual destas bandeiras é a do Brasil?",
+      "verify": "Verificar",
+      "flagAlt": "Bandeira de {{country}}"
+    },
+    "feedback": {
+      "correctTitle": "Boa!",
+      "correctBody": "Boa! Essa é a bandeira do {{country}}.",
+      "wrongTitle": "Vamos revisar juntos.",
+      "wrongBody": "A bandeira do {{country}} é a resposta correta. Você escolheu {{selected}}, e tudo bem: essa vai ficar mais fácil com treino.",
+      "correctAnswer": "Resposta correta"
+    },
+    "reward": {
+      "title": "Primeira lição concluída!",
+      "xp": "Total de XP",
+      "xpValue": "+{{xp}} XP",
+      "accuracy": "Precisão",
+      "accuracyValue": "{{accuracy}}%",
+      "firstFlag": "Reconhecimento",
+      "firstFlagValue": "Brasil",
+      "dailyGoal": "Progresso da meta diária",
+      "goalProgress": "{{current}}/{{goal}} perguntas hoje"
     },
     "profile": {
-      "title": "Como devo te chamar?",
-      "body": "Crie seu perfil para salvar seu progresso.",
-      "nameLabel": "Seu nome",
+      "title": "Salve seu progresso",
+      "body": "Seu progresso fica salvo neste aparelho. Sem conta, sem e-mail e sem senha.",
+      "nameLabel": "Como podemos te chamar?",
       "namePlaceholder": "Seu nome",
       "language": "Idioma",
       "sound": "Sons e músicas",
-      "begin": "Começar jornada"
+      "begin": "Começar jornada",
+      "create": "Criar perfil",
+      "skip": "Agora não"
     }
   },
   "home": {
     "greeting": "Olá, {{name}}!",
+    "greetingFallback": "Olá, explorador!",
+    "dashboardTitle": "Sua jornada pelas bandeiras",
     "learnedCount": "{{learned}}/{{total}} países aprendidos",
     "continueTraining": "Continuar treino",
+    "continueTrainingHint": "Siga com uma sessão de {{count}} perguntas.",
+    "continueWhereLeft": "Continuar de onde parou",
+    "firstTrainingTitle": "Primeiro treino do dia",
     "startFirstTraining": "Começar primeiro treino",
     "firstTrainingHint": "Comece com uma sessão curta de {{count}} perguntas.",
     "continents": "Continentes",
@@ -77,8 +118,39 @@
     "achievements": "Conquistas",
     "shop": "Loja",
     "level": "Nível {{level}}",
+    "levelShort": "Nível",
     "totalXp": "{{xp}} XP",
     "levelProgress": "Progresso do nível",
+    "seen": "Vistos",
+    "toReview": "Revisar",
+    "dailyGoal": {
+      "title": "Meta diária",
+      "questions": "perguntas"
+    },
+    "streakTitle": "Sequência",
+    "streakDays": "dias",
+    "trainingModes": {
+      "title": "Modos de treino",
+      "all": "Ver todos",
+      "typing": {
+        "title": "Modo digitação",
+        "body": "Digite o país para memorizar de verdade."
+      },
+      "survival": {
+        "title": "Sobrevivência",
+        "body": "Treine com vidas e tente bater seu recorde."
+      },
+      "similar": {
+        "title": "Bandeiras parecidas",
+        "body": "Compare países que confundem à primeira vista."
+      },
+      "review": {
+        "title": "Modo revisão",
+        "body": "Volte nas bandeiras que pedem reforço."
+      }
+    },
+    "reviewCountries": "Países para revisar",
+    "noReviewCountries": "Nada pendente agora. Continue descobrindo novas bandeiras.",
     "firstSteps": {
       "title": "Primeiros passos",
       "train": "Faça seu primeiro treino",

@@ -5,7 +5,19 @@ export async function skipOnboarding(page: Page): Promise<void> {
   await page.addInitScript(() => {
     localStorage.setItem(
       "flag-atlas:onboarding",
-      JSON.stringify({ schemaVersion: 1, data: { hasCompletedOnboarding: true } }),
+      JSON.stringify({
+        schemaVersion: 1,
+        data: {
+          hasSeenSplash: true,
+          hasCompletedIntro: true,
+          selectedStartMode: "new",
+          dailyGoal: 10,
+          hasCompletedLessonZero: true,
+          hasSeenFirstReward: true,
+          hasCompletedOnboarding: true,
+          profileName: "",
+        },
+      }),
     );
   });
 }
