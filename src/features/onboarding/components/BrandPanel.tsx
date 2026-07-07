@@ -1,6 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { BrandImage } from "@/shared/components/BrandImage";
 import { Globi } from "@/shared/components/Globi";
+import { Icon } from "@/shared/components/Icon";
+
+const SIDE_STEPS = [
+  { key: "start", threshold: 1 },
+  { key: "goal", threshold: 2 },
+  { key: "lesson", threshold: 3 },
+] as const;
 
 /**
  * The desktop-only brand column: Globi floating over a deep aqua field with a
@@ -10,9 +17,10 @@ import { Globi } from "@/shared/components/Globi";
 type BrandPanelProps = {
   animate?: boolean;
   className?: string;
+  stepIndex?: number;
 };
 
-export function BrandPanel({ animate = true, className = "" }: BrandPanelProps) {
+export function BrandPanel({ animate = true, className = "", stepIndex = 0 }: BrandPanelProps) {
   const { t } = useTranslation();
 
   return (
@@ -35,7 +43,7 @@ export function BrandPanel({ animate = true, className = "" }: BrandPanelProps) 
         <path d="M-40 150 Q200 190 440 150" />
         <path d="M-40 290 Q200 250 440 290" />
       </svg>
-      <div className="relative mb-5 size-40 rounded-full bg-white/92 p-4 shadow-card ring-1 ring-white/35">
+      <div className="relative mb-6 size-40 rounded-full bg-white/92 p-4 shadow-card ring-1 ring-white/35">
         <Globi tone="dark" expression="sorriso" float={animate} wave={animate} blink={animate} />
       </div>
       <BrandImage asset="wordmark" alt={t("app.name")} className="relative h-9 w-auto invert" />
@@ -45,15 +53,28 @@ export function BrandPanel({ animate = true, className = "" }: BrandPanelProps) 
       <p className="relative mt-2 max-w-[30ch] text-sm font-semibold leading-relaxed text-white/88">
         {t("onboarding.brandTagline")}
       </p>
-      <ol className="relative mt-8 flex flex-col gap-3 text-sm font-extrabold text-white/88">
-        {["start", "goal", "lesson"].map((item) => (
-          <li key={item} className="flex items-center gap-2.5">
-            <span className="flex size-6 items-center justify-center rounded-full bg-white/18 ring-1 ring-white/25">
-              <span className="size-2 rounded-full bg-white" />
-            </span>
-            {t(`onboarding.side.${item}`)}
-          </li>
-        ))}
+      <ol className="relative mt-9 flex flex-col gap-3 text-sm font-extrabold text-white/88">
+        {SIDE_STEPS.map((item) => {
+          const isReached = stepIndex >= item.threshold;
+          return (
+            <li key={item.key} className="flex items-center gap-3">
+              <span
+                className={`flex size-7 items-center justify-center rounded-full ring-1 ${
+                  isReached
+                    ? "bg-white text-primary ring-white"
+                    : "bg-white/12 text-white/72 ring-white/25"
+                }`}
+              >
+                {isReached ? (
+                  <Icon name="check" size={15} strokeWidth={3} />
+                ) : (
+                  <span className="size-2 rounded-full bg-current" />
+                )}
+              </span>
+              {t(`onboarding.side.${item.key}`)}
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

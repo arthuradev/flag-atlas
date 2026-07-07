@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import {
   countLearnedCountries,
+  countLearnedCountriesIn,
   countSeenCountries,
   listCountriesNeedingReview,
 } from "@/entities/progress/progress.selectors";
@@ -20,6 +21,7 @@ import { FlagImage } from "@/shared/components/FlagImage";
 import { Icon, type IconName } from "@/shared/components/Icon";
 import { PageTransition } from "@/shared/components/PageTransition";
 import { ProgressBar } from "@/shared/components/ProgressBar";
+import { CONTINENTS } from "@/shared/data/continents";
 import { COUNTRIES } from "@/shared/data/countries";
 import { getLocalDateKey } from "@/shared/utils/dateKey";
 
@@ -56,6 +58,33 @@ const TRAINING_MODES = [
     descriptionKey: "home.trainingModes.review.body",
   },
 ] satisfies readonly TrainingMode[];
+
+const HERO_FLAG_IDS = ["br", "jp", "za"] as const;
+
+function HeroFlagStack() {
+  const { t } = useTranslation();
+  const locale = useSettingsStore((state) => state.locale);
+  const flags = HERO_FLAG_IDS.map((id) => getCountryById(id)).filter(
+    (country): country is NonNullable<ReturnType<typeof getCountryById>> => Boolean(country),
+  );
+
+  return (
+    <div className="fa-home-flag-stage pointer-events-none absolute right-3 top-10 hidden h-36 w-36 sm:block lg:right-4 lg:top-12">
+      {flags.map((country, index) => (
+        <span
+          key={country.id}
+          className={`fa-home-flag-card fa-home-flag-card-${index + 1} absolute flex h-20 w-28 items-center justify-center overflow-hidden rounded-btn border border-white/50 bg-white p-1.5 shadow-flag`}
+        >
+          <FlagImage
+            flagPath={country.flagPath}
+            alt={t("onboarding.lesson.flagAlt", { country: country.names[locale] })}
+            className="max-h-full max-w-full rounded-md object-contain"
+          />
+        </span>
+      ))}
+    </div>
+  );
+}
 
 function FirstStepsCard() {
   const { t } = useTranslation();
@@ -134,98 +163,95 @@ export function HomePage() {
   };
 
   return (
-    <PageTransition className="mx-auto grid min-h-full w-full max-w-7xl gap-5 py-1 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
-      <section className="flex min-w-0 flex-col gap-5">
-        <header className="flex flex-col gap-3 rounded-card border border-line bg-surface p-5 shadow-card sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-extrabold text-primary">
-              {playerName ? t("home.greeting", { name: playerName }) : t("home.greetingFallback")}
-            </p>
-            <h1 className="mt-1 text-3xl font-black leading-tight text-text">
-              {t("home.dashboardTitle")}
-            </h1>
-            <p className="mt-1 max-w-2xl font-semibold text-text-muted">{t("app.tagline")}</p>
+    <PageTransition className="mx-auto grid min-h-full w-full max-w-[1180px] gap-4 py-1 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start xl:grid-cols-[minmax(0,1fr)_320px]">
+      <section className="flex min-w-0 flex-col gap-4">
+        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-black text-primary-foreground shadow-card">
+              {progress.level}
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-lg font-black text-text">
+                {playerName ? t("home.greeting", { name: playerName }) : t("home.greetingFallback")}
+              </p>
+              <p className="text-sm font-bold text-text-muted">
+                {t("home.level", { level: progress.level })} -{" "}
+                {t("home.totalXp", { xp: progress.totalXp })}
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="flex gap-2">
             <Link
               to="/achievements"
-              className="inline-flex items-center justify-center gap-2 rounded-btn border border-line bg-surface-2 px-4 py-3 font-extrabold text-text transition hover:bg-pine-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-line bg-surface px-3 font-extrabold text-text shadow-sm transition hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <Icon name="trophy" size={19} className="text-primary" />
+              <Icon name="trophy" size={18} className="text-primary" />
               {t("home.achievements")}
             </Link>
             <Link
               to="/shop"
-              className="inline-flex items-center justify-between gap-3 rounded-btn border border-line bg-surface-2 px-4 py-3 font-extrabold text-text transition hover:bg-pine-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-btn border border-line bg-surface px-3 font-extrabold text-text shadow-sm transition hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span className="inline-flex items-center gap-2">
-                <Icon name="shop" size={19} className="text-primary" />
-                {t("home.shop")}
-              </span>
-              <CoinBalance />
+              <Icon name="shop" size={18} className="text-primary" />
+              {t("home.shop")}
             </Link>
           </div>
         </header>
 
         <Card className="overflow-hidden p-0">
-          <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="flex flex-col justify-between gap-5 bg-primary p-5 text-primary-foreground sm:p-6">
-              <div>
-                <p className="text-xs font-black uppercase opacity-80">
-                  {t("home.continueWhereLeft")}
-                </p>
-                <h2 className="mt-2 text-3xl font-black leading-tight">
-                  {isFirstRun ? t("home.firstTrainingTitle") : t("home.continueTraining")}
-                </h2>
-                <p className="mt-2 max-w-md text-sm font-bold opacity-88">
-                  {isFirstRun
-                    ? t("home.firstTrainingHint", { count: defaultSessionSize })
-                    : t("home.continueTrainingHint", { count: defaultSessionSize })}
-                </p>
+          <div className="relative min-h-[235px] bg-primary p-5 text-primary-foreground sm:p-6">
+            <HeroFlagStack />
+            <div className="relative z-[2] max-w-[380px]">
+              <p className="text-xs font-black uppercase tracking-[0.08em] opacity-80">
+                {t("home.continueWhereLeft")}
+              </p>
+              <h1 className="mt-2 text-3xl font-black leading-tight sm:text-[38px]">
+                {isFirstRun ? t("home.firstTrainingTitle") : t("home.dashboardTitle")}
+              </h1>
+              <div className="mt-4 max-w-sm">
+                <ProgressBar
+                  value={learned}
+                  max={total}
+                  label={t("home.learnedCount", { learned, total })}
+                />
+                <div className="mt-2 flex items-center justify-between gap-3 text-sm font-extrabold opacity-90">
+                  <span>{t("home.learnedCount", { learned, total })}</span>
+                  <span>{t("home.totalXp", { xp: progress.totalXp })}</span>
+                </div>
               </div>
               <Button
                 size="lg"
                 variant="secondary"
                 onClick={handleContinueTraining}
-                className="w-full bg-white text-primary hover:bg-white/90 sm:w-fit"
+                className="mt-5 bg-white text-primary hover:bg-white/90"
               >
-                <Icon name="play" size={20} fill="currentColor" strokeWidth={1.8} />
+                <Icon name="play" size={19} fill="currentColor" strokeWidth={1.8} />
                 {t(isFirstRun ? "home.startFirstTraining" : "home.continueTraining")}
               </Button>
             </div>
-
-            <div className="flex flex-col justify-center gap-4 p-5 sm:p-6">
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="font-extrabold text-text">
-                  {t("home.learnedCount", { learned, total })}
-                </span>
-                <span className="text-sm font-bold text-text-muted">
-                  {t("home.totalXp", { xp: progress.totalXp })}
-                </span>
-              </div>
-              <ProgressBar
-                value={learned}
-                max={total}
-                label={t("home.learnedCount", { learned, total })}
-                colorClassName="bg-primary"
-              />
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-btn bg-surface-2 p-3">
-                  <span className="block text-xl font-black">{seen}</span>
-                  <span className="text-xs font-bold text-text-muted">{t("home.seen")}</span>
-                </div>
-                <div className="rounded-btn bg-surface-2 p-3">
-                  <span className="block text-xl font-black">{progress.level}</span>
-                  <span className="text-xs font-bold text-text-muted">{t("home.levelShort")}</span>
-                </div>
-                <div className="rounded-btn bg-surface-2 p-3">
-                  <span className="block text-xl font-black">{reviewCount}</span>
-                  <span className="text-xs font-bold text-text-muted">{t("home.toReview")}</span>
-                </div>
-              </div>
-            </div>
           </div>
         </Card>
+
+        <section className="grid gap-3 sm:grid-cols-3">
+          <Card className="p-4">
+            <span className="text-2xl font-black text-text">{seen}</span>
+            <p className="text-xs font-black uppercase tracking-[0.04em] text-text-muted">
+              {t("home.seen")}
+            </p>
+          </Card>
+          <Card className="p-4">
+            <span className="text-2xl font-black text-text">{learned}</span>
+            <p className="text-xs font-black uppercase tracking-[0.04em] text-text-muted">
+              {t("stats.learned")}
+            </p>
+          </Card>
+          <Card className="p-4">
+            <span className="text-2xl font-black text-text">{reviewCount}</span>
+            <p className="text-xs font-black uppercase tracking-[0.04em] text-text-muted">
+              {t("home.toReview")}
+            </p>
+          </Card>
+        </section>
 
         <section className="flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3">
@@ -246,7 +272,7 @@ export function HomePage() {
                   type="button"
                   disabled={isReviewDisabled}
                   onClick={() => handleMode(mode.action)}
-                  className="flex min-h-28 items-start gap-3 rounded-card border border-line bg-surface p-4 text-left shadow-card transition hover:-translate-y-0.5 hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:translate-y-0"
+                  className="flex min-h-28 items-start gap-3 rounded-card border border-line bg-surface p-4 text-left shadow-card transition hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:translate-y-0"
                 >
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-pine-soft text-primary">
                     <Icon name={mode.icon} size={22} />
@@ -263,6 +289,42 @@ export function HomePage() {
           </div>
         </section>
 
+        <Card className="flex flex-col gap-3 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-base font-black text-text">{t("home.continentProgress")}</h2>
+            <Link
+              to="/continents"
+              className="text-sm font-extrabold text-primary hover:text-pine-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {t("home.continents")}
+            </Link>
+          </div>
+          <div className="grid gap-3">
+            {CONTINENTS.map((continent) => {
+              const continentLearned = countLearnedCountriesIn(progress, continent.countryIds);
+              return (
+                <div key={continent.id} className="grid gap-1.5">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-extrabold text-text">
+                      {continent.names[locale]}
+                    </span>
+                    <span className="text-xs font-bold text-text-muted">
+                      {continentLearned}/{continent.countryIds.length}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    value={continentLearned}
+                    max={continent.countryIds.length}
+                    label={`${continent.names[locale]} ${continentLearned}/${continent.countryIds.length}`}
+                    size="thin"
+                    colorClassName="bg-primary"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+
         {isFirstRun && <FirstStepsCard />}
       </section>
 
@@ -276,7 +338,7 @@ export function HomePage() {
               <Icon name="target" size={20} className="text-primary" />
             </div>
             <div>
-              <span className="text-3xl font-black text-text">{goal}</span>
+              <span className="text-4xl font-black text-text">{goal}</span>
               <span className="ml-1 text-sm font-bold text-text-muted">
                 {t("home.dailyGoal.questions")}
               </span>
@@ -295,7 +357,7 @@ export function HomePage() {
               <Icon name="flame" size={20} className="text-danger" />
             </div>
             <div>
-              <span className="text-3xl font-black text-text">
+              <span className="text-4xl font-black text-text">
                 {progress.dailyStreak.currentStreak}
               </span>
               <span className="ml-1 text-sm font-bold text-text-muted">{t("home.streakDays")}</span>
@@ -305,6 +367,22 @@ export function HomePage() {
         </div>
 
         <DailyMissionsCard />
+
+        <Card className="flex items-center gap-3 p-4">
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-btn bg-ocre-soft text-warning">
+            <Icon name="coin" size={24} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <CoinBalance className="text-2xl" />
+            <p className="text-xs font-bold text-text-muted">{t("cosmetics.coinsName")}</p>
+          </div>
+          <Link
+            to="/shop"
+            className="rounded-chip bg-pine-soft px-3 py-2 text-sm font-extrabold text-primary hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {t("shop.visitShort")}
+          </Link>
+        </Card>
 
         <Card className="flex flex-col gap-3 p-4">
           <div className="flex items-center justify-between">

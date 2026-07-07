@@ -74,7 +74,10 @@
       "correctBody": "Boa! Essa é a bandeira do {{country}}.",
       "wrongTitle": "Vamos revisar juntos.",
       "wrongBody": "A bandeira do {{country}} é a resposta correta. Você escolheu {{selected}}, e tudo bem: essa vai ficar mais fácil com treino.",
-      "correctAnswer": "Resposta correta"
+      "skippedTitle": "Sem problema.",
+      "skippedBody": "A bandeira do {{country}} é esta aqui. Você pode seguir agora e praticar de novo depois.",
+      "correctAnswer": "Resposta correta",
+      "yourChoice": "Sua escolha"
     },
     "reward": {
       "title": "Primeira lição concluída!",
@@ -84,8 +87,10 @@
       "accuracyValue": "{{accuracy}}%",
       "firstFlag": "Reconhecimento",
       "firstFlagValue": "Brasil",
+      "reviewedFlagValue": "Brasil revisado",
       "dailyGoal": "Progresso da meta diária",
-      "goalProgress": "{{current}}/{{goal}} perguntas hoje"
+      "goalProgress": "{{current}}/{{goal}} perguntas hoje",
+      "coinsValue": "+{{coins}} Moedas Atlas ganhas"
     },
     "profile": {
       "title": "Salve seu progresso",
@@ -123,6 +128,7 @@
     "levelProgress": "Progresso do nível",
     "seen": "Vistos",
     "toReview": "Revisar",
+    "continentProgress": "Progresso por continente",
     "dailyGoal": {
       "title": "Meta diária",
       "questions": "perguntas"

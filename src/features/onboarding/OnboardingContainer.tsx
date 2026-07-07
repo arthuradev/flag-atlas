@@ -9,6 +9,7 @@ import {
   evaluateLessonZeroAnswer,
   getLessonZeroCountries,
   type LessonZeroOutcome,
+  skipLessonZero,
 } from "./logic/lessonZero";
 import { DailyGoalStep } from "./steps/DailyGoalStep";
 import { LessonFeedbackStep } from "./steps/LessonFeedbackStep";
@@ -77,6 +78,7 @@ export function OnboardingContainer() {
   const [phase, setPhase] = useState<Phase>(() => resolveInitialPhase(onboarding));
   const [selectedLessonCountryId, setSelectedLessonCountryId] = useState<string | null>(null);
   const [lessonOutcome, setLessonOutcome] = useState<LessonZeroOutcome | null>(null);
+  const [lessonCoinsEarned, setLessonCoinsEarned] = useState(0);
   const [profileName, setProfileName] = useState(onboarding.profileName);
 
   const animate = !reduceMotion;
@@ -106,11 +108,24 @@ export function OnboardingContainer() {
     setPhase("feedback");
   };
 
+  const handleSkipLesson = () => {
+    const outcome = skipLessonZero(progress.countries.br, new Date().toISOString());
+    setLessonOutcome(outcome);
+    setPhase("feedback");
+  };
+
   const handleFinishLesson = () => {
     if (!lessonOutcome) {
       return;
     }
-    registerAnswer(lessonOutcome.countryProgress, lessonOutcome.xpGained, lessonOutcome.answeredAt);
+    const coinsBefore = useProgressStore.getState().progress.cosmetics.coins;
+    if (!lessonOutcome.wasSkipped) {
+      registerAnswer(
+        lessonOutcome.countryProgress,
+        lessonOutcome.xpGained,
+        lessonOutcome.answeredAt,
+      );
+    }
     registerCompletedSession({
       mode: "continue",
       questionType: "choice",
@@ -119,6 +134,8 @@ export function OnboardingContainer() {
       accuracy: lessonOutcome.accuracy,
       bestStreak: lessonOutcome.isCorrect ? 1 : 0,
     });
+    const coinsAfter = useProgressStore.getState().progress.cosmetics.coins;
+    setLessonCoinsEarned(Math.max(0, coinsAfter - coinsBefore));
     onboarding.completeLessonZero();
     setPhase("reward");
   };
@@ -171,6 +188,14 @@ export function OnboardingContainer() {
             (phase === "lesson" && !selectedLessonCountryId),
           icon: phase === "lesson" ? ("check" as const) : ("arrow" as const),
         };
+  const secondary =
+    phase === "lesson"
+      ? {
+          label: t("onboarding.skip"),
+          onClick: handleSkipLesson,
+          icon: "x" as const,
+        }
+      : undefined;
 
   return (
     <OnboardingLayout
@@ -178,6 +203,7 @@ export function OnboardingContainer() {
       stepCount={STEP_ORDER.length}
       animate={animate}
       primary={primary}
+      secondary={secondary}
     >
       {phase === "welcome" && <WelcomeStep animate={animate} />}
       {phase === "start" && (
@@ -206,7 +232,12 @@ export function OnboardingContainer() {
         <LessonFeedbackStep outcome={lessonOutcome} animate={animate} />
       )}
       {phase === "reward" && (
-        <RewardStep outcome={lessonOutcome} dailyGoal={onboarding.dailyGoal} animate={animate} />
+        <RewardStep
+          outcome={lessonOutcome}
+          dailyGoal={onboarding.dailyGoal}
+          coinsEarned={lessonCoinsEarned}
+          animate={animate}
+        />
       )}
       {phase === "profile" && (
         <ProfileStep

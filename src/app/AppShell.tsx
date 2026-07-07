@@ -83,10 +83,10 @@ export function AppShell() {
   const levelProgress = getLevelProgress(totalXp);
   const isTrainingRoute = location.pathname.startsWith("/training");
 
-  // Sidebar recolhida por padrão no desktop; abrir e fechar são ações explícitas.
+  // Sidebar aberta por padrão no desktop para a Home parecer um painel de jogo.
   // A largura é CSS puro (não framer), então a expansão funciona mesmo com
   // "reduzir animações" (aí a transição some, mas o trilho ainda abre).
-  const [isExpanded, setExpanded] = useState(false);
+  const [isExpanded, setExpanded] = useState(true);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   const isCollapsed = !isExpanded;
 
@@ -288,7 +288,11 @@ export function AppShell() {
         </aside>
       )}
 
-      <div className={`flex min-h-dvh min-w-0 flex-col ${isTrainingRoute ? "" : "lg:pl-20"}`}>
+      <div
+        className={`flex min-h-dvh min-w-0 flex-col ${
+          isTrainingRoute ? "" : isExpanded ? "lg:pl-[280px]" : "lg:pl-20"
+        } ${transitionClass}`}
+      >
         {!isTrainingRoute && (
           <header className="sticky top-0 z-30 border-b border-line bg-background/88 px-4 py-3 backdrop-blur lg:hidden">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">

@@ -20,16 +20,16 @@ export function StartModeStep({ selectedMode, onSelect, animate = true }: StartM
   const headingRef = useFocusOnMount<HTMLHeadingElement>();
 
   return (
-    <div className={`flex flex-col gap-5 ${animate ? "fa-onb-in" : ""}`}>
-      <div>
+    <div className={`flex flex-col gap-6 ${animate ? "fa-onb-in" : ""}`}>
+      <div className="max-w-2xl">
         <h1
           ref={headingRef}
           tabIndex={-1}
-          className="text-[28px] font-black leading-[1.1] text-text outline-none lg:text-[36px]"
+          className="text-[30px] font-black leading-[1.08] text-text outline-none lg:text-[40px]"
         >
           {t("onboarding.start.title")}
         </h1>
-        <p className="mt-2 max-w-[34ch] text-base font-semibold leading-relaxed text-text-muted">
+        <p className="mt-2 max-w-[44ch] text-base font-semibold leading-relaxed text-text-muted">
           {t("onboarding.start.body")}
         </p>
       </div>
@@ -43,21 +43,21 @@ export function StartModeStep({ selectedMode, onSelect, animate = true }: StartM
               type="button"
               aria-pressed={isSelected}
               onClick={() => onSelect(option.mode)}
-              className={`flex min-h-32 flex-col items-start gap-3 rounded-card border-2 bg-surface p-4 text-left shadow-card transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              className={`flex min-h-44 flex-col items-start gap-4 rounded-[18px] border-2 bg-surface p-4 text-left shadow-card transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 isSelected
-                  ? "border-ring bg-pine-soft text-text"
-                  : "border-line hover:-translate-y-0.5 hover:bg-surface-2"
+                  ? "border-ring bg-pine-soft text-text shadow-[0_18px_40px_-28px_var(--fa-ring)]"
+                  : "border-line hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2"
               }`}
             >
               <span
-                className={`flex size-10 items-center justify-center rounded-btn ${
+                className={`flex size-12 items-center justify-center rounded-btn ${
                   isSelected ? "bg-primary text-primary-foreground" : "bg-pine-soft text-primary"
                 }`}
                 aria-hidden
               >
                 <Icon name={option.icon} size={20} />
               </span>
-              <span className="text-base font-black leading-tight">
+              <span className="text-[17px] font-black leading-tight">
                 {t(`onboarding.start.options.${option.mode}.title`)}
               </span>
               <span className="text-sm font-semibold leading-snug text-text-muted">

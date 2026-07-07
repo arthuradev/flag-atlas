@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 
 /**
- * The step indicator: a row of pill dots where the current step stretches into
- * a wide aqua bar. Announced to assistive tech as "Step X of Y".
+ * Continuous onboarding progress indicator, announced to assistive tech as
+ * "Step X of Y".
  */
 type OnboardingProgressProps = {
   stepIndex: number;
@@ -20,7 +20,7 @@ export function OnboardingProgress({
 
   return (
     <div
-      className={`flex items-center gap-[7px] ${className}`}
+      className={`flex w-full items-center gap-3 ${className}`}
       role="progressbar"
       aria-label={label}
       aria-valuemin={1}
@@ -28,20 +28,15 @@ export function OnboardingProgress({
       aria-valuenow={stepIndex + 1}
       aria-valuetext={label}
     >
-      {Array.from({ length: stepCount }, (_, index) => {
-        const isActive = index === stepIndex;
-        const isReached = index <= stepIndex;
-        return (
-          <span
-            // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length, order-stable indicator
-            key={index}
-            aria-hidden
-            className={`h-[9px] rounded-full transition-all duration-300 ease-out ${
-              isActive ? "w-[30px]" : "w-[9px]"
-            } ${isReached ? "bg-ring" : "bg-line-strong"}`}
-          />
-        );
-      })}
+      <progress
+        className="fa-onb-progress h-3 flex-1"
+        value={stepIndex + 1}
+        max={stepCount}
+        aria-hidden
+      />
+      <span className="min-w-10 text-right text-xs font-black text-text-muted">
+        {stepIndex + 1}/{stepCount}
+      </span>
     </div>
   );
 }

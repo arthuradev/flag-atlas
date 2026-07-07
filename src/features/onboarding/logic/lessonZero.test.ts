@@ -4,6 +4,7 @@ import {
   evaluateLessonZeroAnswer,
   getLessonZeroCountries,
   LESSON_ZERO_CORRECT_COUNTRY_ID,
+  skipLessonZero,
 } from "./lessonZero";
 
 describe("lesson zero", () => {
@@ -33,5 +34,17 @@ describe("lesson zero", () => {
     expect(outcome.accuracy).toBe(0);
     expect(outcome.countryProgress.needsReview).toBe(true);
     expect(outcome.countryProgress.confusions).toEqual({ mx: 1 });
+  });
+
+  it("can be skipped without granting XP or mastery progress", () => {
+    const previous = createInitialCountryProgress("br");
+    const outcome = skipLessonZero(previous, "2026-07-07T12:00:00.000Z");
+
+    expect(outcome.wasSkipped).toBe(true);
+    expect(outcome.selectedCountryId).toBeNull();
+    expect(outcome.xpGained).toBe(0);
+    expect(outcome.accuracy).toBe(0);
+    expect(outcome.masteryBefore).toBe("new");
+    expect(outcome.masteryAfter).toBe("new");
   });
 });

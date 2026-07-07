@@ -74,7 +74,10 @@
       "correctBody": "Nice! That is the flag of {{country}}.",
       "wrongTitle": "Let's review it together.",
       "wrongBody": "The flag of {{country}} is the correct answer. You chose {{selected}}, and that's okay: this will get easier with practice.",
-      "correctAnswer": "Correct answer"
+      "skippedTitle": "No problem.",
+      "skippedBody": "The flag of {{country}} is this one. You can continue now and practice it again later.",
+      "correctAnswer": "Correct answer",
+      "yourChoice": "Your choice"
     },
     "reward": {
       "title": "First lesson complete!",
@@ -84,8 +87,10 @@
       "accuracyValue": "{{accuracy}}%",
       "firstFlag": "Recognition",
       "firstFlagValue": "Brazil",
+      "reviewedFlagValue": "Brazil reviewed",
       "dailyGoal": "Daily goal progress",
-      "goalProgress": "{{current}}/{{goal}} questions today"
+      "goalProgress": "{{current}}/{{goal}} questions today",
+      "coinsValue": "+{{coins}} Atlas Coins earned"
     },
     "profile": {
       "title": "Save your progress",
@@ -123,6 +128,7 @@
     "levelProgress": "Level progress",
     "seen": "Seen",
     "toReview": "Review",
+    "continentProgress": "Progress by continent",
     "dailyGoal": {
       "title": "Daily goal",
       "questions": "questions"
