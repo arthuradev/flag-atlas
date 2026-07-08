@@ -104,12 +104,13 @@ test.describe("daily missions, streak and achievements flow", () => {
 });
 
 test.describe("challenges page v3", () => {
-  test("organizes all six challenges", async ({ page }) => {
+  test("organizes all seven challenges", async ({ page }) => {
     await skipOnboarding(page);
     await page.goto("./#/challenges");
 
     for (const title of [
       "Modo digitação",
+      "Encontre a bandeira",
       "Bandeiras parecidas",
       "Revisar hoje",
       "Sobrevivência",
@@ -118,7 +119,7 @@ test.describe("challenges page v3", () => {
     ]) {
       await expect(page.getByRole("heading", { name: title })).toBeVisible();
     }
-    await expect(page.getByRole("button", { name: "Começar desafio" })).toHaveCount(6);
+    await expect(page.getByRole("button", { name: "Começar desafio" })).toHaveCount(7);
   });
 
   test("quick challenge starts a 5-question session", async ({ page }) => {

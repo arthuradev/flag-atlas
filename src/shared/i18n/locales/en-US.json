@@ -429,6 +429,8 @@
     "title": "Challenges",
     "typingTitle": "Typing mode",
     "typingDescription": "No options: type the name of the country for the flag.",
+    "countryToFlagTitle": "Find the flag",
+    "countryToFlagDescription": "See the country name and pick the right flag.",
     "similarTitle": "Similar flags",
     "similarDescription": "Train the flag pairs everyone mixes up.",
     "reviewTitle": "Review today",

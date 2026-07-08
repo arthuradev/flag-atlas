@@ -35,6 +35,19 @@ export function ChallengesPage() {
       config: { mode: "continue", questionType: "typing", size: defaultSessionSize },
     },
     {
+      icon: "search",
+      titleKey: "challenges.countryToFlagTitle",
+      descriptionKey: "challenges.countryToFlagDescription",
+      questionTypeKey: "challenges.questionTypeChoice",
+      duration: { key: "training.questionsCount", count: defaultSessionSize },
+      config: {
+        mode: "continue",
+        questionType: "choice",
+        exerciseType: "country_to_flag",
+        size: defaultSessionSize,
+      },
+    },
+    {
       icon: "layers",
       titleKey: "challenges.similarTitle",
       descriptionKey: "challenges.similarDescription",

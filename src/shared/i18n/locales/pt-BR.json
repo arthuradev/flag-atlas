@@ -429,6 +429,8 @@
     "title": "Desafios",
     "typingTitle": "Modo digitação",
     "typingDescription": "Sem alternativas: digite o nome do país da bandeira.",
+    "countryToFlagTitle": "Encontre a bandeira",
+    "countryToFlagDescription": "Veja o nome do país e escolha a bandeira certa.",
     "similarTitle": "Bandeiras parecidas",
     "similarDescription": "Treine os pares de bandeiras que todo mundo confunde.",
     "reviewTitle": "Revisar hoje",
