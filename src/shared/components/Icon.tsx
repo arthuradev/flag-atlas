@@ -1,7 +1,7 @@
 import { type SVGProps, useId } from "react";
 
 /**
- * Flag Atlas icon system.
+ * Flaggo icon system.
  *
  * One line-icon language for the whole product: 24×24 grid, `fill="none"`,
  * `stroke="currentColor"`, 2px stroke, round caps/joins — extended from the

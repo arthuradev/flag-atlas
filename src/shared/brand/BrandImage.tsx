@@ -1,4 +1,5 @@
 import type { ImgHTMLAttributes } from "react";
+import { PRODUCT_NAME } from "@/shared/brand/brand.constants";
 
 const BRAND_ASSET_PATHS = {
   appIcon: "brand/app-icon.svg",
@@ -20,7 +21,7 @@ type BrandImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "alt" | "src"> 
 
 export function BrandImage({
   asset,
-  alt = "Flag Atlas",
+  alt = PRODUCT_NAME,
   decorative = false,
   className = "",
   ...props

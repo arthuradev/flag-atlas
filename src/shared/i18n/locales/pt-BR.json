@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Flag Atlas",
+    "name": "Flaggo",
     "tagline": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
     "openSidebar": "Abrir barra lateral",
     "closeSidebar": "Fechar barra lateral"
@@ -292,7 +292,7 @@
     "copied": "Resultado copiado!",
     "copyFailed": "Não foi possível copiar. Selecione o texto abaixo:",
     "textLabel": "Texto do resultado",
-    "header": "Flag Atlas",
+    "header": "Flaggo",
     "sessionTitle": "Sessão concluída!",
     "survivalTitle": "Modo Sobrevivência",
     "correctLine": "Acertos: {{correct}}/{{total}}",
@@ -509,7 +509,7 @@
   "shop": {
     "title": "Loja",
     "tagline": "Personalize sua jornada",
-    "subtitle": "Itens cosméticos para deixar o Flag Atlas com a sua cara.",
+    "subtitle": "Itens cosméticos para deixar o Flaggo com a sua cara.",
     "noRealMoney": "Sem dinheiro real",
     "cosmeticOnly": "Apenas cosmético",
     "visitShort": "Ver loja"
@@ -567,7 +567,7 @@
       },
       "sound-default": {
         "name": "Padrão",
-        "description": "Os sons originais do Flag Atlas."
+        "description": "Os sons originais do Flaggo."
       },
       "sound-silent": {
         "name": "Silencioso",

@@ -4,7 +4,7 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* Flag Atlas brand palette with a quiet cartographic surface. */
+  /* Flaggo brand palette with a quiet cartographic surface. */
   --fa-background: #eef6f7;
   --fa-surface: #ffffff;
   --fa-surface-raised: #f7fbfb;

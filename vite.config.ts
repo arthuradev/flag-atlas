@@ -15,8 +15,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["brand/favicon.svg", "brand/symbol.svg", "brand/orbi.svg", "icons/*.png"],
       manifest: {
-        name: "Flag Atlas",
-        short_name: "Flag Atlas",
+        name: "Flaggo",
+        short_name: "Flaggo",
         description: "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
         lang: "pt-BR",
         display: "standalone",

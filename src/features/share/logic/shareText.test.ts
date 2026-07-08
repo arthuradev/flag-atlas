@@ -37,7 +37,7 @@ describe("buildShareText", () => {
     });
     expect(text).toBe(
       [
-        "Flag Atlas",
+        "Flaggo",
         "Sessão concluída!",
         "",
         "Acertos: 8/10",
@@ -65,7 +65,7 @@ describe("buildShareText", () => {
     });
     expect(text).toBe(
       [
-        "Flag Atlas",
+        "Flaggo",
         "Modo Sobrevivência",
         "",
         "Pontuação: 42",

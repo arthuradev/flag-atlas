@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Flag Atlas",
+    "name": "Flaggo",
     "tagline": "Learn the flags of the world in quick, fun training sessions.",
     "openSidebar": "Open sidebar",
     "closeSidebar": "Close sidebar"
@@ -292,7 +292,7 @@
     "copied": "Result copied!",
     "copyFailed": "Couldn't copy. Select the text below:",
     "textLabel": "Result text",
-    "header": "Flag Atlas",
+    "header": "Flaggo",
     "sessionTitle": "Session complete!",
     "survivalTitle": "Survival Mode",
     "correctLine": "Correct: {{correct}}/{{total}}",
@@ -509,7 +509,7 @@
   "shop": {
     "title": "Shop",
     "tagline": "Personalize your journey",
-    "subtitle": "Cosmetic items to make Flag Atlas your own.",
+    "subtitle": "Cosmetic items to make Flaggo your own.",
     "noRealMoney": "No real money",
     "cosmeticOnly": "Cosmetic only",
     "visitShort": "Visit shop"
@@ -567,7 +567,7 @@
       },
       "sound-default": {
         "name": "Default",
-        "description": "The original Flag Atlas sounds."
+        "description": "The original Flaggo sounds."
       },
       "sound-silent": {
         "name": "Silent",

@@ -156,7 +156,7 @@ test.describe("survival mode", () => {
     const copied = await page.evaluate(
       () => (window as unknown as { __copiedTexts: string[] }).__copiedTexts,
     );
-    expect(copied[0]).toContain("Flag Atlas");
+    expect(copied[0]).toContain("Flaggo");
     expect(copied[0]).toContain("Modo Sobrevivência");
     expect(copied[0]).toContain("Pontuação:");
   });

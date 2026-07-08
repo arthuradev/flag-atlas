@@ -1,7 +1,7 @@
 import { useId, useSyncExternalStore } from "react";
 
 /**
- * Orbi — the official Flag Atlas mascot, as a parametric SVG component.
+ * Orbi — the official Flaggo mascot, as a parametric SVG component.
  *
  * Ported from the Claude Design mascot source so the same little globe can
  * smile, cheer or wink, carry its flag, and float/wave/blink across the whole
