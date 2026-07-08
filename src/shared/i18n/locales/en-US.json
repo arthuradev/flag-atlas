@@ -311,6 +311,7 @@
     "questionLabel": "Question {{current}} of {{total}}",
     "questionShort": "{{current}}/{{total}}",
     "whichCountry": "Which country is this?",
+    "whichFlag": "Which flag belongs to this country?",
     "flagAlt": "Flag to guess",
     "streak": "Streak: {{count}}",
     "sessionXp": "Session XP: {{xp}}",

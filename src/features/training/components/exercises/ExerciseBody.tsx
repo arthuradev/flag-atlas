@@ -4,6 +4,7 @@ import type { SessionQuestion } from "@/entities/session/session.types";
 import type { AnswerFeedback } from "@/features/training/store/sessionStore";
 import type { Locale } from "@/shared/i18n/locale";
 import { ChoiceOptionsGrid } from "./ChoiceOptionsGrid";
+import { FlagOptionsGrid } from "./FlagOptionsGrid";
 import { TypingAnswerArea } from "./TypingAnswerArea";
 
 type ExerciseBodyProps = {
@@ -34,6 +35,17 @@ export function ExerciseBody({
         questionIndex={questionIndex}
         disabled={feedback !== null}
         onSubmit={onSubmitTyped}
+      />
+    );
+  }
+
+  if (format === "country_to_flag") {
+    return (
+      <FlagOptionsGrid
+        question={question}
+        feedback={feedback}
+        locale={locale}
+        onSelect={onSelectOption}
       />
     );
   }

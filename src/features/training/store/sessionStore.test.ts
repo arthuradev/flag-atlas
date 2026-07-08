@@ -363,3 +363,55 @@ describe("sessionStore choice mode confusion tracking", () => {
     expect(progress.countries[question.countryId]?.confusions).toEqual({ [wrongOption]: 1 });
   });
 });
+
+describe("sessionStore country_to_flag exercise", () => {
+  beforeEach(() => {
+    useSessionStore.getState().clearSession();
+    useProgressStore.getState().resetProgress();
+    useMissionsStore.getState().resetMissions();
+    useSessionStore.getState().startSession({
+      mode: "continue",
+      questionType: "choice",
+      exerciseType: "country_to_flag",
+      size: 5,
+    });
+  });
+
+  it("builds annotated questions with 4 options including the correct one", () => {
+    const session = useSessionStore.getState().session;
+    expect(session?.questions).toHaveLength(5);
+    for (const question of session?.questions ?? []) {
+      expect(question.exerciseType).toBe("country_to_flag");
+      expect(question.optionCountryIds).toHaveLength(4);
+      expect(question.optionCountryIds).toContain(question.countryId);
+    }
+  });
+
+  it("rewards a correct pick with the same axes as a choice answer", () => {
+    const state = useSessionStore.getState();
+    const question = state.session?.questions[0];
+    if (!question) {
+      throw new Error("expected a question");
+    }
+    state.answerCurrentQuestion(question.countryId);
+    const { feedback } = useSessionStore.getState();
+    expect(feedback?.isCorrect).toBe(true);
+    const countryProgress = useProgressStore.getState().progress.countries[question.countryId];
+    // Eixos legados (continue/choice): conta como acerto de multipla escolha.
+    expect(countryProgress?.choiceCorrectCount).toBe(1);
+    expect(countryProgress?.typedCorrectCount ?? 0).toBe(0);
+  });
+
+  it("records the confused country on a wrong flag pick", () => {
+    const state = useSessionStore.getState();
+    const question = state.session?.questions[0];
+    const wrongOption = question?.optionCountryIds?.find((id) => id !== question.countryId);
+    if (!question || !wrongOption) {
+      throw new Error("expected a wrong option");
+    }
+    state.answerCurrentQuestion(wrongOption);
+    const progress = useProgressStore.getState().progress;
+    expect(progress.countries[question.countryId]?.confusions).toEqual({ [wrongOption]: 1 });
+    expect(progress.countries[question.countryId]?.needsReview).toBe(true);
+  });
+});

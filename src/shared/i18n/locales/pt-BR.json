@@ -311,6 +311,7 @@
     "questionLabel": "Pergunta {{current}} de {{total}}",
     "questionShort": "{{current}}/{{total}}",
     "whichCountry": "Que país é este?",
+    "whichFlag": "Qual é a bandeira deste país?",
     "flagAlt": "Bandeira para adivinhar",
     "streak": "Sequência: {{count}}",
     "sessionXp": "XP da sessão: {{xp}}",

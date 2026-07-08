@@ -492,18 +492,35 @@ export function TrainingPage() {
           className="mx-auto flex min-h-full max-w-5xl flex-col justify-center gap-2 sm:gap-3"
         >
           <h1 className="shrink-0 text-center text-lg font-black sm:text-2xl">
-            {t(isTyping ? "typing.prompt" : "training.whichCountry")}
+            {t(
+              exerciseFormat === "typing"
+                ? "typing.prompt"
+                : exerciseFormat === "country_to_flag"
+                  ? "training.whichFlag"
+                  : "training.whichCountry",
+            )}
           </h1>
 
           <div
-            className={`relative mx-auto flex h-[clamp(7rem,22dvh,10rem)] w-full max-w-3xl shrink-0 items-center justify-center overflow-hidden rounded-card border border-line bg-surface p-2 shadow-flag sm:h-[clamp(9rem,30dvh,18rem)] sm:p-4 lg:h-[clamp(11rem,34dvh,22rem)] ${flagFrameClass(flagFrameId)}`}
+            className={`relative mx-auto flex h-[clamp(7rem,22dvh,10rem)] w-full max-w-3xl shrink-0 items-center justify-center overflow-hidden rounded-card border border-line bg-surface p-2 shadow-flag sm:h-[clamp(9rem,30dvh,18rem)] sm:p-4 lg:h-[clamp(11rem,34dvh,22rem)] ${
+              exerciseFormat === "country_to_flag" ? "" : flagFrameClass(flagFrameId)
+            }`}
           >
-            <FlagImage
-              key={question.countryId}
-              flagPath={country.flagPath}
-              alt={t("training.flagAlt")}
-              className="max-h-full max-w-full rounded-lg object-contain shadow-flag"
-            />
+            {exerciseFormat === "country_to_flag" ? (
+              <span
+                data-testid="training-country-name"
+                className="px-4 text-center text-2xl font-black sm:text-4xl"
+              >
+                {getCountryName(country, locale)}
+              </span>
+            ) : (
+              <FlagImage
+                key={question.countryId}
+                flagPath={country.flagPath}
+                alt={t("training.flagAlt")}
+                className="max-h-full max-w-full rounded-lg object-contain shadow-flag"
+              />
+            )}
             <VisualEffectBurst playKey={effectKey} className="rounded-card" />
           </div>
 
