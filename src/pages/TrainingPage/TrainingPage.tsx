@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import type { Country } from "@/entities/country/country.types";
+import { deriveExerciseType, resolveExercise } from "@/entities/exercise/exercise.mapping";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { flagFrameClass } from "@/features/cosmetics/logic/flagFrames";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
@@ -412,7 +413,11 @@ export function TrainingPage() {
 
   const question = session.questions[session.currentIndex];
   const country = question ? getCountryById(question.countryId) : undefined;
-  const isTyping = session.config.questionType === "typing";
+  // Tipo por pergunta, com fallback para sessões legadas sem anotação.
+  const exerciseType =
+    question?.exerciseType ?? session.config.exerciseType ?? deriveExerciseType(session.config);
+  const exerciseFormat = resolveExercise(exerciseType).format;
+  const isTyping = exerciseFormat === "typing";
   const isSurvival = session.config.mode === "survival";
   const current = session.currentIndex + 1;
   const total = session.questions.length;
@@ -505,7 +510,7 @@ export function TrainingPage() {
           <ExerciseBody
             question={question}
             questionIndex={session.currentIndex}
-            questionType={session.config.questionType}
+            exerciseType={exerciseType}
             feedback={feedback}
             locale={locale}
             onSelectOption={answerCurrentQuestion}

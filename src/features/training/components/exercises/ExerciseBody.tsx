@@ -1,4 +1,6 @@
-import type { QuestionType, SessionQuestion } from "@/entities/session/session.types";
+import { resolveExercise } from "@/entities/exercise/exercise.mapping";
+import type { ExerciseType } from "@/entities/exercise/exercise.types";
+import type { SessionQuestion } from "@/entities/session/session.types";
 import type { AnswerFeedback } from "@/features/training/store/sessionStore";
 import type { Locale } from "@/shared/i18n/locale";
 import { ChoiceOptionsGrid } from "./ChoiceOptionsGrid";
@@ -7,28 +9,26 @@ import { TypingAnswerArea } from "./TypingAnswerArea";
 type ExerciseBodyProps = {
   question: SessionQuestion;
   questionIndex: number;
-  questionType: QuestionType;
+  exerciseType: ExerciseType;
   feedback: AnswerFeedback | null;
   locale: Locale;
   onSelectOption: (countryId: string) => void;
   onSubmitTyped: (typedAnswer: string) => void;
 };
 
-/**
- * Despacha a área de resposta pelo formato do exercício. Hoje o formato é
- * global por sessão (config.questionType); o dispatch por pergunta chega
- * com o modelo de ExerciseType.
- */
+/** Despacha a área de resposta pelo formato do tipo de exercício da pergunta. */
 export function ExerciseBody({
   question,
   questionIndex,
-  questionType,
+  exerciseType,
   feedback,
   locale,
   onSelectOption,
   onSubmitTyped,
 }: ExerciseBodyProps) {
-  if (questionType === "typing") {
+  const { format } = resolveExercise(exerciseType);
+
+  if (format === "typing") {
     return (
       <TypingAnswerArea
         questionIndex={questionIndex}
