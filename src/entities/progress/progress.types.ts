@@ -66,7 +66,7 @@ export type UserProgress = {
   achievementsUnlocked: Record<string, string>;
   dailyStreak: DailyStreak;
   survival: SurvivalStats;
-  /** Inventário cosmético da Versão 4: Moedas Atlas, itens e equipamento. */
+  /** Inventário cosmético da Versão 4: Moedas Flaggo, itens e equipamento. */
   cosmetics: CosmeticInventory;
   lastPlayedAt?: string;
 };

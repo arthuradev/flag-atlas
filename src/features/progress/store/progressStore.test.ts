@@ -139,7 +139,7 @@ describe("progressStore", () => {
   });
 });
 
-describe("progressStore — Atlas Coins (V4)", () => {
+describe("progressStore — Flaggo Coins (V4)", () => {
   beforeEach(() => {
     useProgressStore.getState().resetProgress();
   });

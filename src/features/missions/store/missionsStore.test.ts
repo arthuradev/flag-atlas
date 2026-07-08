@@ -79,7 +79,7 @@ describe("missionsStore", () => {
       .missions.missions.find((mission) => mission.type === "completeSession");
     expect(completeMission?.completed).toBe(true);
     expect(useProgressStore.getState().progress.totalXp).toBe(completeMission?.rewardXp);
-    // A missão também paga Moedas Atlas cosméticas, uma única vez.
+    // A missão também paga Moedas Flaggo cosméticas, uma única vez.
     expect(useProgressStore.getState().progress.cosmetics.coins).toBe(MISSION_COIN_REWARD);
 
     // Concluir outra sessão no mesmo dia não paga a missão de novo.

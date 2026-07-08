@@ -29,7 +29,7 @@ export type SessionCompletionResult = {
   unlockedAchievementIds: string[];
   dailyStreak: DailyStreakUpdate;
   survival?: SurvivalCompletionResult;
-  /** Moedas Atlas concedidas ao fechar a sessão (sessão + conquistas do fim). */
+  /** Moedas Flaggo concedidas ao fechar a sessão (sessão + conquistas do fim). */
   coinsEarned: number;
 };
 
@@ -45,9 +45,9 @@ type ProgressState = {
   registerCompletedSession: (event: AchievementSessionEvent) => SessionCompletionResult;
   /** XP de missão diária, concedido fora do fluxo de resposta. */
   addBonusXp: (xp: number) => void;
-  /** Credita Moedas Atlas cosméticas (missões, etc.). Nunca deixa o saldo negativo. */
+  /** Credita Moedas Flaggo cosméticas (missões, etc.). Nunca deixa o saldo negativo. */
   addCoins: (coins: number) => void;
-  /** Compra um cosmético com Moedas Atlas, se possível. */
+  /** Compra um cosmético com Moedas Flaggo, se possível. */
   purchaseCosmetic: (id: string) => void;
   /** Equipa um cosmético possuído (nunca custa moedas). */
   equipCosmetic: (id: string) => void;

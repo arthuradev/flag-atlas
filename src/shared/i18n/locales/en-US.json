@@ -90,7 +90,7 @@
       "reviewedFlagValue": "Brazil reviewed",
       "dailyGoal": "Daily goal progress",
       "goalProgress": "{{current}}/{{goal}} questions today",
-      "coinsValue": "+{{coins}} Atlas Coins earned"
+      "coinsValue": "+{{coins}} Flaggo Coins earned"
     },
     "profile": {
       "title": "Save your progress",
@@ -351,7 +351,7 @@
     "answerXp": "+{{xp}} XP answers",
     "bonusMissionXp": "+{{xp}} XP bonuses and missions",
     "xpBreakdown": "{{answersXp}} answers · {{bonusXp}} bonuses/missions",
-    "coinsEarned": "+{{count}} Atlas Coins",
+    "coinsEarned": "+{{count}} Flaggo Coins",
     "accuracy": "Accuracy: {{percent}}%",
     "promoted": "Badges unlocked",
     "badgesSummary": "{{count}} new badges unlocked",
@@ -515,7 +515,7 @@
     "visitShort": "Visit shop"
   },
   "cosmetics": {
-    "coinsName": "Atlas Coins",
+    "coinsName": "Flaggo Coins",
     "free": "Free",
     "owned": "Owned",
     "equipped": "Equipped",
@@ -546,7 +546,7 @@
         "description": "Parchment and sepia tones, like a classic atlas."
       },
       "theme-neon": {
-        "name": "Neon Atlas",
+        "name": "Neon Flaggo",
         "description": "Dark with vibrant neon accents."
       },
       "theme-oceano": {
@@ -590,7 +590,7 @@
         "description": "No extra frame around the flag."
       },
       "frame-atlas": {
-        "name": "Atlas",
+        "name": "Flaggo",
         "description": "An elegant ring around the flag."
       },
       "frame-madeira": {

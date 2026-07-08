@@ -53,7 +53,7 @@ export const useMissionsStore = create<MissionsState>((set, get) => {
       // Concedido apenas na transição para completa: nunca duas vezes.
       useProgressStore.getState().addBonusXp(rewardXp);
     }
-    // Moedas Atlas cosméticas por missão concluída, também só na transição.
+    // Moedas Flaggo cosméticas por missão concluída, também só na transição.
     const rewardCoins = computeMissionCoins(completedNow.length);
     if (rewardCoins > 0) {
       useProgressStore.getState().addCoins(rewardCoins);

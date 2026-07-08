@@ -2,7 +2,7 @@
  * Camada de domínio dos cosméticos da Versão 4.
  *
  * Cosméticos são puramente estéticos e locais: não alteram dificuldade,
- * XP real, domínio, aprendizado ou vantagem. As "Moedas Atlas" que os
+ * XP real, domínio, aprendizado ou vantagem. As "Moedas Flaggo" que os
  * compram são ganhas jogando, não têm valor real e nunca envolvem dinheiro.
  */
 
@@ -23,7 +23,7 @@ export type CosmeticItem = {
   nameKey: string;
   /** Chave i18n da descrição exibível. */
   descriptionKey: string;
-  /** Preço em Moedas Atlas. Itens gratuitos têm price 0 e são sempre possuídos. */
+  /** Preço em Moedas Flaggo. Itens gratuitos têm price 0 e são sempre possuídos. */
   price: number;
   rarity?: CosmeticRarity;
   /** Ícone do sistema exibido no preview da loja. */
@@ -41,7 +41,7 @@ export type CosmeticEquipped = {
 };
 
 export type CosmeticInventory = {
-  /** Saldo de Moedas Atlas. Nunca negativo. */
+  /** Saldo de Moedas Flaggo. Nunca negativo. */
   coins: number;
   /** Ids de itens comprados (defaults gratuitos não precisam estar aqui). */
   ownedItemIds: string[];

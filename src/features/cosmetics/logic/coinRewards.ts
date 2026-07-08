@@ -1,7 +1,7 @@
 import type { AchievementSessionEvent } from "@/entities/achievement/achievement.types";
 
 /**
- * Regras das Moedas Atlas (Versão 4). Moedas são cosméticas, locais e sem
+ * Regras das Moedas Flaggo (Versão 4). Moedas são cosméticas, locais e sem
  * valor real: recompensam jogar, mas nunca alteram dificuldade, XP real,
  * domínio, aprendizado ou vantagem. Recompensas simples e balanceadas para
  * evitar farming exagerado.

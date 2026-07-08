@@ -1,7 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 import { answerFullSession, getMainTrainingCta, seedSessionSize, skipOnboarding } from "./helpers";
 
-/** Semeia o progresso com um saldo de Moedas Atlas e itens já possuídos. */
+/** Semeia o progresso com um saldo de Moedas Flaggo e itens já possuídos. */
 async function seedCosmetics(
   page: Page,
   cosmetics: { coins?: number; ownedItemIds?: string[] },
@@ -105,7 +105,7 @@ test.describe("shop v4", () => {
 });
 
 test.describe("coins from playing", () => {
-  test("awards Atlas Coins for finishing a session", async ({ page }) => {
+  test("awards Flaggo Coins for finishing a session", async ({ page }) => {
     await skipOnboarding(page);
     await seedSessionSize(page, 5);
     await page.goto("./#/training");
@@ -113,7 +113,7 @@ test.describe("coins from playing", () => {
     await answerFullSession(page, 5);
     await expect(page.getByRole("heading", { name: "Sessão concluída!" })).toBeVisible();
     // O resumo mostra as moedas ganhas na sessão.
-    await expect(page.getByTestId("result-coins")).toContainText("Moedas Atlas");
+    await expect(page.getByTestId("result-coins")).toContainText("Moedas Flaggo");
   });
 });
 

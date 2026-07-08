@@ -90,7 +90,7 @@
       "reviewedFlagValue": "Brasil revisado",
       "dailyGoal": "Progresso da meta diária",
       "goalProgress": "{{current}}/{{goal}} perguntas hoje",
-      "coinsValue": "+{{coins}} Moedas Atlas ganhas"
+      "coinsValue": "+{{coins}} Moedas Flaggo ganhas"
     },
     "profile": {
       "title": "Salve seu progresso",
@@ -351,7 +351,7 @@
     "answerXp": "+{{xp}} XP respostas",
     "bonusMissionXp": "+{{xp}} XP bônus e missões",
     "xpBreakdown": "{{answersXp}} respostas · {{bonusXp}} bônus/missões",
-    "coinsEarned": "+{{count}} Moedas Atlas",
+    "coinsEarned": "+{{count}} Moedas Flaggo",
     "accuracy": "Precisão: {{percent}}%",
     "promoted": "Insígnias desbloqueadas",
     "badgesSummary": "{{count}} novas insígnias desbloqueadas",
@@ -515,7 +515,7 @@
     "visitShort": "Ver loja"
   },
   "cosmetics": {
-    "coinsName": "Moedas Atlas",
+    "coinsName": "Moedas Flaggo",
     "free": "Grátis",
     "owned": "Adquirido",
     "equipped": "Equipado",
@@ -546,7 +546,7 @@
         "description": "Tons de pergaminho e sépia, como um atlas clássico."
       },
       "theme-neon": {
-        "name": "Neon Atlas",
+        "name": "Neon Flaggo",
         "description": "Escuro com acentos neon vibrantes."
       },
       "theme-oceano": {
@@ -590,7 +590,7 @@
         "description": "Sem moldura extra na bandeira."
       },
       "frame-atlas": {
-        "name": "Atlas",
+        "name": "Flaggo",
         "description": "Um anel elegante ao redor da bandeira."
       },
       "frame-madeira": {
