@@ -1,4 +1,4 @@
-# Architecture Constitution — Flag Atlas
+# Architecture Constitution — Flaggo
 
 Estas regras devem guiar decisões técnicas futuras.
 

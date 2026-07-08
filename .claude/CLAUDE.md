@@ -1,6 +1,6 @@
-# CLAUDE.md — Flag Atlas Implementation Rules
+# CLAUDE.md — Flaggo Implementation Rules
 
-Você está implementando o projeto **Flag Atlas**.
+Você está implementando o projeto **Flaggo**.
 
 ## Antes de codar
 

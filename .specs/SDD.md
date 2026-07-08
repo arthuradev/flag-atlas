@@ -2,7 +2,7 @@
 
 ## 1. Visão geral
 
-Flag Atlas é uma aplicação web/PWA para ensinar bandeiras dos 195 países do mundo por meio de sessões curtas, feedback imediato, progressão por país e coleção.
+Flaggo é uma aplicação web/PWA para ensinar bandeiras dos 195 países do mundo por meio de sessões curtas, feedback imediato, progressão por país e coleção.
 
 A proposta não é criar um quiz genérico. O objetivo é criar uma experiência de aprendizado leve, gostosa e colecionável.
 

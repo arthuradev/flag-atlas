@@ -1,6 +1,8 @@
-# Flag Atlas
+# Flaggo
 
-**Flag Atlas** é uma PWA gamificada para aprender as bandeiras dos 195 países do mundo.
+**Flaggo** é uma PWA gamificada para aprender as bandeiras dos 195 países do mundo.
+
+> O projeto nasceu como **Flag Atlas**. O repositório, a URL do GitHub Pages (`/flag-atlas/`), as chaves de `localStorage` (`flag-atlas:*`) e a identidade do app Android preservam o nome antigo de propósito — renomeá-los quebraria links públicos e o progresso salvo dos jogadores.
 
 A experiência central é simples:
 
@@ -66,7 +68,7 @@ O MVP implementa:
 
 ## Identidade visual
 
-O **Globi** é o mascote oficial do Flag Atlas. A marca também usa o símbolo **Bandeira-Mundo** para favicon, selo e ícones pequenos.
+O **Orbi** é o mascote oficial do Flaggo. A marca também usa o símbolo **Bandeira-Mundo** para favicon, selo e ícones pequenos.
 
 Os assets fonte ficam em `public/brand/`. Ícones PNG derivados para PWA ficam em `public/icons/`, e os ícones/splash estático do Android são regenerados pelo script `scripts/generate-icons.mjs` a partir desses SVGs oficiais.
 

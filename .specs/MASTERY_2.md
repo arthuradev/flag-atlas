@@ -1,4 +1,4 @@
-# Mastery 2.0 — Flag Atlas V4.5
+# Mastery 2.0 — Flaggo V4.5
 
 Mastery 2.0 torna o domínio por país mais raro, justo e colecionável.
 

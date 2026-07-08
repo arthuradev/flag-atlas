@@ -1,4 +1,4 @@
-# .specs — Fonte da verdade do Flag Atlas
+# .specs — Fonte da verdade do Flaggo
 
 Esta pasta contém a especificação do projeto. O Claude Code deve ler estes arquivos antes de implementar.
 

@@ -1,4 +1,4 @@
-# Cosméticos — Flag Atlas (Versão 4)
+# Cosméticos — Flaggo (Versão 4)
 
 A Versão 4 adiciona **personalização cosmética**. Tudo aqui é estético, local e
 offline. Não existe dinheiro real, microtransação, backend, login, ranking

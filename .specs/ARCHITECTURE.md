@@ -1,4 +1,4 @@
-# Architecture — Flag Atlas
+# Architecture — Flaggo
 
 ## 1. Tipo de arquitetura
 

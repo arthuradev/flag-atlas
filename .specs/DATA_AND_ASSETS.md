@@ -1,4 +1,4 @@
-# Data and Assets — Flag Atlas
+# Data and Assets — Flaggo
 
 ## 1. Fonte oficial do MVP
 

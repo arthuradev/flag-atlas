@@ -1,8 +1,8 @@
-# Product Decisions — Flag Atlas
+# Product Decisions — Flaggo
 
 ## Identidade
 
-- Nome: **Flag Atlas**.
+- Nome: **Flaggo**.
 - Tipo: jogo web gamificado / PWA.
 - Inspiração de sensação: Duolingo-like, sem copiar identidade, elementos proprietários ou layout exato.
 - Fantasia central: explorar e completar o mundo, país por país.
@@ -69,7 +69,7 @@
 
 A Home deve ter:
 
-- marca/nome Flag Atlas;
+- marca/nome Flaggo;
 - frase curta de valor;
 - progresso geral;
 - CTA principal: **Continuar treino**;

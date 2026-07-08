@@ -1,4 +1,4 @@
-# Security — Flag Atlas MVP
+# Security — Flaggo MVP
 
 ## 1. Superfície de segurança
 

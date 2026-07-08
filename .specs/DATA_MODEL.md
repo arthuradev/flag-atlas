@@ -1,4 +1,4 @@
-# Data Model — Flag Atlas MVP
+# Data Model — Flaggo MVP
 
 Este documento define modelos conceituais. A implementação pode ajustar nomes, mas deve preservar significado.
 

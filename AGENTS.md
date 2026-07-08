@@ -1,10 +1,10 @@
-# AGENTS.md — Flag Atlas
+# AGENTS.md — Flaggo
 
 Este arquivo define como agentes de código devem trabalhar neste repositório.
 
 ## Papel do agente
 
-Você deve implementar o projeto **Flag Atlas** com base na documentação em `.specs/`.
+Você deve implementar o projeto **Flaggo** com base na documentação em `.specs/`.
 
 Você não deve reinterpretar o produto do zero. As decisões confirmadas já estão documentadas.
 

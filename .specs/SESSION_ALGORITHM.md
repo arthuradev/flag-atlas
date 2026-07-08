@@ -1,4 +1,4 @@
-# Session Algorithm — Flag Atlas MVP
+# Session Algorithm — Flaggo MVP
 
 ## 1. Objetivo
 

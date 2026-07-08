@@ -1,8 +1,8 @@
-# UI/UX Guide — Flag Atlas
+# UI/UX Guide — Flaggo
 
 ## 1. Direção visual
 
-Flag Atlas deve ser:
+Flaggo deve ser:
 
 - amigável;
 - casual;
@@ -64,7 +64,7 @@ Não criar:
 Três cards/telas curtas:
 
 ```txt
-1. Bem-vindo ao Flag Atlas
+1. Bem-vindo ao Flaggo
 Aprenda as bandeiras do mundo em treinos rápidos e divertidos.
 
 2. Complete o mundo
@@ -79,7 +79,7 @@ Sem pressão. Erre, revise e jogue mais uma quando quiser.
 ## 5. Home sugerida
 
 ```txt
-🌍 Flag Atlas
+🌍 Flaggo
 
 Aprenda as bandeiras do mundo
 em treinos rápidos e divertidos.

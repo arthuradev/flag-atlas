@@ -1,4 +1,4 @@
-# Quality Plan — Flag Atlas
+# Quality Plan — Flaggo
 
 ## 1. Ferramentas
 
