@@ -1,4 +1,5 @@
 import type { ContinentId } from "@/entities/continent/continent.types";
+import type { ExerciseType } from "@/entities/exercise/exercise.types";
 import type { MasteryLevel } from "@/entities/progress/progress.types";
 import type { SessionSize } from "@/entities/settings/settings.types";
 
@@ -9,6 +10,8 @@ export type SessionMode = "continue" | "continent" | "review" | "similar" | "sur
 export type SessionConfig = {
   mode: SessionMode;
   questionType: QuestionType;
+  /** Tipo de exercício de produto. Ausente = derivado de mode/questionType. */
+  exerciseType?: ExerciseType;
   continentId?: ContinentId;
   /** Restringe o modo "similar" a um grupo específico (opcional). */
   similarGroupId?: string;
@@ -17,6 +20,11 @@ export type SessionConfig = {
 
 export type SessionQuestion = {
   countryId: string;
+  /**
+   * Tipo de exercício desta pergunta. Sempre preenchido por buildQuestion;
+   * ausente apenas em perguntas legadas (fallback: config.questionType).
+   */
+  exerciseType?: ExerciseType;
   /** 4 alternativas embaralhadas, incluindo a correta. Ausente no modo digitação. */
   optionCountryIds?: readonly string[];
 };

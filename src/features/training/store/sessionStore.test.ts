@@ -35,6 +35,7 @@ describe("sessionStore typing mode", () => {
     expect(session?.questions).toHaveLength(5);
     for (const question of session?.questions ?? []) {
       expect(question.optionCountryIds).toBeUndefined();
+      expect(question.exerciseType).toBe("typing");
     }
   });
 
@@ -92,6 +93,7 @@ describe("sessionStore similar mode", () => {
     for (const question of session?.questions ?? []) {
       expect(question.optionCountryIds).toHaveLength(4);
       expect(question.optionCountryIds).toContain(question.countryId);
+      expect(question.exerciseType).toBe("similar_flags");
     }
   });
 });
@@ -134,6 +136,13 @@ describe("sessionStore survival mode", () => {
     expect(session?.questions.length).toBe(100);
     const ids = session?.questions.map((question) => question.countryId) ?? [];
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("keeps flag_to_country as the exercise type (survival is a modifier)", () => {
+    const session = useSessionStore.getState().session;
+    for (const question of session?.questions ?? []) {
+      expect(question.exerciseType).toBe("flag_to_country");
+    }
   });
 
   it("starts with all lives and loses one per wrong answer only", () => {
@@ -200,6 +209,14 @@ describe("sessionStore normal flow with v3 summary", () => {
     useProgressStore.getState().resetProgress();
     useMissionsStore.getState().resetMissions();
     useSessionStore.getState().startSession({ mode: "continue", questionType: "choice", size: 5 });
+  });
+
+  it("annotates every question with the derived exercise type", () => {
+    const session = useSessionStore.getState().session;
+    expect(session?.questions.length).toBeGreaterThan(0);
+    for (const question of session?.questions ?? []) {
+      expect(question.exerciseType).toBe("flag_to_country");
+    }
   });
 
   it("completes a normal session without survival data and with streak info", () => {

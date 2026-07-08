@@ -2,6 +2,12 @@ import { create } from "zustand";
 import { getCountryById, listCountriesByContinent } from "@/entities/country/country.selectors";
 import type { Country } from "@/entities/country/country.types";
 import {
+  deriveExerciseType,
+  resolveExercise,
+  rewardAxesForExercise,
+} from "@/entities/exercise/exercise.mapping";
+import type { ExerciseType, SelectionStrategy } from "@/entities/exercise/exercise.types";
+import {
   createInitialCountryProgress,
   type MasteryLevel,
 } from "@/entities/progress/progress.types";
@@ -77,11 +83,29 @@ type SessionState = {
   clearSession: () => void;
 };
 
-function poolForConfig(config: SessionConfig): readonly Country[] {
+/**
+ * Estratégia de seleção da sessão. A config legada manda quando o mode
+ * carrega a seleção (continent/similar/review) — preserva o comportamento
+ * de todas as combinações existentes; senão vale a seleção do exercício.
+ */
+function selectionForConfig(config: SessionConfig, exerciseType: ExerciseType): SelectionStrategy {
   if (config.mode === "continent" && config.continentId) {
-    return listCountriesByContinent(config.continentId);
+    return "continent";
   }
   if (config.mode === "similar") {
+    return "similar";
+  }
+  if (config.mode === "review") {
+    return "review";
+  }
+  return resolveExercise(exerciseType).selection;
+}
+
+function poolForSelection(selection: SelectionStrategy, config: SessionConfig): readonly Country[] {
+  if (selection === "continent" && config.continentId) {
+    return listCountriesByContinent(config.continentId);
+  }
+  if (selection === "similar") {
     const ids = config.similarGroupId
       ? (getSimilarGroupById(config.similarGroupId)?.countryIds ?? [])
       : listSimilarCountryIds();
@@ -90,9 +114,14 @@ function poolForConfig(config: SessionConfig): readonly Country[] {
   return COUNTRIES;
 }
 
-function selectCountryIds(config: SessionConfig, pool: readonly Country[], rng: Rng): string[] {
+function selectCountryIds(
+  config: SessionConfig,
+  selection: SelectionStrategy,
+  pool: readonly Country[],
+  rng: Rng,
+): string[] {
   const progress = useProgressStore.getState().progress;
-  if (config.mode === "review") {
+  if (selection === "review") {
     return selectReviewCountries({ pool, progress, size: config.size, rng });
   }
   if (config.mode === "survival") {
@@ -104,16 +133,21 @@ function selectCountryIds(config: SessionConfig, pool: readonly Country[], rng: 
   return selectSessionCountries({ pool, progress, size: config.size, rng });
 }
 
-function buildQuestion(config: SessionConfig, countryId: string, rng: Rng): SessionQuestion | null {
-  if (config.questionType === "typing") {
-    return { countryId };
+function buildQuestion(
+  exerciseType: ExerciseType,
+  selection: SelectionStrategy,
+  countryId: string,
+  rng: Rng,
+): SessionQuestion | null {
+  if (resolveExercise(exerciseType).format === "typing") {
+    return { countryId, exerciseType };
   }
   const correct = getCountryById(countryId);
   if (!correct) {
     return null;
   }
   const optionCountryIds =
-    config.mode === "similar"
+    selection === "similar"
       ? generateSimilarOptions({
           correct,
           pool: COUNTRIES,
@@ -121,7 +155,7 @@ function buildQuestion(config: SessionConfig, countryId: string, rng: Rng): Sess
           rng,
         })
       : generateOptions({ correct, pool: COUNTRIES, rng });
-  return { countryId, optionCountryIds };
+  return { countryId, exerciseType, optionCountryIds };
 }
 
 export const useSessionStore = create<SessionState>((set, get) => {
@@ -141,12 +175,17 @@ export const useSessionStore = create<SessionState>((set, get) => {
     const previous =
       progressStore.progress.countries[question.countryId] ??
       createInitialCountryProgress(question.countryId);
+    // Eixos de recompensa derivados por pergunta: hoje toda pergunta da
+    // sessão partilha o tipo, mas lições com exercícios mistos já funcionam.
+    const exerciseType =
+      question.exerciseType ?? session.config.exerciseType ?? deriveExerciseType(session.config);
+    const rewardAxes = rewardAxesForExercise(exerciseType, session.config);
     const next = applyAnswerToCountryProgress(previous, {
       isCorrect: input.isCorrect,
       answeredAt,
       localDateKey,
-      mode: session.config.mode,
-      questionType: session.config.questionType,
+      mode: rewardAxes.mode,
+      questionType: rewardAxes.questionType,
       ...(input.confusedWithCountryId !== undefined && {
         confusedWithCountryId: input.confusedWithCountryId,
       }),
@@ -159,7 +198,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
     const missionReward = useMissionsStore.getState().recordAnswer(
       {
         isCorrect: input.isCorrect,
-        mode: session.config.mode,
+        mode: rewardAxes.mode,
         promoted,
         sessionStreak: streakAfter,
       },
@@ -231,10 +270,12 @@ export const useSessionStore = create<SessionState>((set, get) => {
 
     startSession: (config) => {
       const rng = createRng();
-      const pool = poolForConfig(config);
-      const countryIds = selectCountryIds(config, pool, rng);
+      const exerciseType = config.exerciseType ?? deriveExerciseType(config);
+      const selection = selectionForConfig(config, exerciseType);
+      const pool = poolForSelection(selection, config);
+      const countryIds = selectCountryIds(config, selection, pool, rng);
       const questions = countryIds.flatMap((countryId) => {
-        const question = buildQuestion(config, countryId, rng);
+        const question = buildQuestion(exerciseType, selection, countryId, rng);
         return question ? [question] : [];
       });
 
