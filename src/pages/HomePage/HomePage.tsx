@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import {
   countLearnedCountries,
@@ -14,7 +14,7 @@ import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine"
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
-import { useSessionStore } from "@/features/training/store/sessionStore";
+import { useStartSession } from "@/features/training/hooks/useStartSession";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { FlagImage } from "@/shared/components/FlagImage";
@@ -109,13 +109,12 @@ function FirstStepsCard() {
 
 export function HomePage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const progress = useProgressStore((state) => state.progress);
   const playerName = useOnboardingStore((state) => state.playerName);
   const dailyGoal = useOnboardingStore((state) => state.dailyGoal);
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
   const locale = useSettingsStore((state) => state.locale);
-  const startSession = useSessionStore((state) => state.startSession);
+  const startTraining = useStartSession();
 
   const learned = countLearnedCountries(progress);
   const seen = countSeenCountries(progress);
@@ -136,30 +135,27 @@ export function HomePage() {
   const dailyGoalProgress = playedToday ? 1 : 0;
 
   const handleContinueTraining = () => {
-    startSession({ mode: "continue", questionType: "choice", size: defaultSessionSize });
-    navigate("/training");
+    startTraining({ mode: "continue", questionType: "choice", size: defaultSessionSize });
   };
 
   const handleReview = () => {
-    startSession({ mode: "review", questionType: "choice", size: defaultSessionSize });
-    navigate("/training");
+    startTraining({ mode: "review", questionType: "choice", size: defaultSessionSize });
   };
 
   const handleMode = (mode: TrainingMode["action"]) => {
     if (mode === "typing") {
-      startSession({ mode: "continue", questionType: "typing", size: defaultSessionSize });
-    }
-    if (mode === "survival") {
-      startSession({ mode: "survival", questionType: "choice", size: defaultSessionSize });
-    }
-    if (mode === "similar") {
-      startSession({ mode: "similar", questionType: "choice", size: defaultSessionSize });
-    }
-    if (mode === "review") {
-      handleReview();
+      startTraining({ mode: "continue", questionType: "typing", size: defaultSessionSize });
       return;
     }
-    navigate("/training");
+    if (mode === "survival") {
+      startTraining({ mode: "survival", questionType: "choice", size: defaultSessionSize });
+      return;
+    }
+    if (mode === "similar") {
+      startTraining({ mode: "similar", questionType: "choice", size: defaultSessionSize });
+      return;
+    }
+    handleReview();
   };
 
   return (

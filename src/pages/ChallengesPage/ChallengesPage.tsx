@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import type { SessionConfig } from "@/entities/session/session.types";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
-import { useSessionStore } from "@/features/training/store/sessionStore";
+import { useStartSession } from "@/features/training/hooks/useStartSession";
 import { Button } from "@/shared/components/Button";
 import { Card } from "@/shared/components/Card";
 import { Icon, type IconName } from "@/shared/components/Icon";
@@ -22,9 +21,8 @@ type ChallengeCard = {
 
 export function ChallengesPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
-  const startSession = useSessionStore((state) => state.startSession);
+  const handleStart = useStartSession();
   const bestSurvivalScore = useProgressStore((state) => state.progress.survival.bestScore);
 
   const challenges: ChallengeCard[] = [
@@ -77,11 +75,6 @@ export function ChallengesPage() {
       config: { mode: "continue", questionType: "choice", size: 10 },
     },
   ];
-
-  const handleStart = (config: SessionConfig) => {
-    startSession(config);
-    navigate("/training");
-  };
 
   return (
     <PageShell title={t("challenges.title")} backTo="/home">
