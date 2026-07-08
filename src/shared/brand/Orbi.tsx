@@ -1,9 +1,9 @@
 import { useId, useSyncExternalStore } from "react";
 
 /**
- * Globi — the official Flag Atlas mascot, as a parametric SVG component.
+ * Orbi — the official Flag Atlas mascot, as a parametric SVG component.
  *
- * Ported from the Claude Design "GlobiV3" source so the same little globe can
+ * Ported from the Claude Design mascot source so the same little globe can
  * smile, cheer or wink, carry its flag, and float/wave/blink across the whole
  * product (onboarding today, more later). Colours are baked per `tone`; the
  * ambient animations are plain CSS classes (see index.css) so they respect
@@ -11,11 +11,11 @@ import { useId, useSyncExternalStore } from "react";
  * in-app "reduce motion" setting by simply not passing the flags.
  */
 
-export type GlobiTone = "color" | "dark" | "solid-ink" | "solid-cloud" | "mono-ink" | "mono-cloud";
-export type GlobiVariant = "full" | "compact";
-export type GlobiExpression = "sorriso" | "alegre" | "piscada";
+export type OrbiTone = "color" | "dark" | "solid-ink" | "solid-cloud" | "mono-ink" | "mono-cloud";
+export type OrbiVariant = "full" | "compact";
+export type OrbiExpression = "sorriso" | "alegre" | "piscada";
 
-type GlobiColors = {
+type OrbiColors = {
   outline: string;
   ocean: string;
   land: string;
@@ -33,7 +33,7 @@ type GlobiColors = {
   foot: string;
 };
 
-function resolveColors(tone: Exclude<GlobiTone, "mono-ink" | "mono-cloud">): GlobiColors {
+function resolveColors(tone: Exclude<OrbiTone, "mono-ink" | "mono-cloud">): OrbiColors {
   if (tone === "dark") {
     return {
       outline: "#EAF6F8",
@@ -93,10 +93,10 @@ function resolveColors(tone: Exclude<GlobiTone, "mono-ink" | "mono-cloud">): Glo
   };
 }
 
-type GlobiProps = {
-  tone?: GlobiTone | "auto";
-  variant?: GlobiVariant;
-  expression?: GlobiExpression;
+type OrbiProps = {
+  tone?: OrbiTone | "auto";
+  variant?: OrbiVariant;
+  expression?: OrbiExpression;
   flag?: boolean;
   feet?: boolean;
   ground?: boolean;
@@ -128,7 +128,7 @@ export function useBrandTone(): "color" | "dark" {
   return scheme.includes("dark") ? "dark" : "color";
 }
 
-export function Globi({
+export function Orbi({
   tone = "auto",
   variant = "full",
   expression = "sorriso",
@@ -141,7 +141,7 @@ export function Globi({
   size = "100%",
   className = "",
   title,
-}: GlobiProps) {
+}: OrbiProps) {
   const autoTone = useBrandTone();
   const titleId = useId();
   const resolvedTone = tone === "auto" ? autoTone : tone;
@@ -153,9 +153,9 @@ export function Globi({
   const showFeet = feet && full;
   const showDecor = full && !isLine && !isSolid;
 
-  const floatClass = float ? "fa-globi-float" : "";
-  const waveClass = wave ? "fa-globi-wave" : "";
-  const blinkClass = blink ? "fa-globi-blink" : "";
+  const floatClass = float ? "fa-orbi-float" : "";
+  const waveClass = wave ? "fa-orbi-wave" : "";
+  const blinkClass = blink ? "fa-orbi-blink" : "";
 
   const ink = resolvedTone === "mono-cloud" ? "#EAF6F8" : "#12303B";
 
@@ -213,8 +213,8 @@ export function Globi({
           )}
         </g>
       ) : (
-        <FillGlobi
-          colors={resolveColors(resolvedTone as Exclude<GlobiTone, "mono-ink" | "mono-cloud">)}
+        <FillOrbi
+          colors={resolveColors(resolvedTone as Exclude<OrbiTone, "mono-ink" | "mono-cloud">)}
           expression={expression}
           showDecor={showDecor}
           showFeet={showFeet}
@@ -230,9 +230,9 @@ export function Globi({
   );
 }
 
-type FillGlobiProps = {
-  colors: GlobiColors;
-  expression: GlobiExpression;
+type FillOrbiProps = {
+  colors: OrbiColors;
+  expression: OrbiExpression;
   showDecor: boolean;
   showFeet: boolean;
   ground: boolean;
@@ -243,7 +243,7 @@ type FillGlobiProps = {
   ink: string;
 };
 
-function FillGlobi({
+function FillOrbi({
   colors: c,
   expression,
   showDecor,
@@ -254,7 +254,7 @@ function FillGlobi({
   waveClass,
   blinkClass,
   ink,
-}: FillGlobiProps) {
+}: FillOrbiProps) {
   return (
     <g style={{ transformBox: "fill-box", transformOrigin: "center 76%" }}>
       {ground && <ellipse cx="128" cy="228" rx="52" ry="8" fill={ink} opacity="0.1" />}

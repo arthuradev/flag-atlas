@@ -155,7 +155,7 @@ export function AppShell() {
                 className="flex size-14 items-center justify-center rounded-btn text-sidebar-fg transition hover:bg-white/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-btn bg-[#EAF6F8] p-1 shadow-sm ring-1 ring-white/15">
-                  <BrandImage asset="globi" decorative className="size-10" />
+                  <BrandImage asset="orbi" decorative className="size-10" />
                 </span>
               </button>
             ) : (
@@ -166,7 +166,7 @@ export function AppShell() {
                   className="flex min-w-0 flex-1 items-center gap-3 rounded-btn p-1.5 text-sidebar-fg transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-btn bg-[#EAF6F8] p-1 shadow-sm ring-1 ring-white/15">
-                    <BrandImage asset="globi" decorative className="size-10" />
+                    <BrandImage asset="orbi" decorative className="size-10" />
                   </span>
                   <span className="min-w-0 overflow-hidden whitespace-nowrap">
                     <span className="block truncate text-lg font-black leading-tight">
@@ -301,7 +301,7 @@ export function AppShell() {
                 className="inline-flex items-center gap-2 rounded-btn font-black text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span className="flex size-10 items-center justify-center overflow-hidden rounded-btn bg-[#EAF6F8] p-0.5 shadow-sm ring-1 ring-line">
-                  <BrandImage asset="globi" decorative className="size-8" />
+                  <BrandImage asset="orbi" decorative className="size-8" />
                 </span>
                 {t("app.name")}
               </Link>

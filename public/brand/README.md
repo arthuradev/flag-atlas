@@ -1,22 +1,22 @@
 # Flag Atlas — Pacote de Marca (V3 Final)
 
-Sistema de identidade em duas peças: **Globi** (mascote) e **Bandeira-Mundo** (símbolo).
+Sistema de identidade em duas peças: **Orbi** (mascote) e **Bandeira-Mundo** (símbolo).
 
 ## Arquivos
 
 ### SVG (vetorial, escalável, editável)
 | Arquivo | Uso |
 |---|---|
-| `globi.svg` | Mascote completo (com pés). Onboarding, marketing, prêmios. |
+| `orbi.svg` | Mascote completo (com pés). Onboarding, marketing, prêmios. |
 | `symbol.svg` | Símbolo Bandeira-Mundo (com detalhes). Ícone, selo, institucional. |
 | `favicon.svg` | Símbolo simplificado. Favicon e usos ≤ 48 px. |
-| `app-icon.svg` | Ícone do app 1024 px (Globi em squircle marinho). |
+| `app-icon.svg` | Ícone do app 1024 px (Orbi em squircle marinho). |
 | `logo-horizontal.svg` | Mascote + wordmark lado a lado. Cabeçalho, navegação. |
 | `logo-vertical.svg` | Mascote acima do wordmark. Abertura, materiais. |
 | `wordmark.svg` | Só o texto "Flag Atlas". |
 
 ### PNG (rasterizado, alta resolução, fundo transparente)
-`png/app-icon-1024.png` · `png/globi-512.png` · `png/symbol-512.png` · `png/favicon-64.png` · `png/favicon-32.png` · `png/favicon-16.png`
+`png/app-icon-1024.png` · `png/orbi-512.png` · `png/symbol-512.png` · `png/favicon-64.png` · `png/favicon-32.png` · `png/favicon-16.png`
 
 ## Paleta
 | Nome | HEX | Papel |
@@ -42,4 +42,4 @@ Sistema de identidade em duas peças: **Globi** (mascote) e **Bandeira-Mundo** (
 - **Qual versão:** mascote = tamanhos grandes; símbolo = tamanhos pequenos + favicon.
 
 ## Nota sobre os logos com texto
-`logo-*.svg` e `wordmark.svg` usam a fonte **Fredoka** via `@import`. Ao abrir como imagem estática, alguns programas não carregam a webfont — nesse caso instale a Fredoka ou converta o texto em contornos (Path > Object to Path) no editor vetorial. Os ícones (`globi`, `symbol`, `favicon`, `app-icon`) são 100% vetor puro e não dependem de fonte.
+`logo-*.svg` e `wordmark.svg` usam a fonte **Fredoka** via `@import`. Ao abrir como imagem estática, alguns programas não carregam a webfont — nesse caso instale a Fredoka ou converta o texto em contornos (Path > Object to Path) no editor vetorial. Os ícones (`orbi`, `symbol`, `favicon`, `app-icon`) são 100% vetor puro e não dependem de fonte.

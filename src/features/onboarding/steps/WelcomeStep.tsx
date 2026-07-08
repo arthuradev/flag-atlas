@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Globi } from "@/shared/components/Globi";
+import { Orbi } from "@/shared/brand/Orbi";
 import { useFocusOnMount } from "../hooks/useFocusOnMount";
 
 export function WelcomeStep({ animate = true }: { animate?: boolean }) {
@@ -17,7 +17,7 @@ export function WelcomeStep({ animate = true }: { animate?: boolean }) {
           <span className="fa-onb-ring absolute size-[150px] rounded-full border-2 border-ring" />
         )}
         <div className="size-[190px] rounded-full bg-surface/92 p-3 shadow-card ring-1 ring-line">
-          <Globi expression="sorriso" float={animate} wave={animate} blink={animate} ground />
+          <Orbi expression="sorriso" float={animate} wave={animate} blink={animate} ground />
         </div>
       </div>
       <h1

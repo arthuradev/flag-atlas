@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { BrandImage } from "@/shared/brand/BrandImage";
-import { Globi } from "@/shared/components/Globi";
+import { Orbi } from "@/shared/brand/Orbi";
 import { Icon } from "@/shared/components/Icon";
 
 const SIDE_STEPS = [
@@ -10,7 +10,7 @@ const SIDE_STEPS = [
 ] as const;
 
 /**
- * The desktop-only brand column: Globi floating over a deep aqua field with a
+ * The desktop-only brand column: Orbi floating over a deep aqua field with a
  * faint globe, the wordmark and a one-line promise. Keeps the large-screen
  * onboarding feeling full and confident instead of a shrunken phone.
  */
@@ -44,7 +44,7 @@ export function BrandPanel({ animate = true, className = "", stepIndex = 0 }: Br
         <path d="M-40 290 Q200 250 440 290" />
       </svg>
       <div className="relative mb-6 size-40 rounded-full bg-white/92 p-4 shadow-card ring-1 ring-white/35">
-        <Globi tone="dark" expression="sorriso" float={animate} wave={animate} blink={animate} />
+        <Orbi tone="dark" expression="sorriso" float={animate} wave={animate} blink={animate} />
       </div>
       <BrandImage asset="wordmark" alt={t("app.name")} className="relative h-9 w-auto invert" />
       <p className="relative mt-5 max-w-[28ch] text-balance text-xl font-black leading-tight text-white">

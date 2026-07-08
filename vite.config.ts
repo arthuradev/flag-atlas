@@ -13,7 +13,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["brand/favicon.svg", "brand/symbol.svg", "brand/globi.svg", "icons/*.png"],
+      includeAssets: ["brand/favicon.svg", "brand/symbol.svg", "brand/orbi.svg", "icons/*.png"],
       manifest: {
         name: "Flag Atlas",
         short_name: "Flag Atlas",

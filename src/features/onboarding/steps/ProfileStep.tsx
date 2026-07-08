@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { Orbi } from "@/shared/brand/Orbi";
 import { Button } from "@/shared/components/Button";
-import { Globi } from "@/shared/components/Globi";
 import { useFocusOnMount } from "../hooks/useFocusOnMount";
 
 type ProfileStepProps = {
@@ -31,7 +31,7 @@ export function ProfileStep({
     >
       <div className="rounded-[24px] border border-line bg-surface p-5 text-center shadow-card sm:p-7">
         <div className="mx-auto -mt-12 mb-3 size-24 rounded-full bg-pine-soft p-2 shadow-card ring-1 ring-ring/30">
-          <Globi variant="compact" expression="piscada" blink={animate} float={animate} />
+          <Orbi variant="compact" expression="piscada" blink={animate} float={animate} />
         </div>
         <h1
           ref={headingRef}

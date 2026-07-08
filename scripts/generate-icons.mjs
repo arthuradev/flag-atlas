@@ -12,7 +12,7 @@ import { chromium } from "@playwright/test";
 const rootDir = resolve(import.meta.dirname, "..");
 const brandDir = join(rootDir, "public", "brand");
 const appIconSvg = join(brandDir, "app-icon.svg");
-const globiSvg = join(brandDir, "globi.svg");
+const orbiSvg = join(brandDir, "orbi.svg");
 const navy = "#12303B";
 const mist = "#EAF6F8";
 
@@ -128,7 +128,7 @@ const androidIconTargets = androidIconDensities.flatMap(({ dir, iconSize, foregr
       height: iconSize,
     },
     {
-      source: globiSvg,
+      source: orbiSvg,
       output: join(mipmapDir, "ic_launcher_foreground.png"),
       width: foregroundSize,
       height: foregroundSize,

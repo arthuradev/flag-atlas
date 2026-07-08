@@ -444,7 +444,7 @@ textarea {
 
 /* ==========================================================================
    Onboarding — "Primeira Experiência" (Claude Design)
-   Ambient keyframes for the splash, world backdrop and the Globi mascot.
+   Ambient keyframes for the splash, world backdrop and the Orbi mascot.
    All are neutralised under prefers-reduced-motion by the global rule above;
    the in-app "reduce motion" setting additionally strips these classes in JS.
    ========================================================================== */
@@ -530,7 +530,7 @@ textarea {
     opacity: 0;
   }
 }
-@keyframes fa-globi-float {
+@keyframes fa-orbi-float {
   0%,
   100% {
     transform: translateY(0);
@@ -539,7 +539,7 @@ textarea {
     transform: translateY(-7px);
   }
 }
-@keyframes fa-globi-wave {
+@keyframes fa-orbi-wave {
   0%,
   100% {
     transform: rotate(0deg);
@@ -548,7 +548,7 @@ textarea {
     transform: rotate(-10deg);
   }
 }
-@keyframes fa-globi-blink {
+@keyframes fa-orbi-blink {
   0%,
   90%,
   100% {
@@ -580,18 +580,18 @@ textarea {
 .fa-onb-ring {
   animation: fa-onb-ring 2.6s ease-out infinite;
 }
-.fa-globi-float {
-  animation: fa-globi-float 3.6s ease-in-out infinite;
+.fa-orbi-float {
+  animation: fa-orbi-float 3.6s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
 }
-.fa-globi-wave {
-  animation: fa-globi-wave 2.3s ease-in-out infinite;
+.fa-orbi-wave {
+  animation: fa-orbi-wave 2.3s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: left bottom;
 }
-.fa-globi-blink {
-  animation: fa-globi-blink 4.2s ease-in-out infinite;
+.fa-orbi-blink {
+  animation: fa-orbi-blink 4.2s ease-in-out infinite;
   transform-box: fill-box;
   transform-origin: center;
 }

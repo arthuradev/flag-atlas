@@ -3,7 +3,7 @@ import type { ImgHTMLAttributes } from "react";
 const BRAND_ASSET_PATHS = {
   appIcon: "brand/app-icon.svg",
   favicon: "brand/favicon.svg",
-  globi: "brand/globi.svg",
+  orbi: "brand/orbi.svg",
   logoHorizontal: "brand/logo-horizontal.svg",
   logoVertical: "brand/logo-vertical.svg",
   symbol: "brand/symbol.svg",

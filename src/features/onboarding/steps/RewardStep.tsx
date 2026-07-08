@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { LessonZeroOutcome } from "@/features/onboarding/logic/lessonZero";
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
-import { Globi } from "@/shared/components/Globi";
+import { Orbi } from "@/shared/brand/Orbi";
 import { Icon, type IconName } from "@/shared/components/Icon";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import type { OnboardingDailyGoal } from "@/shared/storage/onboardingRepository";
@@ -63,7 +63,7 @@ export function RewardStep({
         )}
 
         <div className="mx-auto flex size-28 items-center justify-center rounded-full bg-pine-soft p-2 ring-1 ring-ring/30">
-          <Globi variant="compact" expression="sorriso" float={animate} blink={animate} />
+          <Orbi variant="compact" expression="sorriso" float={animate} blink={animate} />
         </div>
 
         <h1
