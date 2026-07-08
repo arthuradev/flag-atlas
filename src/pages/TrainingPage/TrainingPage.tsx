@@ -9,8 +9,7 @@ import { flagFrameClass } from "@/features/cosmetics/logic/flagFrames";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
-import { OptionButton } from "@/features/training/components/OptionButton";
-import { TypedAnswerForm } from "@/features/training/components/TypedAnswerForm";
+import { ExerciseBody } from "@/features/training/components/exercises/ExerciseBody";
 import {
   getSurvivalLivesRemaining,
   SURVIVAL_STARTING_LIVES,
@@ -503,41 +502,15 @@ export function TrainingPage() {
             <VisualEffectBurst playKey={effectKey} className="rounded-card" />
           </div>
 
-          {isTyping ? (
-            <TypedAnswerForm
-              key={session.currentIndex}
-              disabled={feedback !== null}
-              onSubmit={answerCurrentQuestionTyped}
-            />
-          ) : (
-            <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:gap-4">
-              {(question.optionCountryIds ?? []).map((optionId) => {
-                const option = getCountryById(optionId);
-
-                if (!option) {
-                  return null;
-                }
-
-                const state = !feedback
-                  ? "idle"
-                  : optionId === feedback.correctCountryId
-                    ? "correct"
-                    : optionId === feedback.selectedCountryId
-                      ? "wrong"
-                      : "dimmed";
-
-                return (
-                  <OptionButton
-                    key={optionId}
-                    label={getCountryName(option, locale)}
-                    state={state}
-                    disabled={feedback !== null}
-                    onSelect={() => answerCurrentQuestion(optionId)}
-                  />
-                );
-              })}
-            </div>
-          )}
+          <ExerciseBody
+            question={question}
+            questionIndex={session.currentIndex}
+            questionType={session.config.questionType}
+            feedback={feedback}
+            locale={locale}
+            onSelectOption={answerCurrentQuestion}
+            onSubmitTyped={answerCurrentQuestionTyped}
+          />
         </motion.div>
       </main>
 
