@@ -4,7 +4,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { getLevelProgress } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
-import { BrandImage } from "@/shared/components/BrandImage";
+import { BrandImage } from "@/shared/brand/BrandImage";
 import { Icon, type IconName } from "@/shared/components/Icon";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 

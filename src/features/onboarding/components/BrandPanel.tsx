@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { BrandImage } from "@/shared/components/BrandImage";
+import { BrandImage } from "@/shared/brand/BrandImage";
 import { Globi } from "@/shared/components/Globi";
 import { Icon } from "@/shared/components/Icon";
 

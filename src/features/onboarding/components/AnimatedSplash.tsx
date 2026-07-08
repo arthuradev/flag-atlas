@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { BrandImage } from "@/shared/components/BrandImage";
+import { BrandImage } from "@/shared/brand/BrandImage";
 
 type AnimatedSplashProps = {
   onDone: () => void;
