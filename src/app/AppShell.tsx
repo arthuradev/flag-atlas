@@ -18,7 +18,6 @@ type NavItem = {
 const PRIMARY_NAV_ITEMS: NavItem[] = [
   { to: "/home", icon: "home", labelKey: "app.name", ariaLabel: "abrir inicio" },
   { to: "/continents", icon: "compass", labelKey: "home.continents", ariaLabel: "abrir mapa" },
-  { to: "/challenges", icon: "target", labelKey: "home.challenges", ariaLabel: "abrir modos" },
   { to: "/collection", icon: "collection", labelKey: "home.collection", ariaLabel: "abrir album" },
   {
     to: "/achievements",
@@ -47,7 +46,12 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
   { to: "/home", icon: "home", labelKey: "app.name", ariaLabel: "abrir inicio" },
   { to: "/continents", icon: "compass", labelKey: "home.continents", ariaLabel: "abrir mapa" },
   { to: "/collection", icon: "collection", labelKey: "home.collection", ariaLabel: "abrir album" },
-  { to: "/challenges", icon: "target", labelKey: "home.challenges", ariaLabel: "abrir modos" },
+  {
+    to: "/achievements",
+    icon: "trophy",
+    labelKey: "home.achievements",
+    ariaLabel: "abrir premios",
+  },
 ];
 
 function navItemClass(isActive: boolean, isCollapsed: boolean): string {
