@@ -1,46 +1,51 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import type { ExerciseType } from "@/entities/exercise/exercise.types";
 import { listCountriesNeedingReview } from "@/entities/progress/progress.selectors";
+import { buildSessionConfigForExercise } from "@/features/lessons/logic/buildSessionConfig";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useStartSession } from "@/features/training/hooks/useStartSession";
 import { Icon, type IconName } from "@/shared/components/Icon";
 
-type TrainingMode = {
+type TrainingModeCard = {
   icon: IconName;
   labelKey: string;
   descriptionKey: string;
-  action: "typing" | "survival" | "similar" | "review";
+  exerciseType: ExerciseType;
+  /** Sobrevivência é modificador de sessão (vidas), ortogonal ao exercício. */
+  survival?: boolean;
 };
 
 const TRAINING_MODES = [
   {
-    action: "typing",
+    exerciseType: "typing",
     icon: "keyboard",
     labelKey: "home.trainingModes.typing.title",
     descriptionKey: "home.trainingModes.typing.body",
   },
   {
-    action: "survival",
+    exerciseType: "flag_to_country",
+    survival: true,
     icon: "heart",
     labelKey: "home.trainingModes.survival.title",
     descriptionKey: "home.trainingModes.survival.body",
   },
   {
-    action: "similar",
+    exerciseType: "similar_flags",
     icon: "layers",
     labelKey: "home.trainingModes.similar.title",
     descriptionKey: "home.trainingModes.similar.body",
   },
   {
-    action: "review",
+    exerciseType: "review",
     icon: "refresh",
     labelKey: "home.trainingModes.review.title",
     descriptionKey: "home.trainingModes.review.body",
   },
-] satisfies readonly TrainingMode[];
+] satisfies readonly TrainingModeCard[];
 
-/** Grid de atalhos de modos de treino + link para a página de desafios. */
+/** Grid de atalhos de exercícios + link para a página de desafios. */
 export function TrainingModesSection() {
   const { t } = useTranslation();
   const progress = useProgressStore((state) => state.progress);
@@ -49,20 +54,14 @@ export function TrainingModesSection() {
 
   const reviewCount = listCountriesNeedingReview(progress).length;
 
-  const handleMode = (mode: TrainingMode["action"]) => {
-    if (mode === "typing") {
-      startTraining({ mode: "continue", questionType: "typing", size: defaultSessionSize });
-      return;
-    }
-    if (mode === "survival") {
-      startTraining({ mode: "survival", questionType: "choice", size: defaultSessionSize });
-      return;
-    }
-    if (mode === "similar") {
-      startTraining({ mode: "similar", questionType: "choice", size: defaultSessionSize });
-      return;
-    }
-    startTraining({ mode: "review", questionType: "choice", size: defaultSessionSize });
+  const handleMode = (card: TrainingModeCard) => {
+    startTraining(
+      buildSessionConfigForExercise({
+        exerciseType: card.exerciseType,
+        size: defaultSessionSize,
+        ...(card.survival && { modifiers: { survival: true } }),
+      }),
+    );
   };
 
   return (
@@ -78,13 +77,13 @@ export function TrainingModesSection() {
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         {TRAINING_MODES.map((mode) => {
-          const isReviewDisabled = mode.action === "review" && reviewCount === 0;
+          const isReviewDisabled = mode.exerciseType === "review" && reviewCount === 0;
           return (
             <button
-              key={mode.action}
+              key={mode.labelKey}
               type="button"
               disabled={isReviewDisabled}
-              onClick={() => handleMode(mode.action)}
+              onClick={() => handleMode(mode)}
               className="flex min-h-28 items-start gap-3 rounded-card border border-line bg-surface p-4 text-left shadow-card transition hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:translate-y-0"
             >
               <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-pine-soft text-primary">
