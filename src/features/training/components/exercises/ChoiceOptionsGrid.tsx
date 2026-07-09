@@ -1,12 +1,13 @@
 import { getCountryById, getCountryName } from "@/entities/country/country.selectors";
 import type { SessionQuestion } from "@/entities/session/session.types";
-import { OptionButton } from "@/features/training/components/OptionButton";
+import { OptionButton, type OptionState } from "@/features/training/components/OptionButton";
 import type { AnswerFeedback } from "@/features/training/store/sessionStore";
 import type { Locale } from "@/shared/i18n/locale";
 
 type ChoiceOptionsGridProps = {
   question: SessionQuestion;
   feedback: AnswerFeedback | null;
+  selectedId: string | null;
   locale: Locale;
   onSelect: (countryId: string) => void;
 };
@@ -15,6 +16,7 @@ type ChoiceOptionsGridProps = {
 export function ChoiceOptionsGrid({
   question,
   feedback,
+  selectedId,
   locale,
   onSelect,
 }: ChoiceOptionsGridProps) {
@@ -27,8 +29,10 @@ export function ChoiceOptionsGrid({
           return null;
         }
 
-        const state = !feedback
-          ? "idle"
+        const state: OptionState = !feedback
+          ? optionId === selectedId
+            ? "selected"
+            : "idle"
           : optionId === feedback.correctCountryId
             ? "correct"
             : optionId === feedback.selectedCountryId

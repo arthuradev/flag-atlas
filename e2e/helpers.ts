@@ -48,11 +48,17 @@ export function getMainTrainingCta(page: Page) {
   return page.getByRole("button", { name: /Começar primeiro treino|Continuar treino/ });
 }
 
+/** Seleciona a primeira alternativa e confirma com o botão Verificar. */
+export async function answerFirstOption(page: Page): Promise<void> {
+  const option = page.getByTestId("training-option").first();
+  await expect(option).toBeEnabled();
+  await option.click();
+  await page.getByRole("button", { name: "Verificar", exact: true }).click();
+}
+
 export async function answerFullSession(page: Page, questions: number): Promise<void> {
   for (let i = 0; i < questions; i++) {
-    const option = page.getByTestId("training-option").first();
-    await expect(option).toBeEnabled();
-    await option.click();
+    await answerFirstOption(page);
     // Usa o botão Continuar para avançar sem esperar o avanço automático.
     await page.getByRole("button", { name: "Continuar", exact: true }).click();
   }

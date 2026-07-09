@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { BrandImage } from "@/shared/brand/BrandImage";
+import { FlaggoLogo } from "@/shared/brand/FlaggoLogo";
 import { Orbi } from "@/shared/brand/Orbi";
 import { Icon } from "@/shared/components/Icon";
 
@@ -46,7 +46,7 @@ export function BrandPanel({ animate = true, className = "", stepIndex = 0 }: Br
       <div className="relative mb-6 size-40 rounded-full bg-white/92 p-4 shadow-card ring-1 ring-white/35">
         <Orbi tone="dark" expression="sorriso" float={animate} wave={animate} blink={animate} />
       </div>
-      <BrandImage asset="wordmark" alt={t("app.name")} className="relative h-9 w-auto invert" />
+      <FlaggoLogo size={36} className="relative text-white" />
       <p className="relative mt-5 max-w-[28ch] text-balance text-xl font-black leading-tight text-white">
         {t("onboarding.side.title")}
       </p>

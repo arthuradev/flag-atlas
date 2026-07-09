@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { seedSessionSize, skipOnboarding } from "./helpers";
+import { answerFirstOption, seedSessionSize, skipOnboarding } from "./helpers";
 
 /** Progresso com países em revisão e confusões, para revisão e estatísticas. */
 async function seedProgressWithReview(page: import("@playwright/test").Page): Promise<void> {
@@ -68,9 +68,10 @@ test.describe("typing mode", () => {
     await expect(page.getByText("Você digitou: atlantida perdida")).toBeVisible();
     await expect(page.getByText(/A resposta certa era/)).toBeVisible();
 
-    // O erro por digitação marca o país para revisão: CTA aparece na Home.
+    // O erro por digitação marca o país para revisão: o card "Hoje" mostra a pendência.
     await page.goto("./#/home");
-    await expect(page.getByRole("button", { name: /Revisar hoje/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Revisões/ })).toBeVisible();
+    await expect(page.getByText(/esperando revisão/)).toBeVisible();
   });
 });
 
@@ -81,7 +82,7 @@ test.describe("review sessions", () => {
     await seedProgressWithReview(page);
     await page.goto("./");
 
-    await page.getByRole("button", { name: /Revisar hoje/ }).click();
+    await page.getByRole("button", { name: /Revisões/ }).click();
 
     // Apenas 1 país em revisão + 1 fraco: a sessão encurta sem repetir.
     await expect(page.getByText("1/2")).toBeVisible();
@@ -101,7 +102,7 @@ test.describe("similar flags challenge", () => {
     await expect(page.getByText("1/5")).toBeVisible();
     await expect(page.getByTestId("training-option")).toHaveCount(4);
 
-    await page.getByTestId("training-option").first().click();
+    await answerFirstOption(page);
     await expect(page.getByText(/Boa!|Quase!/)).toBeVisible();
   });
 });

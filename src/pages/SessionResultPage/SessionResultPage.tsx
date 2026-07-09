@@ -6,6 +6,7 @@ import { getCountryById, getCountryName } from "@/entities/country/country.selec
 import { countSeenCountries } from "@/entities/progress/progress.selectors";
 import type { MasteryLevel } from "@/entities/progress/progress.types";
 import type { MasteryPromotion, SessionSummary } from "@/entities/session/session.types";
+import { EquippedOrbi } from "@/features/cosmetics/components/EquippedOrbi";
 import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectBurst";
 import { DailyMissionsCard } from "@/features/missions/components/DailyMissionsCard";
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
@@ -31,11 +32,13 @@ function CountryRow({ countryId, detail }: { countryId: string; detail?: ReactNo
   }
   return (
     <li className="flex min-w-0 items-center gap-3 py-1.5">
-      <FlagImage
-        flagPath={country.flagPath}
-        alt=""
-        className="h-6 w-9 rounded-sm object-cover shadow-sm"
-      />
+      <span className="flex h-6 w-9 shrink-0 items-center justify-center">
+        <FlagImage
+          flagPath={country.flagPath}
+          alt=""
+          className="max-h-full max-w-full rounded-sm object-contain shadow-sm"
+        />
+      </span>
       <span className="min-w-0 flex-1 truncate font-bold">{getCountryName(country, locale)}</span>
       {detail && <span className="ml-auto shrink-0 text-sm text-text-muted">{detail}</span>}
     </li>
@@ -91,11 +94,13 @@ function HighlightPromotionRow({ promotion }: { promotion: MasteryPromotion }) {
   return (
     <li className="rounded-card border border-line bg-surface-2 p-3">
       <div className="flex min-w-0 items-center gap-3">
-        <FlagImage
-          flagPath={country.flagPath}
-          alt=""
-          className="h-7 w-10 shrink-0 rounded-sm object-cover shadow-sm"
-        />
+        <span className="flex h-7 w-10 shrink-0 items-center justify-center">
+          <FlagImage
+            flagPath={country.flagPath}
+            alt=""
+            className="max-h-full max-w-full rounded-sm object-contain shadow-sm"
+          />
+        </span>
         <div className="min-w-0 flex-1">
           <p className="truncate font-extrabold">{getCountryName(country, locale)}</p>
           <p className="mt-1 text-xs font-semibold text-text-muted">{points}</p>
@@ -267,10 +272,10 @@ export function SessionResultPage() {
           initial={{ scale: 0.4, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.1 }}
-          className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-pine-soft text-primary"
+          className="mx-auto w-28 sm:w-32"
           aria-hidden="true"
         >
-          <Icon name={isSurvival ? "shield" : "party"} size={38} strokeWidth={1.8} />
+          <EquippedOrbi expression="alegre" />
         </motion.div>
         <h1 className="mt-2 text-3xl font-extrabold">
           {t(isSurvival ? "survival.resultTitle" : "result.title")}
@@ -306,44 +311,57 @@ export function SessionResultPage() {
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.85fr)] lg:items-start">
         <section className="flex flex-col gap-4">
-          <Card className="grid grid-cols-2 gap-3 text-sm font-bold sm:grid-cols-3">
-            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
-              <Icon name="check-circle" size={20} className="text-success" />
-              {t("result.correct", { count: summary.correctCount })}
-            </span>
-            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
-              <Icon name="x-circle" size={20} className="text-danger" />
-              {t("result.wrong", { count: summary.wrongCount })}
-            </span>
-            {skippedCount > 0 && (
+          <Card className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col items-center gap-1 rounded-card border border-line bg-accent-soft/60 px-3 py-4 text-center">
+                <span className="flex items-center gap-1.5 text-[0.62rem] font-extrabold uppercase tracking-[0.14em] text-ocre-ink">
+                  <Icon name="star" size={14} />
+                  {t("result.totalXpLabel")}
+                </span>
+                <span className="text-3xl font-black text-text">
+                  {t("result.xpEarned", { xp: summary.xpEarned })}
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-card border border-line bg-success-soft/60 px-3 py-4 text-center">
+                <span className="flex items-center gap-1.5 text-[0.62rem] font-extrabold uppercase tracking-[0.14em] text-success">
+                  <Icon name="percent" size={14} />
+                  {t("result.accuracyLabel")}
+                </span>
+                <span className="text-3xl font-black text-text">{summary.accuracy}%</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-sm font-bold sm:grid-cols-3">
               <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
-                <Icon name="ban" size={20} className="text-muted" />
-                {t("result.skipped", { count: skippedCount })}
+                <Icon name="check-circle" size={20} className="text-success" />
+                {t("result.correct", { count: summary.correctCount })}
               </span>
-            )}
-            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
-              <Icon name="percent" size={20} className="text-primary" />
-              {t("result.accuracy", { percent: summary.accuracy })}
-            </span>
-            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
-              <Icon name="flame" size={20} className="text-danger" />
-              {t("result.bestStreak", { count: summary.bestStreak })}
-            </span>
-            <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3 text-warning">
-              <Icon name="star" size={20} />
-              {t("result.xpEarned", { xp: summary.xpEarned })}
-            </span>
-            {summary.coinsEarned > 0 && (
-              <span
-                className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3 text-warning"
-                data-testid="result-coins"
-              >
-                <Icon name="coin" size={18} />
-                {t("result.coinsEarned", { count: summary.coinsEarned })}
+              <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+                <Icon name="x-circle" size={20} className="text-danger" />
+                {t("result.wrong", { count: summary.wrongCount })}
               </span>
-            )}
+              {skippedCount > 0 && (
+                <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+                  <Icon name="ban" size={20} className="text-muted" />
+                  {t("result.skipped", { count: skippedCount })}
+                </span>
+              )}
+              <span className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3">
+                <Icon name="flame" size={20} className="text-danger" />
+                {t("result.bestStreak", { count: summary.bestStreak })}
+              </span>
+              {summary.coinsEarned > 0 && (
+                <span
+                  className="inline-flex min-h-12 items-center gap-1.5 rounded-2xl bg-surface-2 px-3 text-warning"
+                  data-testid="result-coins"
+                >
+                  <Icon name="coin" size={18} />
+                  {t("result.coinsEarned", { count: summary.coinsEarned })}
+                </span>
+              )}
+            </div>
             {bonusAndMissionXp > 0 && (
-              <p className="col-span-full text-sm font-semibold text-text-muted">
+              <p className="text-sm font-semibold text-text-muted">
                 {t("result.xpBreakdown", {
                   answersXp: summary.baseAnswerXpEarned,
                   bonusXp: bonusAndMissionXp,

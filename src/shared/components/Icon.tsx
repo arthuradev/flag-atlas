@@ -45,6 +45,7 @@ export type IconName =
   | "sparkles"
   | "target"
   | "trophy"
+  | "user"
   | "x"
   | "x-circle"
   | "zap"
@@ -314,6 +315,13 @@ function IconPaths({ name }: { name: IconName }) {
           <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
           <path d="M7 6H4a3 3 0 0 0 3 3" />
           <path d="M17 6h3a3 3 0 0 1-3 3" />
+        </>
+      );
+    case "user":
+      return (
+        <>
+          <circle cx="12" cy="8" r="4" />
+          <path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7" />
         </>
       );
     case "x":

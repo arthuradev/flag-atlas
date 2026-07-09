@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import type { IconName } from "@/shared/components/Icon";
 import { Icon } from "@/shared/components/Icon";
 
-type OptionState = "idle" | "correct" | "wrong" | "dimmed";
+export type OptionState = "idle" | "selected" | "correct" | "wrong" | "dimmed";
 
 type OptionButtonProps = {
   disabled: boolean;
@@ -13,6 +13,7 @@ type OptionButtonProps = {
 
 const STATE_CLASSES: Record<OptionState, string> = {
   idle: "border-line bg-surface text-text hover:border-line-strong hover:bg-surface-2 active:scale-[0.99]",
+  selected: "border-ring bg-pine-soft text-text ring-2 ring-ring/40",
   correct: "border-success bg-success-soft text-success",
   wrong: "border-danger bg-danger-soft text-danger",
   dimmed: "border-line bg-background text-faint opacity-70",
@@ -20,6 +21,7 @@ const STATE_CLASSES: Record<OptionState, string> = {
 
 const STATE_ICONS: Record<OptionState, IconName | null> = {
   idle: null,
+  selected: null,
   correct: "check-circle",
   wrong: "x-circle",
   dimmed: null,
@@ -34,6 +36,7 @@ export function OptionButton({ label, state, disabled, onSelect }: OptionButtonP
       data-sound="off"
       data-testid="training-option"
       data-state={state}
+      aria-pressed={state === "selected"}
       onClick={onSelect}
       disabled={disabled}
       animate={state === "correct" ? { scale: [1, 1.04, 1] } : { scale: 1 }}

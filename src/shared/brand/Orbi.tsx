@@ -15,6 +15,22 @@ export type OrbiTone = "color" | "dark" | "solid-ink" | "solid-cloud" | "mono-in
 export type OrbiVariant = "full" | "compact";
 export type OrbiExpression = "sorriso" | "alegre" | "piscada";
 
+/** Acessórios cosméticos da Loja ("Cosméticos do Orbi"). */
+export type OrbiAccessory =
+  | "explorer-hat"
+  | "cap"
+  | "beanie"
+  | "party-hat"
+  | "crown"
+  | "halo"
+  | "glasses"
+  | "sunglasses"
+  | "monocle"
+  | "scarf"
+  | "bowtie"
+  | "headphones"
+  | "winter";
+
 type OrbiColors = {
   outline: string;
   ocean: string;
@@ -97,6 +113,7 @@ type OrbiProps = {
   tone?: OrbiTone | "auto";
   variant?: OrbiVariant;
   expression?: OrbiExpression;
+  accessory?: OrbiAccessory | undefined;
   flag?: boolean;
   feet?: boolean;
   ground?: boolean;
@@ -132,6 +149,7 @@ export function Orbi({
   tone = "auto",
   variant = "full",
   expression = "sorriso",
+  accessory,
   flag = true,
   feet = true,
   ground = false,
@@ -216,6 +234,7 @@ export function Orbi({
         <FillOrbi
           colors={resolveColors(resolvedTone as Exclude<OrbiTone, "mono-ink" | "mono-cloud">)}
           expression={expression}
+          accessory={accessory}
           showDecor={showDecor}
           showFeet={showFeet}
           ground={ground}
@@ -233,6 +252,7 @@ export function Orbi({
 type FillOrbiProps = {
   colors: OrbiColors;
   expression: OrbiExpression;
+  accessory?: OrbiAccessory | undefined;
   showDecor: boolean;
   showFeet: boolean;
   ground: boolean;
@@ -243,9 +263,225 @@ type FillOrbiProps = {
   ink: string;
 };
 
+/** Acessórios desenhados por cima do globo, na mesma linguagem de traço. */
+function AccessoryLayer({ accessory, ink }: { accessory: OrbiAccessory; ink: string }) {
+  const gold = "#FFC53D";
+  const coral = "#FF6F61";
+  const teal = "#17B4C9";
+
+  switch (accessory) {
+    case "explorer-hat":
+      return (
+        <g>
+          <ellipse cx="118" cy="56" rx="56" ry="12" fill="#C9A063" stroke={ink} strokeWidth="6" />
+          <path
+            d="M86 54 Q118 8 150 54 Z"
+            fill="#D9B37C"
+            stroke={ink}
+            strokeWidth="6"
+            strokeLinejoin="round"
+          />
+          <path d="M88 47 Q118 36 148 47" fill="none" stroke="#8A5E2A" strokeWidth="8" />
+        </g>
+      );
+    case "cap":
+      return (
+        <g>
+          <path
+            d="M88 54 Q118 12 148 54 Z"
+            fill={teal}
+            stroke={ink}
+            strokeWidth="6"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M144 50 Q176 48 182 60 Q152 64 140 58 Z"
+            fill={teal}
+            stroke={ink}
+            strokeWidth="5"
+            strokeLinejoin="round"
+          />
+          <circle cx="118" cy="18" r="6" fill={gold} stroke={ink} strokeWidth="4" />
+        </g>
+      );
+    case "beanie":
+    case "winter":
+      return (
+        <g>
+          <path
+            d="M84 56 Q118 6 152 56 Z"
+            fill={coral}
+            stroke={ink}
+            strokeWidth="6"
+            strokeLinejoin="round"
+          />
+          <rect
+            x="82"
+            y="48"
+            width="72"
+            height="15"
+            rx="7"
+            fill="#FFFFFF"
+            stroke={ink}
+            strokeWidth="5"
+          />
+          <circle cx="118" cy="12" r="9" fill="#FFFFFF" stroke={ink} strokeWidth="5" />
+          {accessory === "winter" && (
+            <path
+              d="M70 176 Q128 200 186 176 L182 192 Q128 214 74 192 Z"
+              fill={coral}
+              stroke={ink}
+              strokeWidth="5"
+              strokeLinejoin="round"
+            />
+          )}
+        </g>
+      );
+    case "party-hat":
+      return (
+        <g>
+          <path
+            d="M96 52 L120 4 L144 52 Z"
+            fill={coral}
+            stroke={ink}
+            strokeWidth="6"
+            strokeLinejoin="round"
+          />
+          <path d="M104 36 L136 36" stroke={gold} strokeWidth="6" strokeLinecap="round" />
+          <circle cx="120" cy="4" r="7" fill={gold} stroke={ink} strokeWidth="4" />
+        </g>
+      );
+    case "crown":
+      return (
+        <g>
+          <path
+            d="M88 52 L88 24 L104 40 L120 16 L136 40 L152 24 L152 52 Z"
+            fill={gold}
+            stroke={ink}
+            strokeWidth="6"
+            strokeLinejoin="round"
+          />
+          <circle cx="120" cy="44" r="4.5" fill={coral} stroke={ink} strokeWidth="3" />
+        </g>
+      );
+    case "halo":
+      return (
+        <ellipse
+          cx="122"
+          cy="24"
+          rx="34"
+          ry="9"
+          fill="none"
+          stroke={gold}
+          strokeWidth="8"
+          strokeLinecap="round"
+        />
+      );
+    case "glasses":
+      return (
+        <g fill="none" stroke={ink} strokeWidth="6">
+          <circle cx="106" cy="118" r="17" />
+          <circle cx="150" cy="118" r="17" />
+          <path d="M123 118 L133 118" />
+        </g>
+      );
+    case "sunglasses":
+      return (
+        <g>
+          <circle cx="106" cy="118" r="17" fill={ink} stroke={ink} strokeWidth="5" />
+          <circle cx="150" cy="118" r="17" fill={ink} stroke={ink} strokeWidth="5" />
+          <path d="M123 118 L133 118" stroke={ink} strokeWidth="6" />
+          <circle cx="100" cy="112" r="4" fill="#FFFFFF" opacity="0.5" />
+          <circle cx="144" cy="112" r="4" fill="#FFFFFF" opacity="0.5" />
+        </g>
+      );
+    case "monocle":
+      return (
+        <g fill="none" stroke={gold} strokeWidth="6">
+          <circle cx="150" cy="118" r="17" />
+          <path d="M150 135 L150 158" strokeLinecap="round" />
+        </g>
+      );
+    case "scarf":
+      return (
+        <g>
+          <path
+            d="M70 176 Q128 200 186 176 L182 192 Q128 214 74 192 Z"
+            fill={coral}
+            stroke={ink}
+            strokeWidth="5"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M160 190 L166 216 L146 212 L150 188 Z"
+            fill={coral}
+            stroke={ink}
+            strokeWidth="5"
+            strokeLinejoin="round"
+          />
+        </g>
+      );
+    case "bowtie":
+      return (
+        <g>
+          <path
+            d="M128 186 L104 174 L104 198 Z"
+            fill={coral}
+            stroke={ink}
+            strokeWidth="5"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M128 186 L152 174 L152 198 Z"
+            fill={coral}
+            stroke={ink}
+            strokeWidth="5"
+            strokeLinejoin="round"
+          />
+          <circle cx="128" cy="186" r="6" fill={gold} stroke={ink} strokeWidth="4" />
+        </g>
+      );
+    case "headphones":
+      return (
+        <g>
+          <path
+            d="M62 118 Q66 44 128 40 Q190 44 194 118"
+            fill="none"
+            stroke={ink}
+            strokeWidth="9"
+            strokeLinecap="round"
+          />
+          <rect
+            x="46"
+            y="108"
+            width="22"
+            height="38"
+            rx="10"
+            fill={teal}
+            stroke={ink}
+            strokeWidth="6"
+          />
+          <rect
+            x="188"
+            y="108"
+            width="22"
+            height="38"
+            rx="10"
+            fill={teal}
+            stroke={ink}
+            strokeWidth="6"
+          />
+        </g>
+      );
+    default:
+      return null;
+  }
+}
+
 function FillOrbi({
   colors: c,
   expression,
+  accessory,
   showDecor,
   showFeet,
   ground,
@@ -383,6 +619,7 @@ function FillOrbi({
             />
           </g>
         )}
+        {accessory && <AccessoryLayer accessory={accessory} ink={ink} />}
       </g>
     </g>
   );

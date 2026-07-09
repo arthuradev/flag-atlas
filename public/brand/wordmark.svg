@@ -1,4 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 130" width="560" height="130" role="img" aria-label="Flag Atlas — wordmark">
-  
-  <text x="10" y="94" font-family="Fredoka, &#39;Trebuchet MS&#39;, system-ui, sans-serif" font-weight="600" font-size="100" letter-spacing="-3"><tspan fill="#17B4C9">Flag</tspan><tspan fill="#12303B"> Atlas</tspan></text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 372 130" width="372" height="130" role="img" aria-label="Flaggo — wordmark">
+  <text x="8" y="96" font-family="Nunito, 'Segoe UI', system-ui, sans-serif" font-weight="900" font-size="100" letter-spacing="-4" fill="#0F2A44" textLength="264">Flagg</text>
+  <g transform="translate(276 18) scale(2.1)">
+    <g transform="rotate(-16 20 21)">
+      <ellipse cx="20" cy="21" rx="21" ry="6" fill="none" stroke="#F5A836" stroke-width="3" stroke-linecap="round"></ellipse>
+    </g>
+    <circle cx="20" cy="21" r="14" fill="url(#fgWordmark)"></circle>
+    <g opacity="0.17" stroke="#EAFDFF" fill="none" stroke-width="1">
+      <ellipse cx="20" cy="21" rx="13.5" ry="4"></ellipse>
+      <ellipse cx="20" cy="21" rx="5" ry="13.5"></ellipse>
+    </g>
+    <ellipse cx="14.5" cy="15" rx="6" ry="4.4" fill="#ffffff" opacity="0.42" transform="rotate(-22 14.5 15)"></ellipse>
+  </g>
+  <defs>
+    <radialGradient id="fgWordmark" cx="34%" cy="27%" r="82%">
+      <stop offset="0%" stop-color="#84E8F1"></stop>
+      <stop offset="55%" stop-color="#18C4D7"></stop>
+      <stop offset="100%" stop-color="#0C97AD"></stop>
+    </radialGradient>
+  </defs>
 </svg>

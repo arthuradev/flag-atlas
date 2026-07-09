@@ -3,10 +3,13 @@ import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore"
 import { AchievementsPage } from "@/pages/AchievementsPage/AchievementsPage";
 import { ChallengesPage } from "@/pages/ChallengesPage/ChallengesPage";
 import { CollectionPage } from "@/pages/CollectionPage/CollectionPage";
+import { CountryDetailPage } from "@/pages/CollectionPage/CountryDetailPage";
 import { ContinentPage } from "@/pages/ContinentPage/ContinentPage";
 import { ContinentsPage } from "@/pages/ContinentsPage/ContinentsPage";
+import { ExpeditionsPage } from "@/pages/ExpeditionsPage/ExpeditionsPage";
 import { HomePage } from "@/pages/HomePage/HomePage";
 import { OnboardingPage } from "@/pages/OnboardingPage/OnboardingPage";
+import { ProfilePage } from "@/pages/ProfilePage/ProfilePage";
 import { SessionResultPage } from "@/pages/SessionResultPage/SessionResultPage";
 import { SettingsPage } from "@/pages/SettingsPage/SettingsPage";
 import { ShopPage } from "@/pages/ShopPage/ShopPage";
@@ -32,9 +35,14 @@ export function AppRouter() {
           <Route path="/continents" element={<ContinentsPage />} />
           <Route path="/continents/:continentId" element={<ContinentPage />} />
           <Route path="/collection" element={<CollectionPage />} />
+          <Route path="/collection/:countryId" element={<CountryDetailPage />} />
+          <Route path="/expeditions" element={<ExpeditionsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          {/* Rota técnica: fora da navegação principal, preservada para links diretos. */}
           <Route path="/challenges" element={<ChallengesPage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/achievements" element={<AchievementsPage />} />
+          {/* Estatísticas vivem dentro do Perfil; a rota continua acessível. */}
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>

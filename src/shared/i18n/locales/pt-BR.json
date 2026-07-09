@@ -2,13 +2,102 @@
   "app": {
     "name": "Flaggo",
     "tagline": "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
+    "taglineShort": "Bandeiras do mundo",
     "openSidebar": "Abrir barra lateral",
     "closeSidebar": "Fechar barra lateral"
+  },
+  "nav": {
+    "learn": "Aprender",
+    "continents": "Continentes",
+    "collection": "Coleção",
+    "expeditions": "Expedições",
+    "achievements": "Conquistas",
+    "shop": "Loja",
+    "profile": "Perfil",
+    "more": "Mais",
+    "primaryLabel": "Navegação principal",
+    "profileLevel": "Perfil · Nível {{level}}"
+  },
+  "learn": {
+    "headerHint": "Pronto para continuar de onde parou?",
+    "heroSubtitle": "{{learned}} de {{total}} bandeiras aprendidas",
+    "today": "Hoje",
+    "goalDone": "Meta cumprida",
+    "goalPending": "{{goal}} perguntas",
+    "reviews": "Revisões",
+    "reviewsPending": "{{count}} bandeiras esperando revisão",
+    "reviewsPending_one": "{{count}} bandeira esperando revisão",
+    "world": "Seu mundo",
+    "exploreContinents": "Explorar continentes",
+    "quickTrainingTitle": "Treino rápido · 2 min",
+    "quickTrainingBody": "Uma rodada curta com bandeiras que você já viu."
   },
   "profile": {
     "player": "Explorador",
     "openMenu": "Abrir menu do perfil",
-    "menuLabel": "Menu do perfil"
+    "menuLabel": "Menu do perfil",
+    "levelTitle": "Nível {{level}} · {{title}}",
+    "levelProgress": "Nível {{level}} para {{next}}",
+    "stats": {
+      "streak": "Sequência",
+      "countries": "Países",
+      "achievements": "Conquistas",
+      "sessions": "Sessões"
+    },
+    "recentAchievements": "Conquistas recentes",
+    "viewAll": "Ver todas",
+    "noAchievements": "Complete treinos para desbloquear suas primeiras conquistas.",
+    "avatarTitle": "Personalize seu avatar",
+    "avatarBody": "Novos estilos na Loja — separados do Orbi.",
+    "sectionsTitle": "Sua conta"
+  },
+  "expeditions": {
+    "title": "Expedições",
+    "subtitle": "Pacotes especiais, eventos e desafios temáticos — fora da jornada principal.",
+    "featured": "Expedição em destaque",
+    "exploreCta": "Explorar",
+    "startCta": "Iniciar expedição",
+    "comingSoon": "Em breve",
+    "moreTitle": "Mais expedições",
+    "xpReward": "{{xp}} XP",
+    "status": {
+      "available": "Disponível",
+      "inProgress": "Em andamento",
+      "locked": "Bloqueada",
+      "completed": "Concluída",
+      "premium": "Premium"
+    },
+    "difficulty": {
+      "easy": "Fácil",
+      "medium": "Médio",
+      "hard": "Difícil"
+    },
+    "items": {
+      "similar-flags": {
+        "title": "Bandeiras Parecidas",
+        "description": "Encare os pares de bandeiras que todo mundo confunde."
+      },
+      "world-cup": {
+        "title": "Copa do Mundo",
+        "description": "Pacote temático com as bandeiras das seleções."
+      },
+      "microstates": {
+        "title": "Microestados",
+        "description": "Os menores países do mundo, das cidades-estado às ilhas."
+      },
+      "pacific-islands": {
+        "title": "Ilhas do Pacífico",
+        "description": "Uma travessia pelas bandeiras da Oceania profunda."
+      },
+      "historic-europe": {
+        "title": "Europa Histórica",
+        "description": "Bandeiras clássicas do velho continente."
+      },
+      "world-capitals": {
+        "title": "Capitais do Mundo",
+        "description": "Um desafio extra: conecte países e capitais."
+      }
+    }
   },
   "common": {
     "back": "Voltar",
@@ -194,6 +283,19 @@
     "locked": "Bloqueada",
     "unlocked": "Desbloqueada",
     "unlockedTitle": "Conquistas desbloqueadas",
+    "recentTitle": "Recentes",
+    "byCategory": "Por categoria",
+    "galleryTitle": "Galeria",
+    "categories": {
+      "progress": "Exploração",
+      "continent": "Continentes",
+      "mastery": "Domínio",
+      "session": "Sessões",
+      "accuracy": "Precisão",
+      "challenge": "Desafios",
+      "survival": "Sobrevivência",
+      "review": "Revisão"
+    },
     "items": {
       "firstSteps": {
         "title": "Primeiros Passos",
@@ -312,6 +414,11 @@
     "questionShort": "{{current}}/{{total}}",
     "whichCountry": "Que país é este?",
     "whichFlag": "Qual é a bandeira deste país?",
+    "whichFlagOfPrefix": "Qual destas bandeiras é a de",
+    "whichFlagOfSuffix": "?",
+    "verify": "Verificar",
+    "newFlag": "Nova bandeira",
+    "optionLetter": "Alternativa {{letter}}",
     "flagAlt": "Bandeira para adivinhar",
     "streak": "Sequência: {{count}}",
     "sessionXp": "XP da sessão: {{xp}}",
@@ -354,6 +461,8 @@
     "xpBreakdown": "{{answersXp}} respostas · {{bonusXp}} bônus/missões",
     "coinsEarned": "+{{count}} Moedas Flaggo",
     "accuracy": "Precisão: {{percent}}%",
+    "accuracyLabel": "Precisão",
+    "totalXpLabel": "Total de XP",
     "promoted": "Insígnias desbloqueadas",
     "badgesSummary": "{{count}} novas insígnias desbloqueadas",
     "badgesTierSummary": "{{count}} {{tier}}",
@@ -373,12 +482,41 @@
   },
   "continents": {
     "title": "Continentes",
+    "exploreTitle": "Explore o mundo",
+    "exploreSubtitle": "{{count}} continentes — sua jornada, região por região.",
+    "youAreHere": "Você está aqui",
     "countriesCount": "{{learned}}/{{total}} países",
+    "flagsCount": "{{learned}}/{{total}} bandeiras",
     "trainContinent": "Treinar este continente",
-    "viewCollection": "Ver países"
+    "viewCollection": "Ver países",
+    "exploreCta": "Explorar",
+    "viewAll": "Ver toda a coleção",
+    "viewAllCount": "{{count}} países",
+    "status": {
+      "notStarted": "Não iniciado",
+      "inProgress": "Em andamento",
+      "completed": "Concluído"
+    }
   },
   "collection": {
     "title": "Coleção",
+    "subtitle": "Sua Pokédex de bandeiras — {{seen}} de {{total}} desbloqueadas.",
+    "detailTitle": "Detalhe do país",
+    "detailHint": "Toque em um país para ver detalhes e praticar a bandeira.",
+    "flagAlt": "Bandeira de {{country}}",
+    "practiceCta": "Praticar bandeira",
+    "factSoon": "Em breve",
+    "facts": {
+      "capital": "Capital",
+      "currency": "Moeda",
+      "language": "Idioma",
+      "population": "População"
+    },
+    "cardStatus": {
+      "locked": "Bloqueado",
+      "learning": "Aprendendo",
+      "mastered": "Dominado"
+    },
     "searchPlaceholder": "Buscar país...",
     "filterContinent": "Continente",
     "filterMastery": "Insígnia",
@@ -421,7 +559,7 @@
     "resetDone": "Progresso resetado.",
     "about": "Sobre",
     "customization": "Personalização",
-    "customizationBody": "Temas, sons, molduras e efeitos ficam na Loja.",
+    "customizationBody": "Cosméticos do Orbi, avatares, temas e molduras ficam na Loja.",
     "openShop": "Abrir loja",
     "flagAttribution": "Imagens de bandeiras obtidas do Flagpedia.net (domínio público)."
   },
@@ -512,18 +650,27 @@
   "shop": {
     "title": "Loja",
     "tagline": "Personalize sua jornada",
-    "subtitle": "Itens cosméticos para deixar o Flaggo com a sua cara.",
+    "subtitle": "Recompensas para deixar o Flaggo com a sua cara.",
     "noRealMoney": "Sem dinheiro real",
     "cosmeticOnly": "Apenas cosmético",
-    "visitShort": "Ver loja"
+    "visitShort": "Ver loja",
+    "featured": "Destaque",
+    "redeemFor": "Resgatar por {{price}}",
+    "buyFor": "Comprar por {{price}}",
+    "youHave": "Você tem {{coins}} moedas",
+    "previewTitle": "Preview",
+    "categoriesLabel": "Categorias da loja"
   },
   "cosmetics": {
     "coinsName": "Moedas Flaggo",
+    "coinsShort": "Moedas",
     "free": "Grátis",
     "owned": "Adquirido",
     "equipped": "Equipado",
     "equip": "Equipar",
     "buy": "Comprar",
+    "locked": "Bloqueado",
+    "available": "Disponível",
     "insufficient": "Moedas insuficientes",
     "purchased": "Compra realizada",
     "itemEquipped": "Item equipado",
@@ -531,41 +678,58 @@
       "theme": "Temas",
       "soundPack": "Sons",
       "flagFrame": "Molduras",
-      "visualEffect": "Efeitos"
+      "visualEffect": "Efeitos",
+      "orbiCosmetic": "Cosméticos do Orbi",
+      "avatarCosmetic": "Meu Avatar"
+    },
+    "shopCategories": {
+      "orbi": "Cosméticos do Orbi",
+      "avatar": "Meu Avatar",
+      "themes": "Temas",
+      "frames": "Molduras"
     },
     "rarity": {
       "common": "Comum",
       "rare": "Raro",
       "epic": "Épico",
-      "legendary": "Lendário"
+      "legendary": "Lendário",
+      "seasonal": "Sazonal"
     },
     "items": {
       "theme-default": {
-        "name": "Padrão",
+        "name": "Flaggo",
         "description": "Segue o tema claro/escuro das configurações."
       },
+      "theme-flaggo-light": {
+        "name": "Flaggo Light",
+        "description": "O tema claro oficial, sempre ativo."
+      },
+      "theme-flaggo-night": {
+        "name": "Flaggo Night",
+        "description": "O tema escuro oficial, sempre ativo."
+      },
       "theme-mapa-antigo": {
-        "name": "Mapa Antigo",
-        "description": "Tons de pergaminho e sépia, como um atlas clássico."
+        "name": "Cartógrafo",
+        "description": "Pergaminho, sépia e linhas de mapa, como um atlas clássico."
       },
       "theme-neon": {
-        "name": "Neon Flaggo",
-        "description": "Escuro com acentos neon vibrantes."
+        "name": "Sunset",
+        "description": "Um entardecer quente em coral e dourado."
       },
       "theme-oceano": {
-        "name": "Oceano",
+        "name": "Ocean",
         "description": "Azuis profundos e calmos do mar aberto."
       },
       "theme-espaco": {
-        "name": "Espaço",
-        "description": "Noite estrelada em tons de índigo."
+        "name": "Aurora",
+        "description": "Noite polar com luzes turquesa e violeta."
       },
       "theme-biblioteca": {
         "name": "Biblioteca",
         "description": "Madeira e creme, silencioso e aconchegante."
       },
       "theme-minimalista": {
-        "name": "Minimalista",
+        "name": "Minimal",
         "description": "Neutro e limpo, sem distrações."
       },
       "sound-default": {
@@ -611,6 +775,158 @@
       "frame-biblioteca": {
         "name": "Biblioteca",
         "description": "Moldura dupla em tom sépia."
+      },
+      "frame-turquesa": {
+        "name": "Turquesa",
+        "description": "Borda turquesa com brilho suave."
+      },
+      "frame-coral": {
+        "name": "Coral",
+        "description": "Borda coral quente e vibrante."
+      },
+      "frame-minimal": {
+        "name": "Minimal",
+        "description": "Contorno fino e discreto."
+      },
+      "frame-aurora": {
+        "name": "Aurora",
+        "description": "Brilho turquesa com um toque violeta."
+      },
+      "frame-ouro": {
+        "name": "Ouro",
+        "description": "Moldura dourada para bandeiras de campeão."
+      },
+      "frame-festivo": {
+        "name": "Festivo",
+        "description": "Moldura de festa por tempo limitado."
+      },
+      "orbi-classic": {
+        "name": "Orbi Clássico",
+        "description": "O Orbi original, sem acessórios."
+      },
+      "orbi-explorer-hat": {
+        "name": "Orbi Aventureiro",
+        "description": "Um chapéu de explorador para acompanhar você pelo mundo."
+      },
+      "orbi-cap": {
+        "name": "Boné Turquesa",
+        "description": "Um boné esportivo para treinos rápidos."
+      },
+      "orbi-beanie": {
+        "name": "Gorro de Inverno",
+        "description": "Quentinho para explorar os países nórdicos."
+      },
+      "orbi-party-hat": {
+        "name": "Chapéu de Festa",
+        "description": "Para comemorar cada lição concluída."
+      },
+      "orbi-crown": {
+        "name": "Coroa Real",
+        "description": "Digna de quem domina o mundo inteiro."
+      },
+      "orbi-halo": {
+        "name": "Auréola",
+        "description": "Um anel dourado flutuante, quase divino."
+      },
+      "orbi-glasses": {
+        "name": "Óculos de Estudo",
+        "description": "Para ler mapas com atenção."
+      },
+      "orbi-sunglasses": {
+        "name": "Óculos Escuros",
+        "description": "Estilo tropical para dias de sol."
+      },
+      "orbi-monocle": {
+        "name": "Monóculo",
+        "description": "Elegância de cartógrafo do século XIX."
+      },
+      "orbi-scarf": {
+        "name": "Cachecol Coral",
+        "description": "Conforto para expedições geladas."
+      },
+      "orbi-bowtie": {
+        "name": "Gravata-borboleta",
+        "description": "Chique para ocasiões especiais."
+      },
+      "orbi-headphones": {
+        "name": "Fones de Ouvido",
+        "description": "Trilha sonora para a volta ao mundo."
+      },
+      "orbi-winter": {
+        "name": "Conjunto de Inverno",
+        "description": "Gorro e cachecol combinando, por tempo limitado."
+      },
+      "avatar-explorer": {
+        "name": "Explorador",
+        "description": "O fundo laranja-coral original do seu perfil."
+      },
+      "avatar-ocean": {
+        "name": "Oceano",
+        "description": "Fundo em azuis profundos."
+      },
+      "avatar-forest": {
+        "name": "Floresta",
+        "description": "Verdes vivos de mata fechada."
+      },
+      "avatar-sand": {
+        "name": "Deserto",
+        "description": "Tons quentes de areia e dunas."
+      },
+      "avatar-mint": {
+        "name": "Menta",
+        "description": "Verde-água fresco e leve."
+      },
+      "avatar-slate": {
+        "name": "Ardósia",
+        "description": "Cinza-azulado sóbrio."
+      },
+      "avatar-sunset": {
+        "name": "Entardecer",
+        "description": "Laranja e rosa de fim de tarde."
+      },
+      "avatar-lagoon": {
+        "name": "Lagoa",
+        "description": "Turquesa e azul de água cristalina."
+      },
+      "avatar-rose": {
+        "name": "Rosa",
+        "description": "Fundo rosado delicado."
+      },
+      "avatar-berry": {
+        "name": "Amora",
+        "description": "Roxo intenso de frutas silvestres."
+      },
+      "avatar-midnight": {
+        "name": "Meia-noite",
+        "description": "Azul-marinho profundo e discreto."
+      },
+      "avatar-ember": {
+        "name": "Brasa",
+        "description": "Laranja incandescente."
+      },
+      "avatar-aurora": {
+        "name": "Aurora",
+        "description": "Gradiente turquesa-violeta como o céu polar."
+      },
+      "avatar-royal": {
+        "name": "Real",
+        "description": "Azul-royal com presença."
+      },
+      "avatar-gold": {
+        "name": "Dourado",
+        "description": "Ouro puro para perfis lendários."
+      },
+      "avatar-nebula": {
+        "name": "Nebulosa",
+        "description": "Roxo cósmico com brilho turquesa."
+      },
+      "avatar-prism": {
+        "name": "Prisma",
+        "description": "Todas as cores do Flaggo em um fundo só."
+      },
+      "avatar-carnival": {
+        "name": "Carnaval",
+        "description": "Festa de cores por tempo limitado."
       },
       "effect-none": {
         "name": "Nenhum",

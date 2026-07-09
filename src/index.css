@@ -4,49 +4,49 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  /* Flaggo brand palette with a quiet cartographic surface. */
-  --fa-background: #eef6f7;
+  /* Flaggo Light — tokens oficiais do design final (Flaggo App Design). */
+  --fa-background: #eaf2f8;
   --fa-surface: #ffffff;
-  --fa-surface-raised: #f7fbfb;
-  --fa-surface-2: #f7fbfb;
-  --fa-text: #16231d;
-  --fa-text-2: #3d4d44;
-  --fa-text-muted: #5c6b62;
-  --fa-text-faint: #8a917f;
-  --fa-primary: #0e8ca1;
-  --fa-primary-hover: #0b7284;
+  --fa-surface-raised: #f4f8fb;
+  --fa-surface-2: #e6eef6;
+  --fa-text: #0f2a44;
+  --fa-text-2: #33475a;
+  --fa-text-muted: #5e7385;
+  --fa-text-faint: #8da0b0;
+  --fa-primary: #0c97ad;
+  --fa-primary-hover: #0a7e90;
   --fa-primary-foreground: #ffffff;
-  --fa-primary-soft: #ddf4f7;
-  --fa-accent: #ffc53d;
-  --fa-accent-foreground: #855e00;
-  --fa-accent-soft: #fff3c9;
-  --fa-success: #2fb98a;
-  --fa-success-soft: #e1f6ef;
-  --fa-warning: #c9911f;
-  --fa-danger: #ff6f61;
-  --fa-danger-soft: #ffe8e5;
-  --fa-border: #dcebed;
-  --fa-border-strong: #c6dde1;
-  --fa-ring: #17b4c9;
-  --fa-progress: #ffc53d;
+  --fa-primary-soft: #d6f2f6;
+  --fa-accent: #f5a836;
+  --fa-accent-foreground: #8a5e06;
+  --fa-accent-soft: #fff3d6;
+  --fa-success: #22b07a;
+  --fa-success-soft: #e1f5ec;
+  --fa-warning: #f5a836;
+  --fa-coin: #e7a81e;
+  --fa-danger: #ff6f5c;
+  --fa-danger-soft: #ffe7e2;
+  --fa-border: #e3eaf1;
+  --fa-border-strong: #cfdbe7;
+  --fa-ring: #12c2d6;
+  --fa-progress: #f5a836;
   --fa-bronze: #c88a52;
   --fa-silver: #98a3aa;
   --fa-gold: #c1901f;
   --fa-platinum: #34c07d;
-  --fa-contour-color: rgba(14, 140, 161, 0.055);
-  --fa-contour-accent: rgba(255, 197, 61, 0.08);
-  --fa-shadow-card: 0 2px 4px rgba(22, 35, 29, 0.04),
-    0 24px 44px -30px rgba(22, 35, 29, 0.45);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
-  --fa-shadow-flag: 0 16px 34px -18px rgba(22, 35, 29, 0.55);
+  --fa-contour-color: rgba(12, 151, 173, 0.14);
+  --fa-contour-accent: rgba(255, 194, 75, 0.16);
+  --fa-shadow-card: 0 2px 4px rgba(15, 42, 68, 0.05),
+    0 24px 44px -30px rgba(15, 42, 68, 0.45);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-shadow-flag: 0 16px 34px -18px rgba(15, 42, 68, 0.55);
 
-  /* Desktop sidebar rail — a deep, atmospheric dark surface shared by every
-     theme so the navigation reads as part of the game (never a bright SaaS
-     panel). Defined once here; all [data-theme] blocks inherit it. */
-  --fa-sidebar: #12303b;
-  --fa-sidebar-raised: #183f4d;
-  --fa-sidebar-fg: #eaf6f8;
-  --fa-sidebar-fg-muted: #93b5bd;
+  /* Trilho de navegação desktop — marinho profundo em todos os temas,
+     para a navegação ler como parte do jogo. */
+  --fa-sidebar: #0f2a44;
+  --fa-sidebar-raised: #173a5c;
+  --fa-sidebar-fg: #eaf2f8;
+  --fa-sidebar-fg-muted: #9fb4c7;
 
   color-scheme: light;
   font-synthesis: none;
@@ -55,40 +55,46 @@
 }
 
 [data-theme="dark"] {
-  --fa-background: #071f26;
-  --fa-surface: #102d35;
-  --fa-surface-raised: #153844;
-  --fa-surface-2: #183f4d;
-  --fa-text: #eaf6f8;
-  --fa-text-2: #cfe4e8;
-  --fa-text-muted: #9fbdc5;
-  --fa-text-faint: #71949d;
-  --fa-primary: #17b4c9;
-  --fa-primary-hover: #0e8ca1;
-  --fa-primary-foreground: #08242c;
-  --fa-primary-soft: #12303b;
-  --fa-accent: #ffc53d;
-  --fa-accent-foreground: #ffd66c;
-  --fa-accent-soft: #302811;
-  --fa-success: #2fb98a;
-  --fa-success-soft: #103c35;
-  --fa-warning: #ffc53d;
-  --fa-danger: #ff7f73;
-  --fa-danger-soft: #40211f;
-  --fa-border: #244b55;
-  --fa-border-strong: #315e69;
-  --fa-ring: #17b4c9;
-  --fa-progress: #ffc53d;
-  --fa-contour-color: rgba(23, 180, 201, 0.085);
-  --fa-contour-accent: rgba(255, 197, 61, 0.07);
+  /* Flaggo Night */
+  --fa-background: #0a1e33;
+  --fa-surface: #102a44;
+  --fa-surface-raised: #143452;
+  --fa-surface-2: #193f60;
+  --fa-text: #eaf2f8;
+  --fa-text-2: #c3d6e6;
+  --fa-text-muted: #9fb4c7;
+  --fa-text-faint: #7e93a5;
+  --fa-primary: #12c2d6;
+  --fa-primary-hover: #0c97ad;
+  --fa-primary-foreground: #062a33;
+  --fa-primary-soft: #0e3a50;
+  --fa-accent: #ffc24b;
+  --fa-accent-foreground: #ffd98a;
+  --fa-accent-soft: #33280f;
+  --fa-success: #22b07a;
+  --fa-success-soft: #12382e;
+  --fa-warning: #ffc24b;
+  --fa-coin: #ffc24b;
+  --fa-danger: #ff8574;
+  --fa-danger-soft: #40211c;
+  --fa-border: #244b6b;
+  --fa-border-strong: #315e7f;
+  --fa-ring: #12c2d6;
+  --fa-progress: #ffc24b;
+  --fa-contour-color: rgba(18, 194, 214, 0.1);
+  --fa-contour-accent: rgba(255, 194, 75, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.18),
     0 24px 44px -30px rgba(0, 0, 0, 0.85);
-  --fa-shadow-btn: 0 7px 0 #0e8ca1;
+  --fa-shadow-btn: 0 6px 0 #0c97ad;
   --fa-shadow-flag: 0 18px 38px -18px rgba(0, 0, 0, 0.85);
+  --fa-sidebar: #0c2238;
+  --fa-sidebar-raised: #16344f;
 
   color-scheme: dark;
 }
 
+/* Tema cosmético "Cartógrafo" (id legado: theme-mapa-antigo) —
+   pergaminho e sépia; o único tema onde a textura de mapa pode voltar. */
 [data-theme="mapa-antigo"] {
   --fa-background: #efe6d2;
   --fa-surface: #fbf6ea;
@@ -108,6 +114,7 @@
   --fa-success: #4d7c2f;
   --fa-success-soft: #e5efd8;
   --fa-warning: #b45309;
+  --fa-coin: #b8863b;
   --fa-danger: #b23a2e;
   --fa-danger-soft: #f3ddd5;
   --fa-border: #d8c6a5;
@@ -118,45 +125,54 @@
   --fa-contour-accent: rgba(184, 134, 59, 0.09);
   --fa-shadow-card: 0 2px 4px rgba(74, 56, 38, 0.05),
     0 24px 44px -30px rgba(74, 56, 38, 0.48);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-sidebar: #3a2c1c;
+  --fa-sidebar-raised: #4c3a26;
+  --fa-sidebar-fg: #f7f0e0;
+  --fa-sidebar-fg-muted: #c9b795;
 
   color-scheme: light;
 }
 
+/* Tema cosmético "Sunset" (id legado: theme-neon) — entardecer quente. */
 [data-theme="neon"] {
-  --fa-background: #0a0a16;
-  --fa-surface: #14142a;
-  --fa-surface-raised: #1d1d3d;
-  --fa-surface-2: #1d1d3d;
-  --fa-text: #eef0ff;
-  --fa-text-2: #c9cdfa;
-  --fa-text-muted: #9aa0d0;
-  --fa-text-faint: #757ab0;
-  --fa-primary: #ff3fbf;
-  --fa-primary-hover: #d92b9e;
-  --fa-primary-foreground: #10001a;
-  --fa-primary-soft: #3a1233;
-  --fa-accent: #22d3ee;
-  --fa-accent-foreground: #67e8f9;
-  --fa-accent-soft: #102f3b;
-  --fa-success: #39ff88;
-  --fa-success-soft: #123824;
-  --fa-warning: #ffd23f;
-  --fa-danger: #ff5470;
-  --fa-danger-soft: #3b1620;
-  --fa-border: #33336a;
-  --fa-border-strong: #47478a;
-  --fa-ring: #ff5ccd;
-  --fa-progress: #22d3ee;
-  --fa-contour-color: rgba(255, 63, 191, 0.07);
-  --fa-contour-accent: rgba(34, 211, 238, 0.08);
+  --fa-background: #241227;
+  --fa-surface: #331a33;
+  --fa-surface-raised: #40203c;
+  --fa-surface-2: #472345;
+  --fa-text: #fdeee4;
+  --fa-text-2: #f3d3c2;
+  --fa-text-muted: #d3a290;
+  --fa-text-faint: #a87d70;
+  --fa-primary: #ff8e53;
+  --fa-primary-hover: #e56f37;
+  --fa-primary-foreground: #33120a;
+  --fa-primary-soft: #4c2438;
+  --fa-accent: #ffc24b;
+  --fa-accent-foreground: #ffd98a;
+  --fa-accent-soft: #3f2b16;
+  --fa-success: #4bc088;
+  --fa-success-soft: #1d3a30;
+  --fa-warning: #ffc24b;
+  --fa-coin: #ffc24b;
+  --fa-danger: #ff6f8b;
+  --fa-danger-soft: #47202c;
+  --fa-border: #57305a;
+  --fa-border-strong: #6c3f6e;
+  --fa-ring: #ff9d6b;
+  --fa-progress: #ffc24b;
+  --fa-contour-color: rgba(255, 142, 83, 0.08);
+  --fa-contour-accent: rgba(255, 194, 75, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.22),
     0 24px 44px -30px rgba(0, 0, 0, 0.9);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-sidebar: #1b0d20;
+  --fa-sidebar-raised: #2c1631;
 
   color-scheme: dark;
 }
 
+/* Tema cosmético "Ocean" (id: theme-oceano) — azuis profundos do mar. */
 [data-theme="oceano"] {
   --fa-background: #06283d;
   --fa-surface: #0b3a56;
@@ -176,6 +192,7 @@
   --fa-success: #4ade80;
   --fa-success-soft: #123b2f;
   --fa-warning: #fbbf24;
+  --fa-coin: #fbbf24;
   --fa-danger: #f87171;
   --fa-danger-soft: #451e25;
   --fa-border: #1c5a7e;
@@ -186,45 +203,53 @@
   --fa-contour-accent: rgba(56, 189, 248, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.22),
     0 24px 44px -30px rgba(0, 0, 0, 0.9);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-sidebar: #041e30;
+  --fa-sidebar-raised: #0b3a56;
 
   color-scheme: dark;
 }
 
+/* Tema cosmético "Aurora" (id legado: theme-espaco) —
+   noite polar em índigo com luzes turquesa/violeta. */
 [data-theme="espaco"] {
-  --fa-background: #070713;
-  --fa-surface: #12122a;
-  --fa-surface-raised: #1b1b3a;
-  --fa-surface-2: #1b1b3a;
-  --fa-text: #e9e9ff;
-  --fa-text-2: #ccccfb;
-  --fa-text-muted: #9a9ac8;
-  --fa-text-faint: #7777a8;
-  --fa-primary: #8b7bff;
-  --fa-primary-hover: #715fe6;
-  --fa-primary-foreground: #0a0620;
-  --fa-primary-soft: #282249;
+  --fa-background: #0b1030;
+  --fa-surface: #151b45;
+  --fa-surface-raised: #1d2456;
+  --fa-surface-2: #1d2456;
+  --fa-text: #eaf0ff;
+  --fa-text-2: #ccd9fb;
+  --fa-text-muted: #9aa9d8;
+  --fa-text-faint: #7381b8;
+  --fa-primary: #4fd8c6;
+  --fa-primary-hover: #35b7a7;
+  --fa-primary-foreground: #06251f;
+  --fa-primary-soft: #163a4b;
   --fa-accent: #a78bfa;
   --fa-accent-foreground: #c4b5fd;
-  --fa-accent-soft: #282145;
+  --fa-accent-soft: #282155;
   --fa-success: #5eead4;
   --fa-success-soft: #143634;
   --fa-warning: #fcd34d;
+  --fa-coin: #fcd34d;
   --fa-danger: #fb7185;
-  --fa-danger-soft: #3d1a25;
-  --fa-border: #2b2b52;
-  --fa-border-strong: #3c3c70;
-  --fa-ring: #a99bff;
+  --fa-danger-soft: #3d1a2c;
+  --fa-border: #2b3462;
+  --fa-border-strong: #3c4680;
+  --fa-ring: #63e3d2;
   --fa-progress: #a78bfa;
-  --fa-contour-color: rgba(139, 123, 255, 0.07);
-  --fa-contour-accent: rgba(252, 211, 77, 0.07);
+  --fa-contour-color: rgba(79, 216, 198, 0.07);
+  --fa-contour-accent: rgba(167, 139, 250, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.24),
     0 24px 44px -30px rgba(0, 0, 0, 0.9);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-sidebar: #080c26;
+  --fa-sidebar-raised: #151b45;
 
   color-scheme: dark;
 }
 
+/* Tema cosmético "Biblioteca" — madeira e creme (extra do catálogo). */
 [data-theme="biblioteca"] {
   --fa-background: #ece3d4;
   --fa-surface: #f5efe3;
@@ -244,6 +269,7 @@
   --fa-success: #4d7c2f;
   --fa-success-soft: #e0ead4;
   --fa-warning: #a86523;
+  --fa-coin: #a97b45;
   --fa-danger: #a83a2e;
   --fa-danger-soft: #f1dad4;
   --fa-border: #d5c6ab;
@@ -254,11 +280,16 @@
   --fa-contour-accent: rgba(169, 123, 69, 0.08);
   --fa-shadow-card: 0 2px 4px rgba(58, 47, 37, 0.05),
     0 24px 44px -30px rgba(58, 47, 37, 0.45);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-sidebar: #33281d;
+  --fa-sidebar-raised: #453626;
+  --fa-sidebar-fg: #f5efe3;
+  --fa-sidebar-fg-muted: #c2b295;
 
   color-scheme: light;
 }
 
+/* Tema cosmético "Minimal" (id legado: theme-minimalista). */
 [data-theme="minimalista"] {
   --fa-background: #f6f6f7;
   --fa-surface: #ffffff;
@@ -278,6 +309,7 @@
   --fa-success: #2e7d32;
   --fa-success-soft: #e3f0e4;
   --fa-warning: #b26a00;
+  --fa-coin: #b26a00;
   --fa-danger: #c62828;
   --fa-danger-soft: #f4dddd;
   --fa-border: #e2e2e4;
@@ -288,7 +320,11 @@
   --fa-contour-accent: rgba(75, 75, 75, 0.04);
   --fa-shadow-card: 0 2px 4px rgba(26, 26, 26, 0.035),
     0 24px 44px -30px rgba(26, 26, 26, 0.35);
-  --fa-shadow-btn: 0 7px 0 var(--fa-primary-hover);
+  --fa-shadow-btn: 0 6px 0 var(--fa-primary-hover);
+  --fa-sidebar: #202022;
+  --fa-sidebar-raised: #333336;
+  --fa-sidebar-fg: #f6f6f7;
+  --fa-sidebar-fg-muted: #a5a5aa;
 
   color-scheme: light;
 }
@@ -319,6 +355,7 @@
   --color-ok: var(--fa-success);
   --color-ok-soft: var(--fa-success-soft);
   --color-warning: var(--fa-warning);
+  --color-coin: var(--fa-coin);
   --color-danger: var(--fa-danger);
   --color-danger-soft: var(--fa-danger-soft);
   --color-bad: var(--fa-danger);
@@ -354,8 +391,19 @@ body {
   height: 100%;
 }
 
+/* Fundo global limpo e premium: só dois brilhos muito sutis nos cantos.
+   Linhas cartográficas ficam restritas a splash/onboarding/cards especiais
+   (classe .fa-contour-detail) e ao tema Cartógrafo. */
 body {
   @apply bg-background font-sans text-text;
+  background-image:
+    radial-gradient(140% 105% at 100% -8%, color-mix(in srgb, var(--fa-ring) 5%, transparent), transparent 52%),
+    radial-gradient(120% 90% at 0% 108%, color-mix(in srgb, var(--fa-accent) 4%, transparent), transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Detalhe cartográfico opcional para hero cards, splash e fim de lição. */
+.fa-contour-detail {
   background-image:
     radial-gradient(circle at 12% 16%, var(--fa-contour-accent) 0 42px, transparent 43px 84px),
     repeating-radial-gradient(
@@ -368,7 +416,22 @@ body {
       transparent 0 62px,
       var(--fa-contour-color) 62px 63px
     );
-  background-attachment: fixed;
+}
+
+/* No tema Cartógrafo a textura de mapa volta como assinatura do tema. */
+[data-theme="mapa-antigo"] body {
+  background-image:
+    radial-gradient(circle at 12% 16%, var(--fa-contour-accent) 0 42px, transparent 43px 84px),
+    repeating-radial-gradient(
+      circle at 82% 18%,
+      transparent 0 46px,
+      var(--fa-contour-color) 46px 47px
+    ),
+    repeating-radial-gradient(
+      circle at 18% 86%,
+      transparent 0 62px,
+      var(--fa-contour-color) 62px 63px
+    );
 }
 
 ::selection {

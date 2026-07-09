@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BrandImage } from "@/shared/brand/BrandImage";
+import { FlaggoLogo } from "@/shared/brand/FlaggoLogo";
 
 type AnimatedSplashProps = {
   onDone: () => void;
@@ -52,7 +53,7 @@ export function AnimatedSplash({ onDone, reduceMotion = false }: AnimatedSplashP
       </div>
 
       <div className={`text-center ${reduceMotion ? "" : "fa-onb-word"}`}>
-        <BrandImage asset="wordmark" alt={t("app.name")} className="mx-auto h-10 w-auto invert" />
+        <FlaggoLogo size={40} className="mx-auto text-sidebar-fg" />
         <p className="mt-3 text-base font-extrabold text-sidebar-fg">
           {t("onboarding.splash.tagline")}
         </p>

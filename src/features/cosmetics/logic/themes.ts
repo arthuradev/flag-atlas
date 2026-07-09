@@ -9,8 +9,15 @@ import type { ThemePreference } from "@/entities/settings/settings.types";
  * visual). Temas desconhecidos caem no padrão com segurança.
  */
 
-/** Valor de data-theme (CSS) para cada tema cosmético especial. */
+/**
+ * Valor de data-theme (CSS) para cada tema cosmético especial.
+ * Ids legados mantidos por compatibilidade de inventário; o nome visível
+ * mudou no rebrand (theme-neon virou "Sunset", theme-espaco virou "Aurora",
+ * theme-mapa-antigo virou "Cartógrafo").
+ */
 export const SPECIAL_THEME_DATA: Record<string, string> = {
+  "theme-flaggo-light": "light",
+  "theme-flaggo-night": "dark",
   "theme-mapa-antigo": "mapa-antigo",
   "theme-neon": "neon",
   "theme-oceano": "oceano",

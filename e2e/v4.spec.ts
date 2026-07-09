@@ -36,9 +36,9 @@ test.describe("home v4", () => {
     await page.goto("./");
 
     await expect(getMainTrainingCta(page)).toBeVisible();
-    // Entrada da Loja com saldo visível.
+    // Entrada da Loja com saldo visível (sidebar no desktop, chip de moedas no mobile).
     const shopLink = page.getByRole("link", { name: /Loja/ });
-    await expect(shopLink).toBeVisible();
+    await expect(shopLink.first()).toBeVisible();
     await expect(page.getByTestId("coin-balance").first()).toContainText("120");
   });
 });
@@ -50,9 +50,11 @@ test.describe("shop v4", () => {
     await page.goto("./#/shop");
 
     await expect(page.getByRole("heading", { name: "Loja", exact: true })).toBeVisible();
-    for (const category of ["Temas", "Sons", "Molduras", "Efeitos"]) {
-      await expect(page.getByRole("heading", { name: category })).toBeVisible();
+    // A Loja Flaggo tem exatamente 4 categorias: sem power-ups nem expedições.
+    for (const category of ["Cosméticos do Orbi", "Meu Avatar", "Temas", "Molduras"]) {
+      await expect(page.getByRole("button", { name: category })).toBeVisible();
     }
+    await expect(page.getByRole("button", { name: /Sons|Efeitos|XP em dobro/ })).toHaveCount(0);
     await expect(page.getByTestId("coin-balance").first()).toContainText("300");
     // Deixa claro que não há dinheiro real.
     await expect(page.getByText("Sem dinheiro real")).toBeVisible();
@@ -63,6 +65,7 @@ test.describe("shop v4", () => {
     await seedCosmetics(page, { coins: 300 });
     await page.goto("./#/shop");
 
+    await page.getByRole("button", { name: "Temas" }).click();
     const oceanCard = page.locator('[data-item-id="theme-oceano"]');
 
     // Antes: não possuído.
@@ -87,6 +90,7 @@ test.describe("shop v4", () => {
     await seedCosmetics(page, { coins: 0 });
     await page.goto("./#/shop");
 
+    await page.getByRole("button", { name: "Temas" }).click();
     const oceanCard = page.locator('[data-item-id="theme-oceano"]');
     await expect(oceanCard).toHaveAttribute("data-owned", "false");
     // Sem saldo: o botão Comprar fica desabilitado.
@@ -97,6 +101,7 @@ test.describe("shop v4", () => {
     await skipOnboarding(page);
     await page.goto("./#/shop");
 
+    await page.getByRole("button", { name: "Temas" }).click();
     const defaultTheme = page.locator('[data-item-id="theme-default"]');
     await expect(defaultTheme).toHaveAttribute("data-owned", "true");
     await expect(defaultTheme).toHaveAttribute("data-equipped", "true");

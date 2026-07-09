@@ -1,5 +1,11 @@
 import { expect, type Page, test } from "@playwright/test";
-import { answerFullSession, getMainTrainingCta, seedSessionSize, skipOnboarding } from "./helpers";
+import {
+  answerFirstOption,
+  answerFullSession,
+  getMainTrainingCta,
+  seedSessionSize,
+  skipOnboarding,
+} from "./helpers";
 
 /**
  * Remove a Web Share API e troca o clipboard por um stub gravável,
@@ -31,7 +37,7 @@ async function playSurvivalToTheEnd(page: Page): Promise<void> {
     if (await endHeading.isVisible()) {
       return;
     }
-    await option.click();
+    await answerFirstOption(page);
     await page.getByRole("button", { name: "Continuar", exact: true }).click();
   }
   await expect(endHeading).toBeVisible();
@@ -65,7 +71,10 @@ test.describe("home v3", () => {
     await expect(page.getByTestId("daily-missions").getByRole("listitem")).toHaveCount(3);
     // Sem atividade hoje: nada de streak, sem culpa.
     await expect(page.getByTestId("daily-streak")).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "Conquistas" })).toBeVisible();
+    // Conquistas acessível pela sidebar (desktop) ou dentro do Perfil (mobile).
+    const achievementsLink = page.getByRole("link", { name: "Conquistas" });
+    const profileTab = page.getByRole("link", { name: "Perfil" });
+    await expect(achievementsLink.or(profileTab).first()).toBeVisible();
   });
 });
 
@@ -94,8 +103,16 @@ test.describe("daily missions, streak and achievements flow", () => {
     await page.getByRole("button", { name: "Voltar ao início" }).click();
     await expect(page.getByTestId("daily-streak")).toContainText("1 dia explorando o mundo");
 
-    // Página de conquistas reflete o desbloqueio.
-    await page.getByRole("link", { name: "Conquistas" }).click();
+    // Página de conquistas reflete o desbloqueio. No mobile, Conquistas não
+    // tem aba própria: o caminho é pelo Perfil.
+    const achievementsLink = page.getByRole("link", { name: "Conquistas" }).first();
+    if (!(await achievementsLink.isVisible())) {
+      await page
+        .getByRole("navigation", { name: "Navegação principal" })
+        .getByRole("link", { name: "Perfil" })
+        .click();
+    }
+    await page.getByRole("link", { name: "Conquistas" }).first().click();
     await expect(page.getByRole("heading", { name: "Conquistas" })).toBeVisible();
     await expect(page.getByTestId("achievement-card")).toHaveCount(20);
     const firstSteps = page.getByTestId("achievement-card").filter({ hasText: "Primeiros Passos" });

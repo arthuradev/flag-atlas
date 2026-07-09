@@ -9,6 +9,7 @@ import { VisualEffectBurst } from "@/features/cosmetics/components/VisualEffectB
 import { flagFrameClass } from "@/features/cosmetics/logic/flagFrames";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
 import { MasteryBadge } from "@/features/progress/components/MasteryBadge";
+import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { ExerciseBody } from "@/features/training/components/exercises/ExerciseBody";
 import {
@@ -131,9 +132,11 @@ type TrainingFeedbackBarProps = {
   isTyping: boolean;
   country: Country;
   selectedCountry: Country | undefined;
+  canVerify: boolean;
   locale: Locale;
   onContinue: () => void;
   onSkip: () => void;
+  onVerify: () => void;
 };
 
 function FeedbackDetail({ children }: { children: ReactNode }) {
@@ -145,9 +148,11 @@ function TrainingFeedbackBar({
   isTyping,
   country,
   selectedCountry,
+  canVerify,
   locale,
   onContinue,
   onSkip,
+  onVerify,
 }: TrainingFeedbackBarProps) {
   const { t } = useTranslation();
   const countryName = getCountryName(country, locale);
@@ -252,11 +257,30 @@ function TrainingFeedbackBar({
               {t("common.continue")}
             </Button>
           </motion.div>
-        ) : (
+        ) : isTyping ? (
           <div className="flex min-h-16 items-center justify-center rounded-card border border-dashed border-line bg-surface/70 px-4 sm:min-h-20">
             <Button variant="secondary" size="md" onClick={onSkip}>
               {t("training.skip")}
             </Button>
+          </div>
+        ) : (
+          <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 rounded-card border border-dashed border-line bg-surface/70 px-4 py-2.5 sm:min-h-20">
+            <span className="hidden text-sm font-bold text-text-muted sm:block">
+              {t("training.answerPrompt")}
+            </span>
+            <div className="flex flex-1 items-center justify-end gap-2.5 sm:flex-none">
+              <Button variant="ghost" size="md" onClick={onSkip}>
+                {t("training.skip")}
+              </Button>
+              <Button
+                size="md"
+                disabled={!canVerify}
+                onClick={onVerify}
+                className="uppercase tracking-[0.05em]"
+              >
+                {t("training.verify")}
+              </Button>
+            </div>
           </div>
         )}
       </div>
@@ -333,7 +357,10 @@ export function TrainingPage() {
   const flagFrameId = useEquippedId("flagFrame");
   const [effectKey, setEffectKey] = useState(0);
   const [isExitDialogOpen, setExitDialogOpen] = useState(false);
+  // Seleção pendente do fluxo "selecionar e verificar" (só alternativas).
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const { session, feedback, sessionXp, currentStreak, summary } = useSessionStore();
+  const progressCountries = useProgressStore((state) => state.progress.countries);
   const startSession = useSessionStore((state) => state.startSession);
   const answerCurrentQuestion = useSessionStore((state) => state.answerCurrentQuestion);
   const answerCurrentQuestionTyped = useSessionStore((state) => state.answerCurrentQuestionTyped);
@@ -359,6 +386,12 @@ export function TrainingPage() {
       void (feedback.isCorrect ? hapticSuccess() : hapticError());
     }
   }, [feedback]);
+
+  // Nova pergunta limpa a seleção pendente.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: currentIndex é o gatilho intencional.
+  useEffect(() => {
+    setSelectedOptionId(null);
+  }, [session?.currentIndex]);
 
   useEffect(() => {
     if (feedback?.isCorrect) {
@@ -413,6 +446,9 @@ export function TrainingPage() {
 
   const question = session.questions[session.currentIndex];
   const country = question ? getCountryById(question.countryId) : undefined;
+  const isNewFlag = question
+    ? (progressCountries[question.countryId]?.seenCount ?? 0) === 0
+    : false;
   // Tipo por pergunta, com fallback para sessões legadas sem anotação.
   const exerciseType =
     question?.exerciseType ?? session.config.exerciseType ?? deriveExerciseType(session.config);
@@ -491,46 +527,48 @@ export function TrainingPage() {
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="mx-auto flex min-h-full max-w-5xl flex-col justify-center gap-2 sm:gap-3"
         >
-          <h1 className="shrink-0 text-center text-lg font-black sm:text-2xl">
-            {t(
-              exerciseFormat === "typing"
-                ? "typing.prompt"
-                : exerciseFormat === "country_to_flag"
-                  ? "training.whichFlag"
-                  : "training.whichCountry",
-            )}
-          </h1>
-
-          <div
-            className={`relative mx-auto flex h-[clamp(7rem,22dvh,10rem)] w-full max-w-3xl shrink-0 items-center justify-center overflow-hidden rounded-card border border-line bg-surface p-2 shadow-flag sm:h-[clamp(9rem,30dvh,18rem)] sm:p-4 lg:h-[clamp(11rem,34dvh,22rem)] ${
-              exerciseFormat === "country_to_flag" ? "" : flagFrameClass(flagFrameId)
-            }`}
-          >
-            {exerciseFormat === "country_to_flag" ? (
-              <span
-                data-testid="training-country-name"
-                className="px-4 text-center text-2xl font-black sm:text-4xl"
-              >
+          {isNewFlag && (
+            <span className="mx-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-pine-soft px-3 py-1 text-[0.62rem] font-extrabold uppercase tracking-[0.14em] text-primary">
+              <Icon name="sparkles" size={12} />
+              {t("training.newFlag")}
+            </span>
+          )}
+          {exerciseFormat === "country_to_flag" ? (
+            <h1 className="relative shrink-0 px-2 text-center text-xl font-black sm:text-3xl">
+              {t("training.whichFlagOfPrefix")}{" "}
+              <span data-testid="training-country-name" className="text-primary">
                 {getCountryName(country, locale)}
               </span>
-            ) : (
-              <FlagImage
-                key={question.countryId}
-                flagPath={country.flagPath}
-                alt={t("training.flagAlt")}
-                className="max-h-full max-w-full rounded-lg object-contain shadow-flag"
-              />
-            )}
-            <VisualEffectBurst playKey={effectKey} className="rounded-card" />
-          </div>
+              {t("training.whichFlagOfSuffix")}
+              <VisualEffectBurst playKey={effectKey} className="rounded-card" />
+            </h1>
+          ) : (
+            <>
+              <h1 className="shrink-0 text-center text-lg font-black sm:text-2xl">
+                {t(exerciseFormat === "typing" ? "typing.prompt" : "training.whichCountry")}
+              </h1>
+              <div
+                className={`relative mx-auto flex h-[clamp(7rem,22dvh,10rem)] w-full max-w-3xl shrink-0 items-center justify-center overflow-hidden rounded-card border border-line bg-surface p-2 shadow-flag sm:h-[clamp(9rem,30dvh,18rem)] sm:p-4 lg:h-[clamp(11rem,34dvh,22rem)] ${flagFrameClass(flagFrameId)}`}
+              >
+                <FlagImage
+                  key={question.countryId}
+                  flagPath={country.flagPath}
+                  alt={t("training.flagAlt")}
+                  className="max-h-full max-w-full rounded-lg object-contain shadow-flag"
+                />
+                <VisualEffectBurst playKey={effectKey} className="rounded-card" />
+              </div>
+            </>
+          )}
 
           <ExerciseBody
             question={question}
             questionIndex={session.currentIndex}
             exerciseType={exerciseType}
             feedback={feedback}
+            selectedId={selectedOptionId}
             locale={locale}
-            onSelectOption={answerCurrentQuestion}
+            onSelectOption={setSelectedOptionId}
             onSubmitTyped={answerCurrentQuestionTyped}
           />
         </motion.div>
@@ -541,9 +579,15 @@ export function TrainingPage() {
         isTyping={isTyping}
         country={country}
         selectedCountry={selectedCountry}
+        canVerify={selectedOptionId !== null}
         locale={locale}
         onContinue={advance}
         onSkip={skipCurrentQuestion}
+        onVerify={() => {
+          if (selectedOptionId) {
+            answerCurrentQuestion(selectedOptionId);
+          }
+        }}
       />
 
       <TrainingExitDialog

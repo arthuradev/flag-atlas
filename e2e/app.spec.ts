@@ -103,8 +103,11 @@ test.describe("training session", () => {
     await seedSessionSize(page, 5);
     await page.goto("./#/training");
 
+    // Fluxo em duas etapas: selecionar marca a alternativa, Verificar responde.
     const option = page.getByTestId("training-option").first();
     await option.click();
+    await expect(option).toHaveAttribute("data-state", "selected");
+    await page.getByRole("button", { name: "Verificar", exact: true }).click();
 
     // Sempre há exatamente uma alternativa marcada como correta.
     await expect(page.locator("[data-testid='training-option'][data-state='correct']")).toHaveCount(
@@ -141,7 +144,8 @@ test.describe("collection", () => {
     await expect(page.getByText("Brasil")).toBeVisible();
 
     await page.getByRole("searchbox").fill("");
-    await page.getByLabel("Continente").selectOption("oceania");
+    // Filtro por continente agora é um chip, não um select.
+    await page.getByRole("button", { name: "Oceania" }).click();
     await expect(page.getByText("14 países")).toBeVisible();
   });
 });

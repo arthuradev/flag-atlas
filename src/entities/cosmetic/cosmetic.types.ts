@@ -8,11 +8,23 @@
 
 import type { IconName } from "@/shared/components/Icon";
 
-export const COSMETIC_TYPES = ["theme", "soundPack", "flagFrame", "visualEffect"] as const;
+/**
+ * Tipos internos de cosmético. "orbiCosmetic" e "avatarCosmetic" chegaram com
+ * a Loja Flaggo; soundPack e visualEffect seguem funcionais mas fora da UI da
+ * Loja. A categoria visual da Loja vive em shop.categories.ts.
+ */
+export const COSMETIC_TYPES = [
+  "theme",
+  "soundPack",
+  "flagFrame",
+  "visualEffect",
+  "orbiCosmetic",
+  "avatarCosmetic",
+] as const;
 
 export type CosmeticType = (typeof COSMETIC_TYPES)[number];
 
-export const COSMETIC_RARITIES = ["common", "rare", "epic", "legendary"] as const;
+export const COSMETIC_RARITIES = ["common", "rare", "epic", "legendary", "seasonal"] as const;
 
 export type CosmeticRarity = (typeof COSMETIC_RARITIES)[number];
 
@@ -38,6 +50,8 @@ export type CosmeticEquipped = {
   soundPackId: string;
   flagFrameId: string;
   visualEffectId: string;
+  orbiCosmeticId: string;
+  avatarCosmeticId: string;
 };
 
 export type CosmeticInventory = {
@@ -54,6 +68,8 @@ export const DEFAULT_COSMETIC_IDS: Record<CosmeticType, string> = {
   soundPack: "sound-default",
   flagFrame: "frame-default",
   visualEffect: "effect-none",
+  orbiCosmetic: "orbi-classic",
+  avatarCosmetic: "avatar-explorer",
 };
 
 /** Mapeia um tipo de cosmético para a chave correspondente em CosmeticEquipped. */
@@ -62,6 +78,8 @@ export const EQUIPPED_KEY_BY_TYPE: Record<CosmeticType, keyof CosmeticEquipped> 
   soundPack: "soundPackId",
   flagFrame: "flagFrameId",
   visualEffect: "visualEffectId",
+  orbiCosmetic: "orbiCosmeticId",
+  avatarCosmetic: "avatarCosmeticId",
 };
 
 export function createInitialCosmeticEquipped(): CosmeticEquipped {
@@ -70,6 +88,8 @@ export function createInitialCosmeticEquipped(): CosmeticEquipped {
     soundPackId: DEFAULT_COSMETIC_IDS.soundPack,
     flagFrameId: DEFAULT_COSMETIC_IDS.flagFrame,
     visualEffectId: DEFAULT_COSMETIC_IDS.visualEffect,
+    orbiCosmeticId: DEFAULT_COSMETIC_IDS.orbiCosmetic,
+    avatarCosmeticId: DEFAULT_COSMETIC_IDS.avatarCosmetic,
   };
 }
 

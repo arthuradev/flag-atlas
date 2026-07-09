@@ -12,6 +12,7 @@ type ExerciseBodyProps = {
   questionIndex: number;
   exerciseType: ExerciseType;
   feedback: AnswerFeedback | null;
+  selectedId: string | null;
   locale: Locale;
   onSelectOption: (countryId: string) => void;
   onSubmitTyped: (typedAnswer: string) => void;
@@ -23,6 +24,7 @@ export function ExerciseBody({
   questionIndex,
   exerciseType,
   feedback,
+  selectedId,
   locale,
   onSelectOption,
   onSubmitTyped,
@@ -44,6 +46,7 @@ export function ExerciseBody({
       <FlagOptionsGrid
         question={question}
         feedback={feedback}
+        selectedId={selectedId}
         locale={locale}
         onSelect={onSelectOption}
       />
@@ -54,6 +57,7 @@ export function ExerciseBody({
     <ChoiceOptionsGrid
       question={question}
       feedback={feedback}
+      selectedId={selectedId}
       locale={locale}
       onSelect={onSelectOption}
     />

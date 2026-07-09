@@ -3,7 +3,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { isContinentId } from "@/entities/continent/continent.types";
 import { listCountriesByContinent } from "@/entities/country/country.selectors";
 import { countLearnedCountriesIn } from "@/entities/progress/progress.selectors";
-import { CountryListItem } from "@/features/collection/components/CountryListItem";
+import { CountryCard } from "@/features/collection/components/CountryCard";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useStartSession } from "@/features/training/hooks/useStartSession";
@@ -11,6 +11,10 @@ import { Button } from "@/shared/components/Button";
 import { PageShell } from "@/shared/components/PageShell";
 import { ProgressBar } from "@/shared/components/ProgressBar";
 import { CONTINENTS } from "@/shared/data/continents";
+import { COUNTRIES } from "@/shared/data/countries";
+
+/** Número estável do país na Pokédex (ordem canônica do dataset). */
+const COUNTRY_NUMBERS = new Map(COUNTRIES.map((country, index) => [country.id, index + 1]));
 
 export function ContinentPage() {
   const { t } = useTranslation();
@@ -62,11 +66,12 @@ export function ContinentPage() {
           {t("continents.trainContinent")}
         </Button>
 
-        <ul className="flex flex-col gap-2">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {countries.map((country) => (
-            <CountryListItem
+            <CountryCard
               key={country.id}
               country={country}
+              number={COUNTRY_NUMBERS.get(country.id) ?? 0}
               progress={progress.countries[country.id]}
               locale={locale}
             />
