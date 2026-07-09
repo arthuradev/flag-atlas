@@ -22,12 +22,20 @@ import { useProgressStore } from "@/features/progress/store/progressStore";
 import { Icon } from "@/shared/components/Icon";
 import { PageTransition } from "@/shared/components/PageTransition";
 
+/** Tinta da zona de arte por categoria (linguagem do design). */
+const CATEGORY_TINT: Record<ShopCategory, string> = {
+  orbi: "#12C2D6",
+  avatar: "#FF6F5C",
+  themes: "#8A79D6",
+  frames: "#E7A81E",
+};
+
 const RARITY_CHIP_CLASSES: Record<CosmeticRarity, string> = {
   common: "bg-surface-2 text-text-muted",
-  rare: "bg-pine-soft text-primary",
-  epic: "bg-[#8B5CF6]/15 text-[#7C3AED] dark:text-[#C4B5FD]",
-  legendary: "bg-accent-soft text-ocre-ink",
-  seasonal: "bg-danger-soft text-danger",
+  rare: "bg-[#12C2D6] text-[#062A33]",
+  epic: "bg-[#8A79D6] text-white",
+  legendary: "bg-[#FFC24B] text-[#5A3D06]",
+  seasonal: "bg-[#FF6F5C] text-white",
 };
 
 /** Item em destaque: o primeiro épico/lendário ainda não possuído da vitrine. */
@@ -39,35 +47,22 @@ const FEATURED_CANDIDATE_IDS = [
   "theme-espaco",
 ];
 
-function RarityChip({ rarity }: { rarity: CosmeticRarity }) {
-  const { t } = useTranslation();
-  return (
-    <span
-      className={`rounded-full px-2 py-0.5 text-[0.6rem] font-extrabold uppercase tracking-wide ${RARITY_CHIP_CLASSES[rarity]}`}
-    >
-      {t(`cosmetics.rarity.${rarity}`)}
-    </span>
-  );
-}
-
 type ShopItemCardProps = {
   item: CosmeticItem;
+  tint: string;
   owned: boolean;
   equipped: boolean;
   affordable: boolean;
-  selected: boolean;
-  onSelect: (id: string) => void;
   onBuy: (id: string) => void;
   onEquip: (id: string) => void;
 };
 
 function ShopItemCard({
   item,
+  tint,
   owned,
   equipped,
   affordable,
-  selected,
-  onSelect,
   onBuy,
   onEquip,
 }: ShopItemCardProps) {
@@ -80,55 +75,51 @@ function ShopItemCard({
       data-item-id={item.id}
       data-owned={owned}
       data-equipped={equipped}
-      className={`flex flex-col gap-3 rounded-card border bg-surface p-4 shadow-card transition ${
-        equipped ? "border-primary" : selected ? "border-ring" : "border-line"
+      className={`relative overflow-hidden rounded-2xl border bg-surface shadow-card transition hover:-translate-y-0.5 hover:shadow-lg ${
+        equipped ? "border-primary" : "border-line"
       }`}
     >
-      <button
-        type="button"
-        onClick={() => onSelect(item.id)}
-        aria-pressed={selected}
-        className="flex cursor-pointer items-start gap-3 rounded-btn text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      {item.rarity && item.rarity !== "common" && (
+        <span
+          className={`absolute left-2.5 top-2.5 z-[1] rounded-full px-2 py-[3px] text-[9.5px] font-black uppercase tracking-[0.05em] ${RARITY_CHIP_CLASSES[item.rarity]}`}
+        >
+          {t(`cosmetics.rarity.${item.rarity}`)}
+        </span>
+      )}
+
+      <div
+        className="flex h-24 items-center justify-center"
+        style={{ background: `linear-gradient(150deg, ${tint}20, ${tint}0a)` }}
       >
         <CosmeticPreview item={item} />
-        <span className="min-w-0 flex-1">
-          <span className="flex flex-wrap items-center gap-1.5">
-            <span className="text-sm font-extrabold text-text">{t(item.nameKey)}</span>
-            {item.rarity && <RarityChip rarity={item.rarity} />}
-          </span>
-          <span className="mt-0.5 block text-xs font-semibold text-text-muted">
-            {t(item.descriptionKey)}
-          </span>
-        </span>
-      </button>
+      </div>
 
-      <div className="mt-auto flex items-center justify-between gap-2">
-        <span className="text-sm font-bold">
-          {isFree ? (
-            <span className="text-success">{t("cosmetics.free")}</span>
-          ) : owned ? (
-            <span className="text-text-muted">{t("cosmetics.owned")}</span>
-          ) : (
-            <span className="inline-flex items-center gap-1 text-warning">
-              <Icon name="coin" size={15} />
-              {item.price}
-              <span className="sr-only">{t("cosmetics.coinsName")}</span>
+      <div className="px-3.5 pb-3.5 pt-3">
+        <p className="flex items-center gap-1.5 text-sm font-black text-text">
+          <span className="truncate">{t(item.nameKey)}</span>
+          {isFree && (
+            <span className="shrink-0 rounded-full bg-success-soft px-1.5 py-px text-[9.5px] font-black uppercase text-success">
+              {t("cosmetics.free")}
             </span>
           )}
-        </span>
+        </p>
+        <p className="mt-0.5 line-clamp-2 min-h-[2.1rem] text-[11.5px] font-semibold leading-[1.35] text-text-muted">
+          {t(item.descriptionKey)}
+        </p>
 
         {equipped ? (
           <span
-            className="inline-flex min-h-9 items-center gap-1 rounded-btn bg-primary px-3.5 text-sm font-extrabold text-primary-foreground"
             data-testid="cosmetic-equipped-badge"
+            className="mt-[11px] flex w-full items-center justify-center gap-1.5 rounded-[11px] bg-primary py-2.5 text-[13px] font-extrabold text-primary-foreground"
           >
-            <Icon name="check" size={15} strokeWidth={2.6} /> {t("cosmetics.equipped")}
+            <Icon name="check" size={15} strokeWidth={2.6} />
+            {t("cosmetics.equipped")}
           </span>
         ) : owned ? (
           <button
             type="button"
             onClick={() => onEquip(item.id)}
-            className="inline-flex min-h-9 cursor-pointer items-center rounded-btn bg-pine-soft px-3.5 text-sm font-extrabold text-primary transition hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="mt-[11px] flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-[11px] bg-pine-soft py-2.5 text-[13px] font-extrabold text-primary transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {t("cosmetics.equip")}
           </button>
@@ -136,10 +127,12 @@ function ShopItemCard({
           <button
             type="button"
             disabled={!affordable}
+            aria-label={t("shop.buyForAria", { name: t(item.nameKey), price: item.price })}
             onClick={() => onBuy(item.id)}
-            className="inline-flex min-h-9 cursor-pointer items-center rounded-btn bg-primary px-3.5 text-sm font-extrabold text-primary-foreground shadow-sm transition hover:bg-pine-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-55"
+            className="mt-[11px] flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-[11px] bg-accent-soft py-2.5 text-[13px] font-extrabold text-ocre-ink transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-55"
           >
-            {t("cosmetics.buy")}
+            <Icon name="coin" size={15} />
+            {item.price}
           </button>
         )}
       </div>
@@ -153,17 +146,12 @@ export function ShopPage() {
   const purchaseCosmetic = useProgressStore((state) => state.purchaseCosmetic);
   const equipCosmetic = useProgressStore((state) => state.equipCosmetic);
   const [category, setCategory] = useState<ShopCategory>("orbi");
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [effectKey, setEffectKey] = useState(0);
 
   const activeType = SHOP_CATEGORY_TYPE[category];
   const items = useMemo(() => listCosmeticsByType(activeType), [activeType]);
   const equippedId = getEquippedId(inventory, activeType);
-  const selectedItem =
-    (selectedItemId ? getCosmeticById(selectedItemId) : undefined) ??
-    getCosmeticById(equippedId) ??
-    items[0];
 
   const featuredItem = FEATURED_CANDIDATE_IDS.map((id) => getCosmeticById(id)).find(
     (item): item is CosmeticItem => item !== undefined && !isCosmeticOwned(inventory, item.id),
@@ -187,158 +175,104 @@ export function ShopPage() {
     setMessage(t("cosmetics.itemEquipped"));
   };
 
-  const handleSelectCategory = (next: ShopCategory) => {
-    setCategory(next);
-    setSelectedItemId(null);
-  };
-
   return (
-    <PageTransition className="mx-auto flex min-h-full w-full max-w-[1180px] flex-col gap-4 py-1">
+    <PageTransition className="mx-auto flex min-h-full w-full max-w-[1180px] flex-col gap-5 py-1">
       <VisualEffectBurst playKey={effectKey} />
 
-      <header className="flex items-end justify-between gap-3">
+      <header className="flex items-end justify-between gap-4">
         <div className="min-w-0">
-          <h1 className="text-2xl font-black text-text sm:text-[1.7rem]">{t("shop.title")}</h1>
-          <p className="text-sm font-semibold text-text-muted">{t("shop.subtitle")}</p>
+          <h1 className="text-[25px] font-black tracking-[-0.02em] text-text">{t("shop.title")}</h1>
+          <p className="mt-0.5 text-sm font-semibold text-text-muted">{t("shop.subtitle")}</p>
         </div>
-        <span className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface px-3.5 py-2 shadow-sm">
-          <CoinBalance className="text-base" />
-          <span className="ml-1.5 text-xs font-bold text-text-muted">
+        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-accent-soft px-[15px] py-[9px]">
+          <CoinBalance className="text-sm" />
+          <span className="text-[11px] font-extrabold text-ocre-ink opacity-80">
             {t("cosmetics.coinsShort")}
           </span>
         </span>
       </header>
 
-      <p className="text-xs font-bold text-text-muted">
-        {t("shop.noRealMoney")} · {t("shop.cosmeticOnly")}
-      </p>
-
       {featuredItem && (
         <section
           aria-labelledby="shop-featured-title"
-          className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-primary to-pine-hover p-6 text-white shadow-[0_22px_44px_-26px_rgba(0,0,0,0.55)]"
+          className="relative flex items-center gap-6 overflow-hidden rounded-[22px] bg-gradient-to-br from-[#173A5C] to-[#0F2A44] px-7 py-[26px] text-white shadow-[0_22px_44px_-26px_rgba(0,0,0,0.5)]"
         >
-          <div className="pointer-events-none absolute -right-10 -top-16 size-44 rounded-full bg-white/10" />
-          <div className="relative flex flex-wrap items-center gap-5">
-            <span className="flex size-28 items-center justify-center rounded-card bg-white/15 p-2 shadow-sm">
-              <CosmeticPreview item={featuredItem} size="lg" />
+          <div className="pointer-events-none absolute -bottom-[60px] -left-10 size-[190px] rounded-full bg-[#12C2D6]/[0.14]" />
+          <div className="relative flex size-[130px] shrink-0 items-center justify-center drop-shadow-[0_14px_20px_rgba(0,0,0,0.4)]">
+            <CosmeticPreview item={featuredItem} size="lg" />
+          </div>
+          <div className="relative min-w-0 flex-1">
+            <span className="inline-flex items-center rounded-full bg-white/[0.14] px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#7FE6EF]">
+              {t("shop.featured")}
             </span>
-            <div className="min-w-0 flex-1">
-              <span className="inline-flex rounded-full bg-white/18 px-2.5 py-1 text-[0.62rem] font-extrabold uppercase tracking-[0.14em]">
-                {t("shop.featured")}
+            <h2 id="shop-featured-title" className="mt-2.5 text-[23px] font-black">
+              {t(featuredItem.nameKey)}
+            </h2>
+            <p className="mt-1 max-w-[420px] text-[13.5px] font-semibold text-[#EAF2F8]/80">
+              {t(featuredItem.descriptionKey)}
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                disabled={inventory.coins < featuredItem.price}
+                onClick={() => handleBuy(featuredItem.id)}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-[13px] bg-accent px-6 py-[13px] text-sm font-black text-[#5A3D06] shadow-[0_5px_0_#C98F1E] transition active:translate-y-[3px] active:shadow-[0_2px_0_#C98F1E] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <Icon name="coin" size={17} />
+                {t("shop.redeemFor", { price: featuredItem.price })}
+              </button>
+              <span className="text-[12.5px] font-bold text-[#EAF2F8]/60">
+                {t("shop.youHave", { coins: inventory.coins })}
               </span>
-              <h2 id="shop-featured-title" className="mt-1.5 text-xl font-black leading-tight">
-                {t(featuredItem.nameKey)}
-              </h2>
-              <p className="mt-1 max-w-[52ch] text-sm font-semibold text-white/85">
-                {t(featuredItem.descriptionKey)}
-              </p>
-              <div className="mt-4 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  disabled={inventory.coins < featuredItem.price}
-                  onClick={() => handleBuy(featuredItem.id)}
-                  className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-btn bg-white px-5 text-sm font-black text-primary shadow-[0_6px_0_rgba(0,0,0,0.18)] transition active:translate-y-[3px] active:shadow-[0_3px_0_rgba(0,0,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  <Icon name="coin" size={16} />
-                  {t("shop.redeemFor", { price: featuredItem.price })}
-                </button>
-                <span className="text-xs font-bold text-white/80">
-                  {t("shop.youHave", { coins: inventory.coins })}
-                </span>
-              </div>
             </div>
           </div>
         </section>
       )}
 
-      <p aria-live="polite" className="min-h-5 text-sm font-bold text-success">
+      <p aria-live="polite" className="-my-2 min-h-5 text-sm font-bold text-success">
         {message}
       </p>
 
       <fieldset className="m-0 min-w-0 border-0 p-0">
         <legend className="sr-only">{t("shop.categoriesLabel")}</legend>
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <div className="flex flex-wrap items-center gap-[9px]">
           {SHOP_CATEGORIES.map((entry) => (
             <button
               key={entry}
               type="button"
               aria-pressed={category === entry}
-              onClick={() => handleSelectCategory(entry)}
-              className={`inline-flex min-h-10 shrink-0 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+              onClick={() => setCategory(entry)}
+              className={`inline-flex cursor-pointer items-center gap-[7px] whitespace-nowrap rounded-full px-[15px] py-[9px] text-[12.5px] font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 category === entry
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-primary text-primary-foreground"
                   : "border border-line bg-surface text-text-muted hover:bg-surface-2 hover:text-text"
               }`}
             >
-              <Icon name={SHOP_CATEGORY_ICON[entry]} size={16} />
+              <Icon name={SHOP_CATEGORY_ICON[entry]} size={15} />
               {t(`cosmetics.shopCategories.${entry}`)}
             </button>
           ))}
         </div>
       </fieldset>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
-        <div className="grid gap-3 sm:grid-cols-2">
-          {items.map((item) => (
-            <ShopItemCard
-              key={item.id}
-              item={item}
-              owned={isCosmeticOwned(inventory, item.id)}
-              equipped={getEquippedId(inventory, activeType) === item.id}
-              affordable={inventory.coins >= item.price}
-              selected={selectedItem?.id === item.id}
-              onSelect={setSelectedItemId}
-              onBuy={handleBuy}
-              onEquip={handleEquip}
-            />
-          ))}
-        </div>
-
-        {selectedItem && (
-          <aside className="rounded-card border border-line bg-surface p-5 shadow-card lg:sticky lg:top-8">
-            <h2 className="text-[0.68rem] font-extrabold uppercase tracking-[0.14em] text-text-muted">
-              {t("shop.previewTitle")}
-            </h2>
-            <div className="mt-3 flex min-h-36 items-center justify-center rounded-btn border border-line bg-surface-raised p-4">
-              <CosmeticPreview item={selectedItem} size="lg" />
-            </div>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <h3 className="text-lg font-black text-text">{t(selectedItem.nameKey)}</h3>
-              {selectedItem.rarity && <RarityChip rarity={selectedItem.rarity} />}
-            </div>
-            <p className="mt-1 text-sm font-semibold text-text-muted">
-              {t(selectedItem.descriptionKey)}
-            </p>
-            <div className="mt-4">
-              {getEquippedId(inventory, selectedItem.type) === selectedItem.id ? (
-                <span className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-btn bg-primary/15 px-4 font-extrabold text-primary">
-                  <Icon name="check" size={17} strokeWidth={2.6} />
-                  {t("cosmetics.equipped")}
-                </span>
-              ) : isCosmeticOwned(inventory, selectedItem.id) ? (
-                <button
-                  type="button"
-                  onClick={() => handleEquip(selectedItem.id)}
-                  className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-btn bg-primary px-4 font-extrabold text-primary-foreground shadow-btn transition hover:bg-pine-hover active:translate-y-[3px] active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {t("cosmetics.equip")}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  disabled={inventory.coins < selectedItem.price}
-                  onClick={() => handleBuy(selectedItem.id)}
-                  className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-btn bg-primary px-4 font-extrabold text-primary-foreground shadow-btn transition hover:bg-pine-hover active:translate-y-[3px] active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-55 disabled:shadow-none"
-                >
-                  <Icon name="coin" size={16} />
-                  {t("shop.buyFor", { price: selectedItem.price })}
-                </button>
-              )}
-            </div>
-          </aside>
-        )}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+        {items.map((item) => (
+          <ShopItemCard
+            key={item.id}
+            item={item}
+            tint={CATEGORY_TINT[category]}
+            owned={isCosmeticOwned(inventory, item.id)}
+            equipped={equippedId === item.id}
+            affordable={inventory.coins >= item.price}
+            onBuy={handleBuy}
+            onEquip={handleEquip}
+          />
+        ))}
       </div>
+
+      <p className="pb-2 text-center text-[11px] font-bold text-faint">
+        {t("shop.noRealMoney")} · {t("shop.cosmeticOnly")}
+      </p>
     </PageTransition>
   );
 }

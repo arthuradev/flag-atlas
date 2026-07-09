@@ -70,47 +70,47 @@ export function LearnHero({ isFirstRun }: LearnHeroProps) {
 
   return (
     <section
-      className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-primary to-pine-hover p-6 text-white shadow-[0_22px_44px_-26px_rgba(0,0,0,0.55)] sm:p-7"
+      className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-primary to-pine-hover px-7 py-[26px] text-white shadow-[0_22px_44px_-26px_rgba(0,0,0,0.55)]"
       aria-labelledby="learn-hero-title"
     >
-      <div className="pointer-events-none absolute -right-12 -top-14 size-52 rounded-full bg-white/10" />
-      <div className="pointer-events-none absolute -bottom-24 right-28 size-36 rounded-full bg-white/[0.06]" />
+      <div className="pointer-events-none absolute -right-[46px] -top-[58px] size-[210px] rounded-full bg-white/[0.09]" />
+      <div className="pointer-events-none absolute -bottom-[90px] right-[120px] size-[150px] rounded-full bg-white/[0.06]" />
       <div className="relative flex items-center gap-6">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-white/80">
+          <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-white/[0.82]">
             {t("home.continueWhereLeft")}
           </p>
           <h2
             id="learn-hero-title"
-            className="mt-1.5 text-2xl font-black leading-tight sm:text-[1.7rem]"
+            className="mt-1.5 text-[27px] font-black leading-tight tracking-[-0.01em]"
           >
             {isFirstRun ? t("home.firstTrainingTitle") : continent.names[locale]}
           </h2>
-          <p className="mt-1 text-sm font-semibold text-white/85">
+          <p className="mt-1 text-sm font-semibold text-white/[0.86]">
             {t("learn.heroSubtitle", { learned, total })}
           </p>
-          <div className="mt-4 flex max-w-[340px] items-center gap-3">
-            <span className="block h-2.5 flex-1 overflow-hidden rounded-full bg-white/25">
+          <div className="mt-[15px] flex max-w-[340px] items-center gap-3">
+            <span className="block h-[9px] flex-1 overflow-hidden rounded-full bg-white/[0.28]">
               <span
                 className="block h-full rounded-full bg-white transition-[width] duration-300"
                 style={{ width: `${total > 0 ? Math.round((learned / total) * 100) : 0}%` }}
               />
             </span>
-            <span className="whitespace-nowrap text-[0.82rem] font-extrabold">
+            <span className="whitespace-nowrap text-[13px] font-extrabold">
               {learned} / {total}
             </span>
           </div>
           <button
             type="button"
             onClick={handleContinue}
-            className="mt-5 inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-btn bg-white px-7 text-sm font-black uppercase tracking-[0.05em] text-primary shadow-[0_6px_0_rgba(0,0,0,0.18)] transition active:translate-y-[3px] active:shadow-[0_3px_0_rgba(0,0,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+            className="mt-[19px] inline-flex cursor-pointer items-center gap-2 rounded-[14px] bg-white px-7 py-3.5 text-sm font-black uppercase tracking-[0.05em] text-primary shadow-[0_6px_0_rgba(0,0,0,0.18)] transition active:translate-y-[3px] active:shadow-[0_3px_0_rgba(0,0,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
           >
-            <Icon name="play" size={17} fill="currentColor" strokeWidth={1.8} />
+            <Icon name="play" size={18} fill="currentColor" strokeWidth={1.8} />
             {t(isFirstRun ? "home.startFirstTraining" : "home.continueTraining")}
           </button>
         </div>
-        <div className="hidden w-32 shrink-0 drop-shadow-[0_16px_22px_rgba(0,0,0,0.3)] sm:block lg:w-36">
-          <Orbi expression="alegre" float={!reduceMotion} blink={!reduceMotion} />
+        <div className="hidden w-[150px] shrink-0 drop-shadow-[0_16px_22px_rgba(0,0,0,0.3)] sm:block">
+          <Orbi expression="alegre" feet={false} float={!reduceMotion} blink={!reduceMotion} />
         </div>
       </div>
     </section>

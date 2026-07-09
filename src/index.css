@@ -391,35 +391,15 @@ body {
   height: 100%;
 }
 
-/* Fundo global limpo e premium: só dois brilhos muito sutis nos cantos.
-   Linhas cartográficas ficam restritas a splash/onboarding/cards especiais
-   (classe .fa-contour-detail) e ao tema Cartógrafo. */
+/* Fundo global limpo e premium: cor sólida por tema, sem textura nem ruído.
+   Linhas cartográficas existem apenas como detalhe opcional (.fa-contour-detail)
+   em splash, onboarding e cards especiais — nunca atrás de todas as telas. */
 body {
   @apply bg-background font-sans text-text;
-  background-image:
-    radial-gradient(140% 105% at 100% -8%, color-mix(in srgb, var(--fa-ring) 5%, transparent), transparent 52%),
-    radial-gradient(120% 90% at 0% 108%, color-mix(in srgb, var(--fa-accent) 4%, transparent), transparent 50%);
-  background-attachment: fixed;
 }
 
-/* Detalhe cartográfico opcional para hero cards, splash e fim de lição. */
+/* Detalhe cartográfico opcional para splash, onboarding e cards especiais. */
 .fa-contour-detail {
-  background-image:
-    radial-gradient(circle at 12% 16%, var(--fa-contour-accent) 0 42px, transparent 43px 84px),
-    repeating-radial-gradient(
-      circle at 82% 18%,
-      transparent 0 46px,
-      var(--fa-contour-color) 46px 47px
-    ),
-    repeating-radial-gradient(
-      circle at 18% 86%,
-      transparent 0 62px,
-      var(--fa-contour-color) 62px 63px
-    );
-}
-
-/* No tema Cartógrafo a textura de mapa volta como assinatura do tema. */
-[data-theme="mapa-antigo"] body {
   background-image:
     radial-gradient(circle at 12% 16%, var(--fa-contour-accent) 0 42px, transparent 43px 84px),
     repeating-radial-gradient(

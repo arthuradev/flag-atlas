@@ -19,7 +19,7 @@ export function CosmeticPreview({ item, size = "sm" }: CosmeticPreviewProps) {
 
   if (item.type === "orbiCosmetic") {
     return (
-      <span className={isLarge ? "block w-32" : "block w-14"}>
+      <span className={isLarge ? "block w-32" : "block w-[72px]"}>
         <Orbi
           accessory={orbiAccessoryFor(item.id)}
           expression="sorriso"
@@ -67,7 +67,7 @@ export function CosmeticPreview({ item, size = "sm" }: CosmeticPreviewProps) {
     return (
       <span
         className={`flex items-center justify-center rounded-md border border-line bg-white p-1 ${flagFrameClass(item.id)} ${
-          isLarge ? "h-20 w-28 p-1.5" : "h-10 w-14"
+          isLarge ? "h-20 w-28 p-1.5" : "h-11 w-16"
         }`}
       >
         <FlagImage

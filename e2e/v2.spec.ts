@@ -71,7 +71,7 @@ test.describe("typing mode", () => {
     // O erro por digitação marca o país para revisão: o card "Hoje" mostra a pendência.
     await page.goto("./#/home");
     await expect(page.getByRole("button", { name: /Revisões/ })).toBeVisible();
-    await expect(page.getByText(/esperando revisão/)).toBeVisible();
+    await expect(page.getByRole("button", { name: /Revisões 1/ })).toBeVisible();
   });
 });
 

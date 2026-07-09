@@ -19,18 +19,18 @@
     "profileLevel": "Profile · Level {{level}}"
   },
   "learn": {
-    "headerHint": "Ready to pick up where you left off?",
+    "headerHint": "{{weekday}} · ready to pick up where you left off?",
     "heroSubtitle": "{{learned}} of {{total}} flags learned",
     "today": "Today",
+    "dailyStreakLabel": "Daily streak",
     "goalDone": "Goal reached",
     "goalPending": "{{goal}} questions",
     "reviews": "Reviews",
-    "reviewsPending": "{{count}} flags waiting for review",
-    "reviewsPending_one": "{{count}} flag waiting for review",
     "world": "Your world",
     "exploreContinents": "Explore continents",
     "quickTrainingTitle": "Quick training · 2 min",
-    "quickTrainingBody": "A short round with flags you have already seen."
+    "quickTrainingBody": "A light mix of flags you have already seen.",
+    "quickTrainingCta": "Start"
   },
   "profile": {
     "player": "Explorer",
@@ -48,8 +48,9 @@
     "viewAll": "View all",
     "noAchievements": "Complete training sessions to unlock your first achievements.",
     "avatarTitle": "Customize your avatar",
-    "avatarBody": "New styles in the Shop — separate from Orbi.",
-    "sectionsTitle": "Your account"
+    "avatarBody": "New styles coming soon — separate from Orbi.",
+    "sectionsTitle": "Your account",
+    "coinsCount": "{{coins}} coins"
   },
   "expeditions": {
     "title": "Expeditions",
@@ -194,8 +195,8 @@
     }
   },
   "home": {
-    "greeting": "Hi, {{name}}!",
-    "greetingFallback": "Hi, explorer!",
+    "greeting": "Good to see you, {{name}}",
+    "greetingFallback": "Good to see you, explorer",
     "dashboardTitle": "Your flag journey",
     "learnedCount": "{{learned}}/{{total}} countries learned",
     "continueTraining": "Continue training",
@@ -657,6 +658,7 @@
     "featured": "Featured",
     "redeemFor": "Redeem for {{price}}",
     "buyFor": "Buy for {{price}}",
+    "buyForAria": "Buy {{name}} for {{price}} coins",
     "youHave": "You have {{coins}} coins",
     "previewTitle": "Preview",
     "categoriesLabel": "Shop categories"

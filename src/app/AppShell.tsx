@@ -3,12 +3,10 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { avatarStyleClass } from "@/features/cosmetics/logic/avatarStyles";
 import { useEquippedId } from "@/features/cosmetics/store/useCosmetics";
 import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
-import { getLevelProgress } from "@/features/progress/logic/xp";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { FlaggoLogo } from "@/shared/brand/FlaggoLogo";
 import { Orbi } from "@/shared/brand/Orbi";
 import { Icon, type IconName } from "@/shared/components/Icon";
-import { ProgressBar } from "@/shared/components/ProgressBar";
 
 type NavItem = {
   icon: IconName;
@@ -69,11 +67,11 @@ export function AppShell() {
   const { t } = useTranslation();
   const location = useLocation();
   const level = useProgressStore((state) => state.progress.level);
-  const totalXp = useProgressStore((state) => state.progress.totalXp);
   const playerName = useOnboardingStore((state) => state.playerName);
   const avatarCosmeticId = useEquippedId("avatarCosmetic");
-  const levelProgress = getLevelProgress(totalXp);
   const isTrainingRoute = location.pathname.startsWith("/training");
+  // Fim de lição é uma tela-momento: sem bottom nav competindo com os CTAs.
+  const isResultRoute = location.pathname.startsWith("/session-result");
 
   const displayName = playerName.trim() || t("profile.player");
   const initials = playerInitials(displayName);
@@ -90,14 +88,14 @@ export function AppShell() {
       {!isTrainingRoute && (
         <aside
           aria-label={t("app.name")}
-          className="z-40 hidden w-[260px] shrink-0 flex-col overflow-y-auto border-r border-white/10 bg-sidebar p-4 text-sidebar-fg lg:fixed lg:inset-y-0 lg:left-0 lg:flex"
+          className="z-40 hidden w-[260px] shrink-0 flex-col overflow-y-auto bg-sidebar px-4 py-5 text-sidebar-fg lg:fixed lg:inset-y-0 lg:left-0 lg:flex"
         >
           <Link
             to="/home"
             aria-label={t("app.name")}
             className="mb-5 flex items-center gap-3 rounded-btn p-1.5 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-black/30 p-1.5 shadow-sm">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-[13px] bg-[#0A1E33] p-1.5 shadow-[0_6px_14px_-6px_rgba(0,0,0,0.6)]">
               <Orbi expression="sorriso" flag={false} feet={false} tone="dark" />
             </span>
             <span className="min-w-0">
@@ -153,7 +151,7 @@ export function AppShell() {
               }
             >
               <span
-                className={`flex size-10 shrink-0 items-center justify-center rounded-btn text-sm font-black text-white shadow-[0_0_0_3px_rgba(255,255,255,0.08)] ${avatarStyleClass(avatarCosmeticId)}`}
+                className={`flex size-[42px] shrink-0 items-center justify-center rounded-[13px] text-[15px] font-black tracking-tight text-white shadow-[0_0_0_3px_rgba(255,255,255,0.08)] ${avatarStyleClass(avatarCosmeticId)}`}
               >
                 {initials || <Icon name="user" size={18} />}
               </span>
@@ -164,13 +162,6 @@ export function AppShell() {
                 <span className="block truncate text-[0.69rem] font-bold text-sidebar-fg-muted">
                   {t("nav.profileLevel", { level })}
                 </span>
-                <ProgressBar
-                  value={levelProgress.currentLevelXp}
-                  max={Math.max(1, levelProgress.xpForNextLevel)}
-                  label={t("home.levelProgress")}
-                  size="thin"
-                  colorClassName="bg-primary"
-                />
               </span>
             </NavLink>
             <NavLink
@@ -204,7 +195,7 @@ export function AppShell() {
         </main>
       </div>
 
-      {!isTrainingRoute && (
+      {!isTrainingRoute && !isResultRoute && (
         <nav
           className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2 shadow-[0_-10px_26px_-18px_rgba(0,0,0,0.55)] backdrop-blur lg:hidden"
           aria-label={t("nav.primaryLabel")}

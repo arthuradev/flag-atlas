@@ -20,8 +20,8 @@ export default defineConfig({
         description: "Aprenda as bandeiras do mundo em treinos rápidos e divertidos.",
         lang: "pt-BR",
         display: "standalone",
-        background_color: "#EAF6F8",
-        theme_color: "#12303B",
+        background_color: "#EAF2F8",
+        theme_color: "#0F2A44",
         icons: [
           { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" },

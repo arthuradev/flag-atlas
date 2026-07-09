@@ -1,19 +1,71 @@
 import { useTranslation } from "react-i18next";
 import { countCountriesDueForReview } from "@/entities/progress/progress.selectors";
+import type { DailyStreak } from "@/entities/progress/progress.types";
 import { useOnboardingStore } from "@/features/onboarding/store/onboardingStore";
 import { DailyStreakLine } from "@/features/progress/components/DailyStreakLine";
 import { useProgressStore } from "@/features/progress/store/progressStore";
 import { useSettingsStore } from "@/features/settings/store/settingsStore";
 import { useStartSession } from "@/features/training/hooks/useStartSession";
-import { Card } from "@/shared/components/Card";
 import { Icon } from "@/shared/components/Icon";
-import { getLocalDateKey } from "@/shared/utils/dateKey";
+import { getLocalDateKey, isDateKey } from "@/shared/utils/dateKey";
 
-/** Resumo do dia: sequência, meta diária e revisões pendentes. */
+type WeekDayState = "active" | "idle" | "future";
+
+type WeekDay = {
+  key: string;
+  label: string;
+  state: WeekDayState;
+  isToday: boolean;
+};
+
+/** Data local (00:00) a partir de uma chave YYYY-MM-DD. */
+function dateFromKey(key: string): Date {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1);
+}
+
+/**
+ * Semana atual (segunda a domingo) com os dias ativos derivados do streak:
+ * um streak de N dias terminando em lastActiveDate implica que esses N dias
+ * consecutivos foram jogados — nada além disso é inventado.
+ */
+export function buildWeekDays(streak: DailyStreak, locale: string, today = new Date()): WeekDay[] {
+  const activeKeys = new Set<string>();
+  if (streak.currentStreak > 0 && isDateKey(streak.lastActiveDate)) {
+    const last = dateFromKey(streak.lastActiveDate);
+    for (let i = 0; i < streak.currentStreak; i++) {
+      const date = new Date(last);
+      date.setDate(last.getDate() - i);
+      activeKeys.add(getLocalDateKey(date));
+    }
+  }
+
+  const todayKey = getLocalDateKey(today);
+  const mondayOffset = (today.getDay() + 6) % 7;
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - mondayOffset);
+
+  const formatter = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + index);
+    const key = getLocalDateKey(date);
+    const state: WeekDayState = activeKeys.has(key) ? "active" : key > todayKey ? "future" : "idle";
+    return {
+      key,
+      label: formatter.format(date).toUpperCase(),
+      state,
+      isToday: key === todayKey,
+    };
+  });
+}
+
+/** Resumo do dia (design "Hoje"): sequência com semana, meta diária e revisões. */
 export function TodayCard() {
   const { t } = useTranslation();
   const progress = useProgressStore((state) => state.progress);
   const dailyGoal = useOnboardingStore((state) => state.dailyGoal);
+  const locale = useSettingsStore((state) => state.locale);
   const defaultSessionSize = useSettingsStore((state) => state.defaultSessionSize);
   const startTraining = useStartSession();
 
@@ -22,77 +74,108 @@ export function TodayCard() {
     ? getLocalDateKey(new Date(progress.lastPlayedAt)) === getLocalDateKey()
     : false;
   const reviewCount = countCountriesDueForReview(progress);
+  const week = buildWeekDays(progress.dailyStreak, locale);
 
   const handleReview = () => {
     startTraining({ mode: "review", questionType: "choice", size: defaultSessionSize });
   };
 
   return (
-    <Card className="flex flex-col gap-3 p-5">
-      <h2 className="text-[0.68rem] font-extrabold uppercase tracking-[0.14em] text-text-muted">
+    <section
+      aria-labelledby="today-title"
+      className="rounded-[18px] border border-line bg-surface p-[18px] shadow-card"
+    >
+      <h2
+        id="today-title"
+        className="text-[13px] font-black uppercase tracking-[0.08em] text-text-muted"
+      >
         {t("learn.today")}
       </h2>
 
-      <div className="flex items-center gap-3 rounded-btn border border-line bg-surface-raised px-3 py-2.5">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-chip bg-danger-soft text-danger">
-          <Icon name="flame" size={19} />
+      <div className="mt-3.5 flex items-center gap-3">
+        <span className="flex size-[46px] shrink-0 items-center justify-center rounded-[13px] bg-danger-soft text-danger">
+          <Icon name="flame" size={26} />
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-lg font-black leading-tight">
-            {progress.dailyStreak.currentStreak}
-            <span className="ml-1 text-xs font-bold text-text-muted">{t("home.streakDays")}</span>
-          </span>
-          <span className="block text-[0.7rem] font-bold text-text-muted">
-            {t("home.streakTitle")}
-          </span>
-        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[22px] font-black leading-none text-text">
+            {progress.dailyStreak.currentStreak}{" "}
+            <span className="text-[13px] font-extrabold text-text-muted">
+              {t("home.streakDays")}
+            </span>
+          </p>
+          <p className="mt-0.5 text-[11.5px] font-bold text-text-muted">
+            {t("learn.dailyStreakLabel")}
+          </p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-3 rounded-btn border border-line bg-surface-raised px-3 py-2.5">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-chip bg-accent-soft text-warning">
-          <Icon name="zap" size={19} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="flex items-center justify-between gap-2">
-            <span className="text-[0.8rem] font-extrabold">{t("home.dailyGoal.title")}</span>
-            <span className="text-xs font-bold text-text-muted">
-              {playedToday ? t("learn.goalDone") : t("learn.goalPending", { goal })}
-            </span>
-          </span>
-          <span className="mt-1.5 block h-1.5 overflow-hidden rounded-full bg-line">
+      <div className="mt-3.5 flex gap-[5px]" aria-hidden="true">
+        {week.map((day) => (
+          <div key={day.key} className="flex flex-1 flex-col items-center gap-[5px]">
             <span
-              className="block h-full rounded-full bg-warning transition-[width] duration-300"
-              style={{ width: playedToday ? "100%" : "0%" }}
-            />
-          </span>
+              className={`text-[9.5px] font-extrabold ${
+                day.isToday && day.state === "active" ? "text-danger" : "text-faint"
+              }`}
+            >
+              {day.label}
+            </span>
+            <span
+              className={`flex h-7 w-full items-center justify-center rounded-lg text-white ${
+                day.state === "active"
+                  ? "bg-danger"
+                  : day.state === "future"
+                    ? "border border-dashed border-line-strong bg-surface-2"
+                    : "bg-surface-2"
+              }`}
+            >
+              {day.state === "active" && <Icon name="flame" size={13} strokeWidth={2.4} />}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="my-4 h-px bg-line" />
+
+      <div className="flex items-center gap-2.5">
+        <span className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-accent-soft text-ocre-ink">
+          <Icon name="zap" size={16} />
+        </span>
+        <span className="min-w-0 flex-1 text-[13.5px] font-extrabold text-text">
+          {t("home.dailyGoal.title")}
+        </span>
+        <span className="text-xs font-extrabold text-text-muted">
+          {playedToday ? t("learn.goalDone") : t("learn.goalPending", { goal })}
         </span>
       </div>
+      <span className="mt-2.5 block h-2 overflow-hidden rounded-full bg-surface-2">
+        <span
+          className="block h-full rounded-full bg-accent transition-[width] duration-300"
+          style={{ width: playedToday ? "100%" : "0%" }}
+        />
+      </span>
+
+      <div className="my-4 h-px bg-line" />
 
       <button
         type="button"
         onClick={handleReview}
         disabled={reviewCount === 0}
-        className="flex cursor-pointer items-center gap-3 rounded-btn border border-line bg-surface-raised px-3 py-2.5 text-left transition hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:hover:bg-surface-raised"
+        className="flex w-full cursor-pointer items-center gap-2.5 rounded-btn text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default"
       >
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-chip bg-pine-soft text-primary">
-          <Icon name="refresh" size={19} />
+        <span className="flex size-[30px] shrink-0 items-center justify-center rounded-[9px] bg-pine-soft text-primary">
+          <Icon name="refresh" size={16} />
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-[0.8rem] font-extrabold">{t("learn.reviews")}</span>
-          <span className="block text-[0.7rem] font-bold text-text-muted">
-            {reviewCount > 0
-              ? t("learn.reviewsPending", { count: reviewCount })
-              : t("home.noReviewCountries")}
-          </span>
+        <span className="min-w-0 flex-1 text-[13.5px] font-extrabold text-text">
+          {t("learn.reviews")}
         </span>
-        {reviewCount > 0 && (
-          <span className="text-lg font-black text-primary" aria-hidden="true">
-            {reviewCount}
-          </span>
-        )}
+        <span className="text-[13px] font-black text-primary">
+          {reviewCount > 0 ? reviewCount : "—"}
+        </span>
       </button>
 
-      <DailyStreakLine streak={progress.dailyStreak} />
-    </Card>
+      <div className="mt-3 empty:hidden">
+        <DailyStreakLine streak={progress.dailyStreak} />
+      </div>
+    </section>
   );
 }

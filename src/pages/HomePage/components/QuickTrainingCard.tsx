@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useStartSession } from "@/features/training/hooks/useStartSession";
 import { Icon } from "@/shared/components/Icon";
 
-/** Treino rápido como ação secundária: uma rodada curta, sem virar "Modos". */
+/** Treino rápido como ação secundária: card pontilhado com botão "Começar". */
 export function QuickTrainingCard() {
   const { t } = useTranslation();
   const startTraining = useStartSession();
@@ -12,23 +12,23 @@ export function QuickTrainingCard() {
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleQuickTraining}
-      className="flex w-full cursor-pointer items-center gap-3 rounded-card border border-line bg-surface p-4 text-left shadow-card transition hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-btn bg-accent-soft text-warning">
-        <Icon name="zap" size={20} />
+    <div className="flex items-center gap-3.5 rounded-2xl border border-dashed border-line-strong px-[18px] py-[15px]">
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-[13px] bg-accent-soft text-ocre-ink">
+        <Icon name="zap" size={22} />
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-extrabold text-text">
-          {t("learn.quickTrainingTitle")}
-        </span>
-        <span className="block text-xs font-semibold text-text-muted">
+      <div className="min-w-0 flex-1">
+        <p className="text-[14.5px] font-extrabold text-text">{t("learn.quickTrainingTitle")}</p>
+        <p className="mt-0.5 text-[12.5px] font-semibold text-text-muted">
           {t("learn.quickTrainingBody")}
-        </span>
-      </span>
-      <Icon name="chevron-right" size={18} className="shrink-0 text-faint" />
-    </button>
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={handleQuickTraining}
+        className="shrink-0 cursor-pointer rounded-xl border-[1.5px] border-line-strong bg-surface px-[18px] py-2.5 text-[13px] font-extrabold text-text transition hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {t("learn.quickTrainingCta")}
+      </button>
+    </div>
   );
 }

@@ -32,9 +32,9 @@ function ExpeditionCard({ expedition }: { expedition: ExpeditionDefinition }) {
   };
 
   return (
-    <li className="flex h-full flex-col gap-3 rounded-card border border-line bg-surface p-5 shadow-card">
+    <li className="flex h-full flex-col gap-3 rounded-2xl border border-line bg-surface p-[18px] shadow-card transition hover:-translate-y-0.5 hover:shadow-lg">
       <div className="flex items-start justify-between gap-3">
-        <span className="flex size-11 items-center justify-center rounded-btn bg-pine-soft text-primary">
+        <span className="flex size-11 items-center justify-center rounded-[13px] bg-pine-soft text-primary">
           <Icon name={expedition.icon} size={23} strokeWidth={1.9} />
         </span>
         <span
@@ -46,10 +46,10 @@ function ExpeditionCard({ expedition }: { expedition: ExpeditionDefinition }) {
       </div>
 
       <div className="min-w-0 flex-1">
-        <h3 className="text-base font-extrabold text-text">
+        <h3 className="text-[15px] font-black text-text">
           {t(`expeditions.items.${expedition.id}.title`)}
         </h3>
-        <p className="mt-0.5 text-sm font-semibold text-text-muted">
+        <p className="mt-0.5 text-[12.5px] font-semibold leading-[1.4] text-text-muted">
           {t(`expeditions.items.${expedition.id}.description`)}
         </p>
       </div>

@@ -42,7 +42,7 @@ test.describe("onboarding", () => {
 
     await expect(getMainTrainingCta(page)).toBeVisible();
     await expect(page.getByText("0/195 países aprendidos")).toBeVisible();
-    await expect(page.getByText("Olá, Ana!")).toBeVisible();
+    await expect(page.getByText("Bom te ver, Ana")).toBeVisible();
 
     // Próxima abertura vai direto para a Home.
     await page.goto("./");
@@ -73,7 +73,7 @@ test.describe("onboarding", () => {
     await page.getByRole("button", { name: "Agora não" }).click();
 
     await expect(getMainTrainingCta(page)).toBeVisible();
-    await expect(page.getByText("Olá, explorador!")).toBeVisible();
+    await expect(page.getByText("Bom te ver, explorador")).toBeVisible();
   });
 });
 
